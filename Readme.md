@@ -58,7 +58,7 @@ Assessment of home ranges
 ## R concepts
 <!-- (50-100 words) -->
 <!-- Which R concepts, functions, packages will you mainly use. What additional spatial analysis methods will you be using? -->
-We will use:
+We will use the following libraries:
 * readr, tidyr, dplyr library for data processing
 * ggplot2 and tmap library for visualization
 * sf library for spatial data handling
