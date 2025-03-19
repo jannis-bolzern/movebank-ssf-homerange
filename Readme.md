@@ -78,7 +78,7 @@ We are not yet familiar with using folium.
 * Are you happy with this plan?
 * Do you think the level of ambition is appropriate?
 * Do you see any obstacles? What are we missing?
-* Do you have advice on how to adress the last two risks mentioned in the risk analysis?
+* Do you have advice on how to address the last two risks mentioned in the risk analysis?
 
 ## References
 * Porteus TA, Short MJ, Hoodless AN, Reynolds JC. 2024. Movement ecology and minimum density estimates of red foxes in wet grassland habitats used by breeding wading birds. Eur J Wildlife Res. 70:8. https://doi.org/10.1007/s10344-023-01759-y
