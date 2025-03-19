@@ -13,7 +13,7 @@ Analysis Geo 880**
 | Semester:      | FS25                                     |
 |:---------------|:---------------------------------------- |
 | **Data:**      | Selected animal tracking dataset from the Movebank database  |
-| **Title:**     | Does human footprint affect the movement patterns of wild animals?               |
+| **Title:**     | How does human activity affect the movement patterns of wild animals?   |
 | **Student 1:** | Jannis Bolzern                        |
 | **Student 2:** | Elke Michlmayr                        |
 
@@ -34,13 +34,15 @@ A research paper in the Quarto template format (abstract, bibliography, …) wit
 <!-- (100-150 words) -->
 <!-- What data will you use? Will you require additional context data? Where do you get this data from? Do you already have all the data? -->
 
-Human footprint data:
-We will use the global 100 meter resolution terrestrial human footprint data (HFP-100) by Joe Mazzariello et al. The data can be read in Python, R, or any other script that has libraries that can interpret geospatial data (such as folium).
-
 We will use the following wild animal tracking data published on Movebank under a Creative Commons license by three different research groups (see references)
+
 * Red fox data for rural areas (GPS-based, Wiltshire, UK)
 * Red fox data for remote areas (Argos-based, from Bylot island and from Herschel island, Canada)
 * Bobcat and Coyote data for remote areas with some rural structures (GPS-based, northern Washington, US)
+
+For the human footprint data, we will use the global 100 meter resolution terrestrial human footprint data (HFP-100) by Joe Mazzariello et al. The data can be read in Python, R, or any other script that has libraries that can interpret geospatial data (such as folium).
+
+For land use in Washington, US, we will rely on the General Land Use Final Dataset published by Washington Spatial Data ([link](https://geo.wa.gov/datasets/a0ddbd4e0e2141b3841a6a42ff5aff46_0/explore?location=48.347066%2C-118.420235%2C9.91)).
 
 ## Analytical concepts
 <!-- (100-200 words) -->
