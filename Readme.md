@@ -12,43 +12,55 @@ Analysis Geo 880**
 
 | Semester:      | FS25                                     |
 |:---------------|:---------------------------------------- |
-| **Data:**      | Selected animal tracking dataset from the Movebank database  |
+| **Data:**      | Selected datasets from the Movebank animal tracking database  |
 | **Title:**     | How does human activity affect the movement patterns of wild animals?   |
 | **Student 1:** | Jannis Bolzern                        |
 | **Student 2:** | Elke Michlmayr                        |
 
 ## Abstract 
 <!-- (50-60 words) -->
-In our student project we aim to demonstrate that wild animal movement patterns differ in rural and remote areas based on data from the Movebank animal tracking database. We selected three publicly available datasets with location data from red fox, bobcat, and coyote movements in England, Canada, and the US for comparison and analysis.
+In this project, we aim to investigate how human activity influences the movement patterns of wild animals. Using GPS and Argos tracking data from red foxes, bobcats, and coyotes across rural and remote areas in England, Canada, and the US, we will analyze home range sizes, temporal activity shifts, and habitat selection in relation to human footprint and land use data.
 
 ## Research Questions
 <!-- (50-60 words) -->
-Two hypotheses will be tested: (1) animals with access to anthropogenic food sources have shorter home ranges, and (2) animal mortality rates are linked to the human footprint index of their home range area. To prove these, an assessment of home ranges for individual animals will be performed and linked to the human activity found in the respective area.
+1. **Access to Anthropogenic Food Sources:** Do animals in high human-impact areas exhibit smaller home ranges due to easier access to food resources?
+2. **Temporal Shifts in Activity Patterns:** Do animals become more nocturnal in high human-impact areas to avoid direct human encounters?
+3. **Habitat Selection in Human-Dominated Landscapes:** How do animals select habitats (e.g., forests, agriculture) under varying levels of human influence?
 
 ## Results / products
 <!-- (50-100 words) -->
 <!-- What do you expect, anticipate? -->
-A research paper in the Quarto template format (abstract, bibliography, …) with scientific text containing the relevant data analysis, visualization, and descriptions will be authored and published to QuartoPub. The R code for the data analysis and visualization part will be hosted on the Github site under a Creative Commons license.
+The project will produce:
+
+1. A **research paper** in Quarto format, including an abstract, methodology, results, visualizations, and discussion.
+2. **R code** for data processing, analysis, and visualization, hosted on GitHub under a Creative Commons license.
+3. **Interactive maps** and visualizations of animal movements, home ranges, and habitat selection in relation to human footprint and land use data.
 
 ## Data
 <!-- (100-150 words) -->
 <!-- What data will you use? Will you require additional context data? Where do you get this data from? Do you already have all the data? -->
 
-We will use the following wild animal tracking data published on Movebank under a Creative Commons license by three different research groups (see references).
+We will use the following wild animal tracking data published on Movebank under a Creative Commons license by three different research groups (see references):
 
-* Red fox data for rural areas (GPS-based, Wiltshire, UK)
+* **Red fox** data for rural areas (GPS-based, Wiltshire, UK)
 * Red fox data for remote areas (Argos-based, from the uninhabitated islands Bylot and Herschel, Canada)
-* Bobcat and Coyote data for remote areas with some rural structures (GPS-based, northern Washington, US)
+* **Bobcat** and **coyote** data for remote areas with some rural structures (GPS-based, northern Washington, US)
 
-For the human footprint data, we will use the global 100 meter resolution terrestrial human footprint data (HFP-100) by Joe Mazzariello et al. The data can be read in Python, R, or any other script that has libraries that can interpret geospatial data (such as folium).
+For the human footprint data, we will use the **global 100 meter resolution terrestrial human footprint data (HFP-100)** by Joe Mazzariello et al. The data can be read in Python, R, or any other script that has libraries that can interpret geospatial data (such as folium).
 
-If required, for land use in Washington, US, we will rely on the General Land Use Final Dataset published by Washington Spatial Data ([link](https://geo.wa.gov/datasets/a0ddbd4e0e2141b3841a6a42ff5aff46_0/explore?location=48.347066%2C-118.420235%2C9.91)) and for land use in the UK on gov.uk data ([link](https://www.data.gov.uk/dataset/946ce540-de76-441e-bac8-624f30cace8a/land-cover-map-2021-10m-classified-pixels-gb)).
+If required, for **land use** in Washington, US, we will rely on the General Land Use Final Dataset published by Washington Spatial Data ([link](https://geo.wa.gov/datasets/a0ddbd4e0e2141b3841a6a42ff5aff46_0/explore?location=48.347066%2C-118.420235%2C9.91)) and for land use in the UK on gov.uk data ([link](https://www.data.gov.uk/dataset/946ce540-de76-441e-bac8-624f30cace8a/land-cover-map-2021-10m-classified-pixels-gb)).
 
 ## Analytical concepts
 <!-- (100-200 words) -->
 <!-- Which analytical concepts will you use? What conceptual movement spaces and respective modelling approaches of trajectories will you be using? What additional spatial analysis methods will you be using? -->
-Trajectory analysis 
-Assessment of home ranges
+1. **Trajectory Analysis:** Movement paths will be analyzed to identify patterns in speed, direction, and habitat use. Step lengths and turning angles will help infer behavioral states. Step-selection functions (SSFs) will model habitat preferences relative to availability, allowing us to quantify how animals respond to environmental covariates such as human footprint and land use.
+
+2. **Home Range Assessment:** Home range sizes will be calculated using kernel density estimation (KDE) and minimum convex polygons (MCPs). This will provide estimates of the area used by each individual. Home ranges will be compared across regions with varying levels of human activity to test whether access to anthropogenic food sources (e.g., garbage, crops) leads to smaller home ranges due to resource concentration.
+
+3. **Temporal Activity Patterns:** Movement rates will be used to quantify diel activity shifts. We will test whether animals in high human-impact areas exhibit increased nocturnality, potentially as a strategy to avoid direct human encounters. This analysis will reveal how temporal behavior adapts to human presence.
+
+4. **Habitat Selection:** SSFs will quantify selection for human-modified habitats (e.g., agricultural areas, urban edges) relative to natural habitats. By comparing selection patterns across species and regions, we will assess how habitat preferences vary with human influence.
+
 
 ## R concepts
 <!-- (50-100 words) -->
@@ -75,10 +87,13 @@ We are not yet familiar with using folium.
 <!-- (100-150 words) -->
 <!-- Which questions would you like to discuss at the coaching session? -->
 
-* Are you happy with this plan?
-* Do you think the level of ambition is appropriate?
+* Are you happy with this plan in general?
+* Do you think the level of ambition is appropriate? Are we aiming too low or too high?
 * Do you see any obstacles? What are we missing?
-* Do you have advice on how to address the last two risks mentioned in the risk analysis?
+* Do you agree with the expected degree of complexity ranking that we chose?
+* If it were preferable to focus on fewer research questions, which ones would be the most feasible?
+* We don’t have a plan B since we think we can address at least two of the research questions. Is that acceptable? 
+* How likely are we going to run into the last two risks mentioned in the risk analysis?
 
 ## References
 * Porteus TA, Short MJ, Hoodless AN, Reynolds JC. 2024. Movement ecology and minimum density estimates of red foxes in wet grassland habitats used by breeding wading birds. Eur J Wildlife Res. 70:8. https://doi.org/10.1007/s10344-023-01759-y
