@@ -73,20 +73,96 @@ foxes_herschel <- movebank_download_study(
 )
 ```
 
-@laube2011 have found that the temporal scale affects the calculation of movement parameters. The speed, sinuosity and turning angle of animal trajectories will differ based on the sampling interval. We conclude that temporal scale will also affect home range results. Therefore we need to check if the sampling intervals are similar between the datasets to ensure an apples-to-apples comparison.
+@laube2011 have found that the temporal scale affects the calculation of movement parameters. The speed, sinuosity and turning angle of animal trajectories will differ based on the sampling interval. We conclude that temporal scale could also affect home range results.
 
-The Wiltshire data is collected at 10 or 60 minute intervals. The data collection team had the option to select the sampling interval remotely. The Canadian data is collected only once per day
+Therefore we need to check if the sampling intervals are similar between the datasets to ensure an apples-to-apples comparison. We also need to make sure that the datasets cover comparable time ranges.
 
-We also need to make sure that they cover similar time ranges.
+The Wiltshire data was collected during the wader nesting season, which was defined to be 15 March to 15 June, from 2016 to 2019 for 35 foxes in total. It was sampled at 10 or 60 minute rates throughout the day. The research team had the option to select the sampling rate remotely. They used this to save battery at times the data was considered less interesting, such as times when foxes were known to be usually static. The Canadian data was collected all year round, but at a much lower sampling rate of just once per day from 2011 to 2015 (Bylot) and June 2009 to Feb 2010 (Herschel), at randomly different afternoon times of the day. It included a much lower number of foxes, two per island. @fig-datapoints-year provides an overview of the amount of data points available per year, demonstrating the fact that there is much more data from Wiltshire because of the higher number of foxes and also the higher sampling rate.
+
+The time of day at which the data was collected poses an interesting challenge because it would not be reasonable to assume that foxes in remote area will follow the same daily patterns as the ones living in a rural area. These two groups will have different activity levels because in one case humans will be present in the afternoon and in the other case that will not happen. 
+
+Given finding the selection of best data points to compare involves a complex choice that will influence the results, the first goal is to perform the simplest acceptable comparison. But what is that?
+
+We can decide to compare the data for the same time of the year. @fig-datapoints-month shows that (1) the Herschel data can not be used because it does only minimally overlap with the wader nesting season and (2) there is much less data from Bylot for the wader nesting season compared to other times of the year. It could be that the foxes have different yearly activity patterns because of the seasonal differences between the locations.
+
+We will do it anyway and compare the median animal home range between Wiltshire and Bylot for the wader season for all years there is data for (five for Bylot, four for Wiltshire) to find out if any conclusion can be drawn. 
+
+TBD Note to self: When doing processing, be careful since the places are in different timezones. Also, there is a change from GMT to BST during the study period.
 
 ```{r}
-#| label: red fox data filtering
-# TBD: filter data to the same time range (doesnt have to be the same year, but same month and day)
+#| label: red fox data investigation
+#| include: false
+library("lubridate")
 
-foxes_wiltshire |>
-  group_by(timestamp())
+counts_herschel <- data.frame(foxes_herschel) |> 
+  mutate(source = as.character("Herschel")) |>
+  select(source, timestamp)
+st_drop_geometry(counts_herschel)
+counts_bylot <- data.frame(foxes_bylot) |> 
+  mutate(source = as.character("Bylot")) |>
+  select(source, timestamp)
+st_drop_geometry(counts_bylot)
+counts_wiltshire <- data.frame(foxes_wiltshire) |> 
+  mutate(source = as.character("Wiltshire")) |>
+  select(source, timestamp)
+st_drop_geometry(counts_wiltshire)
 
+combined_data <- bind_rows(counts_herschel, counts_bylot, counts_wiltshire)
+combined_data <- combined_data |>
+  mutate(date = as.Date(timestamp), month = month(timestamp), year = as.integer(year(timestamp)))
+year_count <- combined_data |>
+  group_by(source, year) |>
+  summarise(count = n())
+month_count <- combined_data |>
+  group_by(source, month) |>
+  summarise(count = n())
+```
 
+```{r}
+#| label: fig-datapoints-year
+#| fig-cap: "Overview of the number of data points per year in the three different datasets"
+#| echo: false
+#| warning: false
+ggplot(year_count, aes(x = factor(year), y = count, color = source)) +
+  geom_bar(stat = "identity") +
+  facet_wrap(~ source, scales = "free_y") +
+  labs(title = "Number of data points per year per dataset",
+       x = "Year", y = "# of timestamps") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90))
+```
+
+```{r}
+#| label: fig-datapoints-month
+#| fig-cap: "Overview of the number of data points per month in the three different datasets"
+#| echo: false
+#| warning: false
+ggplot(month_count, aes(x = month, y = count, color = source)) +
+  geom_point() +
+  scale_x_continuous(breaks = 1:12, labels = 1:12) +
+  facet_wrap(~ source, scales = "free_y") +
+  labs(title = "Number of data points per month per dataset",
+       x = "Month", y = "# of timestamps") +
+  theme_minimal()
+```
+
+```{r}
+# TBD: Why does this not work with the newer pipe? The dot is the issue
+foxes_herschel_monthly <- foxes_herschel %>% mt_set_track_id(paste(mt_track_id(.),
+    sep = "_", month.name[month(mt_time(.))]
+  ))
+```
+
+```{r}
+# TBD: filter_track_data doesn't seem to be fully functional
+foxes_herschel |>
+  filter_track_data(source == c("Herschel"))
+```
+
+```{r}
+foxes_herschel %>%
+  filter(!st_is_empty(.)) %>%
+  mt_filter_per_interval(unit = "24 hours")
 ```
 
 #### HRP-100
@@ -99,7 +175,7 @@ Use 2020 data and make a subset as quickly as possible
 Movement paths will be analyzed to identify patterns in speed, direction, and habitat use. Step lengths and turning angles will help infer behavioral states. Step-selection functions (SSFs) will model habitat preferences relative to availability, allowing us to quantify how animals respond to environmental covariates such as human footprint and land use.
 
 #### Home Range Assessment:
-Home range sizes will be calculated using kernel density estimation (KDE) and minimum convex polygons (MCPs). This will provide estimates of the area used by each individual. Home ranges will be compared across regions with varying levels of human activity to test whether access to anthropogenic food sources (e.g., garbage, crops) leads to smaller home ranges due to resource concentration.
+Home range sizes will be calculated using kernel density estimation (KDE) and minimum convex polygons (MCPs). This will provide estimates of the area used by each individual. Home ranges will be compared across regions with varying levels of human activity to test whether access to anthropogenic food sources (e.g., household waste, crops) leads to smaller home ranges due to resource concentration.
 
 TBD: There are several ways to calculate home range, we could compare (and could focus on only that)
 
