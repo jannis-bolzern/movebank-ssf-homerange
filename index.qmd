@@ -52,12 +52,7 @@ If required, for **land use** in Washington, US, we will rely on the General Lan
 #### Movebank
 We have used data from the Movebank database and system by @kays2022movebank. This simplifies data preparation since all the datasets have the same format and table definitions. A library for data ingestion and trajectory handling in R is provided by @bartk_move2.
 
-@laube2011 have found that the temporal scale affects the calculation of movement parameters. The speed, sinuosity and turning angle of animal trajectories will differ based on the sampling interval. We conclude that temporal scale will also affect home range results. Therefore we need to check if the sampling intervals are similar between the datasets to ensure an apples-to-apples comparison.
-
-We also need to make sure that they cover similar time ranges.
-
 ```{r}
-"#| eval: false"
 library("dplyr")
 library("move2")
 library("units")
@@ -78,9 +73,38 @@ foxes_herschel <- movebank_download_study(
 )
 ```
 
+@laube2011 have found that the temporal scale affects the calculation of movement parameters. The speed, sinuosity and turning angle of animal trajectories will differ based on the sampling interval. We conclude that temporal scale will also affect home range results. Therefore we need to check if the sampling intervals are similar between the datasets to ensure an apples-to-apples comparison.
+
+The Wiltshire data is collected at 10 or 60 minute intervals. The data collection team had the option to select the sampling interval remotely. The Canadian data is collected only once per day
+
+We also need to make sure that they cover similar time ranges.
+
 ```{r}
+#| label: red fox data filtering
 # TBD: filter data to the same time range (doesnt have to be the same year, but same month and day)
+
+foxes_wiltshire |>
+  group_by(timestamp())
+
+
 ```
+
+#### HRP-100
+
+Use 2020 data and make a subset as quickly as possible
+
+### Methodology
+
+#### Trajectory Analysis:
+Movement paths will be analyzed to identify patterns in speed, direction, and habitat use. Step lengths and turning angles will help infer behavioral states. Step-selection functions (SSFs) will model habitat preferences relative to availability, allowing us to quantify how animals respond to environmental covariates such as human footprint and land use.
+
+#### Home Range Assessment:
+Home range sizes will be calculated using kernel density estimation (KDE) and minimum convex polygons (MCPs). This will provide estimates of the area used by each individual. Home ranges will be compared across regions with varying levels of human activity to test whether access to anthropogenic food sources (e.g., garbage, crops) leads to smaller home ranges due to resource concentration.
+
+TBD: There are several ways to calculate home range, we could compare (and could focus on only that)
+
+TBD: Do this for foxes first, for bobcat and coyote data later, potentially even cross-species analysis
+
 
 ```{r}
 library("ggplot2")
@@ -107,24 +131,6 @@ ggplot(mcp, aes(fill = individual_id)) +
 #ggplot(c2_mcp, aes(fill = individual_id)) +
 #  geom_sf(alpha = 0.4)
 ```
-
-#### HRP-100
-
-Use 2020 data and make a subset as quickly as possible
-
-### Methodology
-
-#### Trajectory Analysis:
-Movement paths will be analyzed to identify patterns in speed, direction, and habitat use. Step lengths and turning angles will help infer behavioral states. Step-selection functions (SSFs) will model habitat preferences relative to availability, allowing us to quantify how animals respond to environmental covariates such as human footprint and land use.
-
-#### Home Range Assessment:
-Home range sizes will be calculated using kernel density estimation (KDE) and minimum convex polygons (MCPs). This will provide estimates of the area used by each individual. Home ranges will be compared across regions with varying levels of human activity to test whether access to anthropogenic food sources (e.g., garbage, crops) leads to smaller home ranges due to resource concentration.
-
-TBD: There are several ways Wie die home ranges verwendet, es gibt verschiedene Ansätze
-Home intervals (could focus on only that)
-Zuerst nur für Füchse
-Dann auch mit Bobcat und Coyotes
-Cross-species analysis
 
 #### Temporal Activity Patterns:
 Movement rates will be used to quantify diel activity shifts. We will test whether animals in high human-impact areas exhibit increased nocturnality, potentially as a strategy to avoid direct human encounters. This analysis will reveal how temporal behavior adapts to human presence.
