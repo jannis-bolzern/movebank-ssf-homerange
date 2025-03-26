@@ -73,11 +73,15 @@ foxes_herschel <- movebank_download_study(
 )
 ```
 
-@laube2011 have found that the temporal scale affects the calculation of movement parameters. The speed, sinuosity and turning angle of animal trajectories will differ based on the sampling interval. We conclude that temporal scale will also affect home range results. Therefore we need to check if the sampling intervals are similar between the datasets to ensure an apples-to-apples comparison.
+@laube2011 have found that the temporal scale affects the calculation of movement parameters. The speed, sinuosity and turning angle of animal trajectories will differ based on the sampling interval. We conclude that temporal scale could also affect home range results.
 
-The Wiltshire data is collected at 10 or 60 minute intervals. The data collection team had the option to select the sampling interval remotely. The Canadian data is collected only once per day
+Therefore we need to check if the sampling intervals are similar between the datasets to ensure an apples-to-apples comparison. We also need to make sure that the datasets cover comparable time ranges.
 
-We also need to make sure that they cover similar time ranges.
+The Wiltshire data was collected at 10 or 60 minute intervals. The research team had the option to select the sampling interval remotely. They used this to save battery at times the data was considered less interesting, such as times when foxes were known to be usually static. The Canadian data was collected just once per day, at randomly different afternoon times of the day. 
+
+This poses an interesting challenge because it would not be reasonable to assume that foxes in remote area will follow the same daily patterns as the ones living in a rural area. These two groups will have different activity levels because in one case humans will be present in the afternoon and in the other case that will not happen.
+
+When doing processing, be careful since the places are in different timezones.
 
 ```{r}
 #| label: red fox data filtering
