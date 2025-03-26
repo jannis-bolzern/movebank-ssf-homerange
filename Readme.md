@@ -69,9 +69,9 @@ We will use the following libraries:
 
 * readr, tidyr, dplyr library for data processing
 * ggplot2 and tmap library for visualization
-* sf library for spatial data handling
-* move2 library for trajectory handling
-* folium for reading the human footprint data
+* sf and terra library for spatial data handling
+* move2 and amt library for trajectory handling
+* R or folium for reading the human footprint data
 
 We are not yet familiar with using folium.
 
