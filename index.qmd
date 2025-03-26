@@ -20,7 +20,6 @@ bibliography: bibliography.bib
 
 In this project, we aim to investigate how human activity influences the movement patterns of wild animals. Using GPS and Argos tracking data from red foxes, bobcats, and coyotes across rural and remote areas in England, Canada, and the US, we will analyze home range sizes, temporal activity shifts, and habitat selection in relation to human footprint and land use data.
 
-
 ## Introduction
 
 Research questions:
@@ -29,14 +28,19 @@ Research questions:
 2. **Temporal Shifts in Activity Patterns:** Do animals become more nocturnal in high human-impact areas to avoid direct human encounters?
 3. **Habitat Selection in Human-Dominated Landscapes:** How do animals select habitats (e.g., forests, agriculture) under varying levels of human influence?
 
+Additional challenges:
+
+* We will be using data for purposes that it wasn't originally collected for.
+* We will be comparing between data from different studies (foxes).
+* We will be using parts of datasets (missing animals in the bobcat/coyote study).
 
 ## Material and Methods
 
 ### Datasets
 
 We will use the following wild animal tracking data published on Movebank under a Creative Commons license by three different research groups (see references):
-* **Red fox** data from @porteus2024movement for rural areas (GPS-based, Wiltshire, UK)
-* Red fox data from @lai2022red for remote areas (Argos-based, from the uninhabitated islands Bylot and Herschel, Canada)
+
+* **Red fox** data from @porteus2024movement for rural areas (outskirt areas of villages in Wiltshire, UK) will be compared to red fox data from @lai2022red for remote areas (uninhabitated islands Bylot and Herschel, Canada)
 * **Bobcat** and **coyote** data from @prugh2023fear for remote areas with some rural structures (GPS-based, northern Washington, US)
 
 For the human footprint data, we will use the **global 100 meter resolution terrestrial human footprint data (HFP-100)** by @gassert2023operational. The data can be read in Python, R, or any other script that has libraries that can interpret geospatial data (such as folium).
@@ -45,23 +49,68 @@ If required, for **land use** in Washington, US, we will rely on the General Lan
 
 ### Data preparation and processing
 
-@laube2011 investigate how temporal scale affects the calculation of movement parameters (speed, sinuosity and turning angle) of animal trajectories. 
+#### Movebank
+We have used data from the Movebank database and system by @kays2022movebank. This simplifies data preparation since all the datasets have the same format and table definitions. A library for data ingestion and trajectory handling in R is provided by @bartk_move2.
 
-Relevant topics:
+@laube2011 have found that the temporal scale affects the calculation of movement parameters. The speed, sinuosity and turning angle of animal trajectories will differ based on the sampling interval. We conclude that temporal scale will also affect home range results. Therefore we need to check if the sampling intervals are similar between the datasets to ensure an apples-to-apples comparison.
 
-* Sampling intervals
-* Stimmen die Zeiträume überein?
-* Daten von verschiedenen Quellen?
+We also need to make sure that they cover similar time ranges.
 
-HRP-100: use 2020 data and make a subset as quickly as possible
+```{r}
+"#| eval: false"
+library("dplyr")
+library("move2")
+library("units")
+library("rnaturalearth")
 
-We will use the following libraries:
+foxes_wiltshire <- movebank_download_study(
+  study_id = 3179890710,
+  sensor_type_id = c("gps"),
+  'license-md5'='ffa36f79defe10eac9fe70f6502a17e0'
+)
+foxes_bylot <- movebank_download_study(
+  study_id = 1371322147,
+  'license-md5'='9559cb1b1cca51e9f3fd69812e5e22dc'
+)
+foxes_herschel <- movebank_download_study(
+  study_id = 1371529289,
+  'license-md5'='436e8205d0c2973115e2024b146a6ad5'
+)
+```
 
-* readr, tidyr, dplyr library for data processing
-* ggplot2 and tmap library for visualization
-* sf and terra library for spatial data handling
-* move2 and amt library for trajectory handling
-* TBD for reading the human footprint data
+```{r}
+# TBD: filter data to the same time range (doesnt have to be the same year, but same month and day)
+```
+
+```{r}
+library("ggplot2")
+library("sf")
+
+tracks = mt_track_lines(foxes_wiltshire)
+mcp <- st_convex_hull(tracks)
+area <- st_area(mcp)
+print(area)
+ggplot(mcp, aes(fill = individual_id)) +
+  geom_sf(alpha = 0.4)
+
+#c1_tracks = mt_track_lines(foxes_bylot)
+#c1_mcp <- st_convex_hull(c1_tracks)
+#print(c1_area)
+#c1_area <- st_area(c1_mcp)
+#ggplot(c1_mcp, aes(fill = individual_id)) +
+#  geom_sf(alpha = 0.4)
+
+#c2_tracks = mt_track_lines(foxes_herschel)
+#c2_mcp <- st_convex_hull(c2_tracks)
+#c2_area <- st_area(c2_mcp)
+#print(c2_area)
+#ggplot(c2_mcp, aes(fill = individual_id)) +
+#  geom_sf(alpha = 0.4)
+```
+
+#### HRP-100
+
+Use 2020 data and make a subset as quickly as possible
 
 ### Methodology
 
@@ -90,7 +139,6 @@ SSFs will quantify selection for human-modified habitats (e.g., agricultural are
 * Wortlimit mit Patrick besprechen
 * Runder Bericht in dem die research questions zu Ende beantwortet werden
 
-
 ## Appendix
 
 ### Wordcount
@@ -101,4 +149,7 @@ SSFs will quantify selection for human-modified habitats (e.g., agricultural are
 wordcountaddin::word_count("index.qmd")
 ```
 
+### Use of Large Language Models and Generative AI
+
+Elke used @notebooklm for interactively querying the set of research papers cited in the references.
 
