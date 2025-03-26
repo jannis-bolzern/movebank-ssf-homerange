@@ -18,7 +18,7 @@ bibliography: bibliography.bib
 
 ## Abstract
 
-In this project, we aim to investigate how human activity influences the movement patterns of wild animals. Using GPS and Argos tracking data from red foxes, bobcats, and coyotes across rural and remote areas in England, Canada, and the US, we will analyze home range sizes, temporal activity shifts, and habitat selection in relation to human footprint and land use data.
+In this project we investigate how human activity influences the movement patterns of wild animals. Using GPS and Argos tracking data from red foxes, bobcats, and coyotes across rural and remote areas in England, Canada, and the US, we will analyze home range sizes, temporal activity shifts, and habitat selection in relation to human footprint and land use data.
 
 ## Introduction
 
@@ -36,12 +36,14 @@ Additional challenges:
 
 ## Material and Methods
 
+This section describes the dataset, the steps taken to prepare and process the different data set in use, and the methodological approach that was employed.
+
 ### Datasets
 
 We will use the following wild animal tracking data published on Movebank under a Creative Commons license by three different research groups (see references):
 
-* **Red fox** data from @porteus2024movement for rural areas (outskirt areas of villages in Wiltshire, UK) will be compared to red fox data from @lai2022red for remote areas (uninhabitated islands Bylot and Herschel, Canada)
-* **Bobcat** and **coyote** data from @prugh2023fear for remote areas with some rural structures (GPS-based, northern Washington, US)
+* **Red fox** data from two sources: @porteus2024movement for rural areas (outskirt areas of villages in Wiltshire, UK) will be compared to red fox data from @lai2022red for highly remote areas (uninhabitated islands Bylot and Herschel, Canada)
+* **Bobcat** and **coyote** data from @prugh2023fear for remote areas with some rural structures (northern Washington, US)
 
 For the human footprint data, we will use the **global 100 meter resolution terrestrial human footprint data (HFP-100)** by @gassert2023operational. The data can be read in Python, R, or any other script that has libraries that can interpret geospatial data (such as folium).
 
@@ -50,9 +52,14 @@ If required, for **land use** in Washington, US, we will rely on the General Lan
 ### Data preparation and processing
 
 #### Movebank
-We have used data from the Movebank database and system by @kays2022movebank. This simplifies data preparation since all the datasets have the same format and table definitions. A library for data ingestion and trajectory handling in R is provided by @bartk_move2.
+We have used data from the Movebank database and system by @kays2022movebank. All the datasets in Movebank have the same format and table definitions, which simplifies data handling since it allows to re-use R code between datasets. A library for data ingestion (see [@fig-code-chunk] for an example) and trajectory handling in R is provided by @bartk_move2.
+
+##### Red fox data
+
 
 ```{r}
+#| label: fig-code-chunk
+#| output: false
 library("dplyr")
 library("move2")
 library("units")
@@ -73,21 +80,9 @@ foxes_herschel <- movebank_download_study(
 )
 ```
 
-@laube2011 have found that the temporal scale affects the calculation of movement parameters. The speed, sinuosity and turning angle of animal trajectories will differ based on the sampling interval. We conclude that temporal scale could also affect home range results.
+The main challenge for this research question is the fact that data from different sources is compared. Upon closer inspection it turns out that even if the datasets have the exact same format, the data itself shows completely different properties across the two sources Wiltshire and Bylot/Herschel.
 
-Therefore we need to check if the sampling intervals are similar between the datasets to ensure an apples-to-apples comparison. We also need to make sure that the datasets cover comparable time ranges.
-
-The Wiltshire data was collected during the wader nesting season, which was defined to be 15 March to 15 June, from 2016 to 2019 for 35 foxes in total. It was sampled at 10 or 60 minute rates throughout the day. The research team had the option to select the sampling rate remotely. They used this to save battery at times the data was considered less interesting, such as times when foxes were known to be usually static. The Canadian data was collected all year round, but at a much lower sampling rate of just once per day from 2011 to 2015 (Bylot) and June 2009 to Feb 2010 (Herschel), at randomly different afternoon times of the day. It included a much lower number of foxes, two per island. @fig-datapoints-year provides an overview of the amount of data points available per year, demonstrating the fact that there is much more data from Wiltshire because of the higher number of foxes and also the higher sampling rate.
-
-The time of day at which the data was collected poses an interesting challenge because it would not be reasonable to assume that foxes in remote area will follow the same daily patterns as the ones living in a rural area. These two groups will have different activity levels because in one case humans will be present in the afternoon and in the other case that will not happen. 
-
-Given finding the selection of best data points to compare involves a complex choice that will influence the results, the first goal is to perform the simplest acceptable comparison. But what is that?
-
-We can decide to compare the data for the same time of the year. @fig-datapoints-month shows that (1) the Herschel data can not be used because it does only minimally overlap with the wader nesting season and (2) there is much less data from Bylot for the wader nesting season compared to other times of the year. It could be that the foxes have different yearly activity patterns because of the seasonal differences between the locations.
-
-We will do it anyway and compare the median animal home range between Wiltshire and Bylot for the wader season for all years there is data for (five for Bylot, four for Wiltshire) to find out if any conclusion can be drawn. 
-
-TBD Note to self: When doing processing, be careful since the places are in different timezones. Also, there is a change from GMT to BST during the study period.
+The Wiltshire data was collected during the UK wader nesting season, which was defined to be 15 March to 15 June, from 2016 to 2019 for 35 foxes in total. It was sampled at 10 or 60 minute rates throughout the day. The research team had the option to select the sampling rate remotely. They used this to save battery at times the data was considered less interesting, such as times when foxes were known to be usually static. 
 
 ```{r}
 #| label: red fox data investigation
@@ -119,6 +114,8 @@ month_count <- combined_data |>
   summarise(count = n())
 ```
 
+The Bylot/Herschel Canadian data was collected all year round, but at a much lower sampling rate of just once per day. The collection period was from 2011 to 2015 for Bylot and from June 2009 to Feb 2010 for Herschel, at randomly different afternoon times of the day. It included a much lower number of foxes, two per island. @fig-datapoints-year provides an overview of the amount of data points available per year, demonstrating the fact that there is much more data from Wiltshire because of the higher number of foxes and also the higher sampling rate.
+
 ```{r}
 #| label: fig-datapoints-year
 #| fig-cap: "Overview of the number of data points per year in the three different datasets"
@@ -135,6 +132,12 @@ ggplot(year_count, aes(x = factor(year), y = count, color = source)) +
   theme(axis.text.x = element_text(angle = 90))
 ```
 
+The time of day at which the data was collected poses an interesting challenge because it would not be reasonable to assume that foxes in remote area will follow the same daily patterns as the ones living in a rural area. These two groups will have different activity levels because in one case humans will be present in the afternoon and in the other case that will not happen. 
+
+Given finding the selection of best data points to compare involves a complex choice that will influence the results, the first goal is to perform the simplest acceptable comparison. But what is that?
+
+We need to make sure that the datasets cover comparable time ranges. We can decide to compare the data for the same time of the year. @fig-datapoints-month shows that the Herschel data can not be used for this because it does only minimally overlap with the UK wader nesting season.
+
 ```{r}
 #| label: fig-datapoints-month
 #| fig-cap: "Overview of the number of data points per month in the three different datasets"
@@ -149,28 +152,36 @@ ggplot(month_count, aes(x = month, y = count, color = source)) +
   theme_minimal()
 ```
 
+@fig-datapoints-month also reveals there is much less data from Bylot for the time period of the UK wader nesting season compared to other times of the year. It could be that the foxes have different yearly activity patterns on the two continent because of the seasonal differences between the locations.
+
+We will do it anyway and compare the median animal home range between Wiltshire and Bylot for the UK wader season for all years there is data for (five for Bylot, four for Wiltshire) to find out if any conclusion can be drawn. 
+
+@laube2011 have found that the choice of temporal scale has considerable effects on the outcome of movement parameter calculations. Speed, sinuosity and turning angle of animal trajectories will differ based on the sampling interval. Based on these insights we suspect that temporal scale will also affect home range results. Therefore, we need to ensure that the sampling intervals are similar between the datasets for an apples-to-apples comparison. The simplest acceptable solution is to select a random data point from every 24 hour period for the Wiltshire data. This would not be possible for many use cases except for home range calculation.
+
+```{r}
+foxes_wiltshire_sampled_24h <- foxes_wiltshire |>
+  mt_filter_per_interval(unit = "24 hours")
+```
+
+TBD Note to self: When doing processing, be careful since the places are in different timezones. Also, there is a change from GMT to BST during the study period.
+
 ```{r}
 # TBD: Why does this not work with the newer pipe? The dot is the issue
-foxes_herschel_monthly <- foxes_herschel %>% mt_set_track_id(paste(mt_track_id(.),
+foxes_bylot_monthly <- foxes_bylot %>% mt_set_track_id(paste(mt_track_id(.),
     sep = "_", month.name[month(mt_time(.))]
   ))
 ```
 
 ```{r}
-# TBD: filter_track_data doesn't seem to be fully functional
-#foxes_herschel |>st_drop_geometry
-#  filter_track_data(source == c("Herschel"))
+foxes_bylot_monthly_filtered_may <- foxes_bylot_monthly |>
+  #filter_track_data(individual_local_identifier == "JBJB_May") # worked for Herschel
+  filter_track_data(deployment_id == "1371336385_May")
 ```
 
-```{r}
-foxes_herschel %>%
-  filter(!st_is_empty(.)) %>%
-  mt_filter_per_interval(unit = "24 hours")
-```
 
 #### HRP-100
 
-Use 2020 data and make a subset as quickly as possible
+Use 2020 data and make a subset as quickly as possible since the dataset is very big.
 
 ### Methodology
 
@@ -189,26 +200,21 @@ TBD: Do this for foxes first, for bobcat and coyote data later, potentially even
 library("ggplot2")
 library("sf")
 
-tracks = mt_track_lines(foxes_wiltshire)
-mcp <- st_convex_hull(tracks)
-area <- st_area(mcp)
-print(area)
-ggplot(mcp, aes(fill = individual_id)) +
+w_tracks <- mt_track_lines(foxes_wiltshire_sampled_24h)
+w_mcp <- st_convex_hull(w_tracks)
+w_area <- st_area(w_mcp)
+w_median <- median(w_area)
+print(w_median)
+ggplot(w_mcp, aes(fill = individual_id)) +
   geom_sf(alpha = 0.4)
 
-#c1_tracks = mt_track_lines(foxes_bylot)
-#c1_mcp <- st_convex_hull(c1_tracks)
-#print(c1_area)
-#c1_area <- st_area(c1_mcp)
-#ggplot(c1_mcp, aes(fill = individual_id)) +
-#  geom_sf(alpha = 0.4)
-
-#c2_tracks = mt_track_lines(foxes_herschel)
-#c2_mcp <- st_convex_hull(c2_tracks)
-#c2_area <- st_area(c2_mcp)
-#print(c2_area)
-#ggplot(c2_mcp, aes(fill = individual_id)) +
-#  geom_sf(alpha = 0.4)
+c1_tracks <- mt_track_lines(foxes_bylot_monthly_filtered_may)
+c1_mcp <- st_convex_hull(c1_tracks)
+c1_area <- st_area(c1_mcp)
+c1_median <- median(c1_area)
+print(c1_median)
+ggplot(c1_mcp, aes(fill = individual_id)) +
+  geom_sf(alpha = 0.4)
 ```
 
 #### Temporal Activity Patterns:
