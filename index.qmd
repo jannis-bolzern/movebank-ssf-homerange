@@ -1,6 +1,6 @@
 ---
-title: The title of your Semesterproject
-subtitle: A subtle subtitle
+title: How does human activity affect the movement patterns of wild animals?
+subtitle: An analysis of selected datasets from the Movebank animal tracking database
 author: Jannis Bolzern and Elke Michlmayr
 format:
   html:
@@ -34,10 +34,7 @@ bibliography: bibliography.bib
 
 ### Wordcount
 
-<!-- after installing the wordcountadding, remove the line "#| eval: false" -->
-
 ```{r}
-#| eval: false
 wordcountaddin::word_count("index.qmd")
 ```
 
