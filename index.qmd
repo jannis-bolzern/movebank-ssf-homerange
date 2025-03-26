@@ -33,7 +33,7 @@ bibliography: bibliography.bib
 
 ### Wordcount
 
-<!-- after installing the wordcountadding, remove the line "#| eval: false" -->
+<!-- after installing the wordcountadding (see https://github.com/benmarwick/wordcountaddin), remove the line "#| eval: false" -->
 
 ```{r}
 #| eval: false
