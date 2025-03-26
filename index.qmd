@@ -93,6 +93,7 @@ TBD Note to self: When doing processing, be careful since the places are in diff
 #| label: red fox data investigation
 #| include: false
 library("lubridate")
+library("sf")
 
 counts_herschel <- data.frame(foxes_herschel) |> 
   mutate(source = as.character("Herschel")) |>
@@ -123,6 +124,8 @@ month_count <- combined_data |>
 #| fig-cap: "Overview of the number of data points per year in the three different datasets"
 #| echo: false
 #| warning: false
+library("ggplot2")
+
 ggplot(year_count, aes(x = factor(year), y = count, color = source)) +
   geom_bar(stat = "identity") +
   facet_wrap(~ source, scales = "free_y") +
@@ -155,8 +158,8 @@ foxes_herschel_monthly <- foxes_herschel %>% mt_set_track_id(paste(mt_track_id(.
 
 ```{r}
 # TBD: filter_track_data doesn't seem to be fully functional
-foxes_herschel |>
-  filter_track_data(source == c("Herschel"))
+#foxes_herschel |>st_drop_geometry
+#  filter_track_data(source == c("Herschel"))
 ```
 
 ```{r}
@@ -235,3 +238,4 @@ wordcountaddin::word_count("index.qmd")
 
 Elke used @notebooklm for interactively querying the set of research papers cited in the references.
 
+## References
