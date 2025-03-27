@@ -33,8 +33,11 @@ We will be using different data sets for each research question.
 Additional challenges:
 
 * We will be using data for purposes that it wasn't originally collected for.
-* We will be comparing between data from different studies for the same animals.
 * We will be using parts of data sets (missing animals in the bobcat/coyote study).
+* We will be comparing between data from different studies for the same animals.
+* We will be comparing data from different continents where weather conditions will differ for the same day of the year, leading to animal behavior likely also being different.
+* We will be comparing data from different timezones.
+* The data includes changes of timezone (winter to summer time).
 
 ## Material and Methods
 
@@ -54,9 +57,7 @@ If required, for **land use** in Washington, US, we will rely on the General Lan
 ### Data preparation and processing
 
 #### Movebank
-We have used data from the Movebank database and system by @kays2022movebank. All the data sets in Movebank have the same format and table definitions, which simplifies data handling since it allows to re-use R code between data sets. A library for data ingestion and trajectory handling in R is provided by @bartk_move2.
-
-##### Red fox data
+We have used data from the Movebank database and system by @kays2022movebank. All the data sets in Movebank have the same format and table definitions, which simplifies data handling since it allows to re-use R code between data sets. A library for data ingestion, data filtering,  and trajectory handling in R is provided by @bartk_move2.
 
 ```{r}
 #| label: fig-code-chunk
@@ -84,6 +85,14 @@ foxes_herschel <- movebank_download_study(
   attributes = NULL
 )
 ```
+
+#### HRP-100
+
+Use 2020 data and make a subset as quickly as possible since the data set is very big.
+
+### Data exploration and analysis
+
+#### Red fox data  {@sec-red-fox-data}
 
 ```{r}
 #| label: red fox data investigation
@@ -119,7 +128,13 @@ The data sets have the exact same format. But the data itself shows completely d
 
 The Wiltshire data was collected during the UK wader nesting season, which was defined to be 15 March to 15 June, from 2016 to 2019 for 35 foxes in total. It was sampled at 10 or 60 minute rates throughout the day. The research team had the option to select the sampling rate remotely. They used this to save battery at times the data was considered less interesting, such as times when foxes were known to be usually static. 
 
-The Bylot/Herschel Canadian data was collected all year round, but at a much lower sampling rate of just once per day. The collection period was from 2011 to 2015 for Bylot and from June 2009 to Feb 2010 for Herschel, at randomly different afternoon times of the day. It included a much lower number of foxes, two per island. @fig-datapoints-year provides an overview of the amount of data points available per year, demonstrating the fact that there is much more data from Wiltshire because of the higher number of foxes and also the higher sampling rate.
+The Bylot/Herschel Canadian data was collected all year round, but at a much lower sampling rate of just once per day. The collection period was from 2011 to 2015 for Bylot and from June 2009 to Feb 2010 for Herschel, at random different afternoon times of the day. It included a much lower number of foxes, two foxes per island. @fig-datapoints-year provides an overview of the amount of data points available per year, demonstrating the fact that there is much more data from Wiltshire because of the higher number of foxes and also the higher sampling rate.
+
+@laube2011 have found that the choice of temporal scale has considerable effects on the outcome of movement parameter calculations. Speed, sinuosity and turning angle of animal trajectories will differ based on the sampling interval. Based on these insights we suspect that temporal scale will also affect home range results. Therefore, to be able to compare between these dataset, we need to ensure similar sampling intervals between the data sets for an apples-to-apples comparison. 
+
+The obvious approach would be to sample a random afternoon data point for each 24 hour window to achieve similar temporal scales. However, it would not be justified to assume that foxes in remote areas will follow similar daily patterns as the ones living in rural areas. These two groups will have different activity levels because in one case humans will be present in the environment in the afternoon, and in the other case the foxes will be left undisturbed. 
+
+We can conclude that finding the selection of best data points to compare involves a complex choice. It is highly likely that this choice will influence the results. The amount of influence on the results will depend on the use case. This is why we will discuss it as part of section @sec-methodology.
 
 ```{r}
 #| label: fig-datapoints-year
@@ -137,11 +152,7 @@ ggplot(year_count, aes(x = factor(year), y = count, color = source)) +
   theme(axis.text.x = element_text(angle = 90))
 ```
 
-The time of day at which the data was collected poses an interesting challenge because it would not be reasonable to assume that foxes in remote area will follow the same daily patterns as the ones living in a rural area. These two groups will have different activity levels because in one case humans will be present in the afternoon and in the other case that will not happen. 
-
-Given finding the selection of best data points to compare involves a complex choice that will influence the results, the first goal is to perform the simplest acceptable comparison. But what is that?
-
-We need to make sure that the data sets cover comparable time ranges. We can decide to compare the data for the same time of the year. @fig-datapoints-month shows that the Herschel data can not be used for this because it does only minimally overlap with the UK wader nesting season.
+Looking at the breakdowns by month as shown in @fig-datapoints-month shows noticeable seasonal differences in the amount of data available. 
 
 ```{r}
 #| label: fig-datapoints-month
@@ -157,19 +168,11 @@ ggplot(month_count, aes(x = month, y = count, color = source)) +
   theme_minimal()
 ```
 
-@fig-datapoints-month also reveals there is much less data from Bylot for the time period of the UK wader nesting season compared to other times of the year. It could be that the foxes have different yearly activity patterns on the two continent because of the seasonal differences between the locations.
-
-We will do it anyway and compare the median animal home range between Wiltshire and Bylot for the UK wader season for all years there is data for (five for Bylot, four for Wiltshire) to find out if any conclusion can be drawn. 
-
-@laube2011 have found that the choice of temporal scale has considerable effects on the outcome of movement parameter calculations. Speed, sinuosity and turning angle of animal trajectories will differ based on the sampling interval. Based on these insights we suspect that temporal scale will also affect home range results. Therefore, we need to ensure that the sampling intervals are similar between the data sets for an apples-to-apples comparison. The simplest acceptable solution is to select a random data point from every 24 hour period for the Wiltshire data. This would not be possible for many use cases except for home range calculation.
-
 ```{r}
 # Would be interesting to see the difference w and w/o sampling
 foxes_wiltshire_sampled_24h <- foxes_wiltshire |>
   mt_filter_per_interval(unit = "24 hours")
 ```
-
-TBD Note to self: When doing processing, be careful since the places are in different timezones. Also, there is a change from GMT to BST during the study period.
 
 ```{r}
 # TBD: Why does this not work with the newer pipe? The dot is the issue
@@ -193,11 +196,7 @@ foxes_bylot_monthly_filtered_may <- foxes_bylot_monthly |>
   filter_track_data(deployment_id == "1371336385_May")
 ```
 
-#### HRP-100
-
-Use 2020 data and make a subset as quickly as possible since the data set is very big.
-
-### Methodology
+### Methodology {@sec-methodology}
 
 #### Trajectory Analysis:
 Movement paths will be analyzed to identify patterns in speed, direction, and habitat use. Step lengths and turning angles will help infer behavioral states. Step-selection functions (SSFs) will model habitat preferences relative to availability, allowing us to quantify how animals respond to environmental covariates such as human footprint and land use.
@@ -205,9 +204,33 @@ Movement paths will be analyzed to identify patterns in speed, direction, and ha
 #### Home Range Assessment:
 Home range sizes will be calculated using minimum convex polygons (MCPs). This will provide estimates of the area used by each individual. Home ranges will be compared across regions with varying levels of human activity to test whether access to anthropogenic food sources (e.g., household waste, crops) leads to smaller home ranges due to resource concentration.
 
-A big challenge for home range assessment lies i
+We will use the red fox data for home range assessment present for a rural and a remote location.
+
+As pointed out in @sec-red-fox-data the red
 
 The main challenge for this research question is the fact that data from different sources is compared. 
+
+A big challenge for home range assessment lies i
+
+* We will be comparing data from different continents where weather conditions will differ for the same day of the year, leading to animal behavior likely also being different.
+
+also reveals there is much less data from Bylot for the time period of the UK wader nesting season compared to other times of the year. It could be that the foxes have different yearly activity patterns on the two continent because of the seasonal differences between the locations.
+
+We need to make sure that the data sets cover comparable time ranges. We can decide to compare the data for the same time of the year. @fig-datapoints-month shows that the Herschel data can not be used for this because it does only minimally overlap with the UK wader nesting season.
+
+
+the first goal is to perform the simplest acceptable comparison. But what is that?
+
+The simplest acceptable solution would be to select a random data point from every 24 hour period for the Wiltshire data. 
+
+The different sampling intervals 
+The time of day at which the data was collected poses an interesting challenge because 
+
+This would not be possible for many use cases except for home range calculation.
+
+We will do it anyway and compare the median animal home range between Wiltshire and Bylot for the UK wader season for all years there is data for (five for Bylot, four for Wiltshire) to find out if any conclusion can be drawn.
+
+
 
 TBD: Use kernel density estimation (KDE)
 
@@ -244,6 +267,8 @@ Movement rates will be used to quantify diel activity shifts. We will test wheth
 SSFs will quantify selection for human-modified habitats (e.g., agricultural areas, urban edges) relative to natural habitats. By comparing selection patterns across species and regions, we will assess how habitat preferences vary with human influence.
 
 ## Results
+
+
 
 ## Discussion
 
