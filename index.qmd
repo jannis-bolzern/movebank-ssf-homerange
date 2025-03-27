@@ -92,7 +92,7 @@ Use 2020 data and make a subset as quickly as possible since the data set is ver
 
 ### Data exploration and analysis
 
-#### Red fox data  {@sec-red-fox-data}
+#### Red fox data  {#sec-red-fox-data}
 
 ```{r}
 #| label: red fox data investigation
@@ -134,7 +134,7 @@ The Bylot/Herschel Canadian data was collected all year round, but at a much low
 
 The obvious approach would be to sample a random afternoon data point for each 24 hour window to achieve similar temporal scales. However, it would not be justified to assume that foxes in remote areas will follow similar daily patterns as the ones living in rural areas. These two groups will have different activity levels because in one case humans will be present in the environment in the afternoon, and in the other case the foxes will be left undisturbed. 
 
-We can conclude that finding the selection of best data points to compare involves a complex choice. It is highly likely that this choice will influence the results. The amount of influence on the results will depend on the use case. This is why we will discuss it as part of section @sec-methodology.
+We can conclude that finding the selection of best data points to compare involves a complex choice. It is highly likely that this choice will influence the results. The amount of influence on the results will depend on the use case. This is why we will discuss it as part of @sec-methodology.
 
 ```{r}
 #| label: fig-datapoints-year
@@ -196,7 +196,7 @@ foxes_bylot_monthly_filtered_may <- foxes_bylot_monthly |>
   filter_track_data(deployment_id == "1371336385_May")
 ```
 
-### Methodology {@sec-methodology}
+### Methodology {#sec-methodology}
 
 #### Trajectory Analysis:
 Movement paths will be analyzed to identify patterns in speed, direction, and habitat use. Step lengths and turning angles will help infer behavioral states. Step-selection functions (SSFs) will model habitat preferences relative to availability, allowing us to quantify how animals respond to environmental covariates such as human footprint and land use.
