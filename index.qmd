@@ -60,6 +60,7 @@ We have used data from the Movebank database and system by @kays2022movebank. Al
 ```{r}
 #| label: fig-code-chunk
 #| output: false
+
 library("dplyr")
 library("move2")
 library("units")
@@ -68,15 +69,18 @@ library("rnaturalearth")
 foxes_wiltshire <- movebank_download_study(
   study_id = 3179890710,
   sensor_type_id = c("gps"),
-  'license-md5'='ffa36f79defe10eac9fe70f6502a17e0'
+  'license-md5'='ffa36f79defe10eac9fe70f6502a17e0',
+  attributes = NULL
 )
 foxes_bylot <- movebank_download_study(
   study_id = 1371322147,
-  'license-md5'='9559cb1b1cca51e9f3fd69812e5e22dc'
+  'license-md5'='9559cb1b1cca51e9f3fd69812e5e22dc',
+  attributes = NULL
 )
 foxes_herschel <- movebank_download_study(
   study_id = 1371529289,
-  'license-md5'='436e8205d0c2973115e2024b146a6ad5'
+  'license-md5'='436e8205d0c2973115e2024b146a6ad5',
+  attributes = NULL
 )
 ```
 
@@ -159,6 +163,7 @@ We will do it anyway and compare the median animal home range between Wiltshire 
 @laube2011 have found that the choice of temporal scale has considerable effects on the outcome of movement parameter calculations. Speed, sinuosity and turning angle of animal trajectories will differ based on the sampling interval. Based on these insights we suspect that temporal scale will also affect home range results. Therefore, we need to ensure that the sampling intervals are similar between the datasets for an apples-to-apples comparison. The simplest acceptable solution is to select a random data point from every 24 hour period for the Wiltshire data. This would not be possible for many use cases except for home range calculation.
 
 ```{r}
+# Would be interesting to see the difference w and w/o sampling
 foxes_wiltshire_sampled_24h <- foxes_wiltshire |>
   mt_filter_per_interval(unit = "24 hours")
 ```
@@ -173,11 +178,19 @@ foxes_bylot_monthly <- foxes_bylot %>% mt_set_track_id(paste(mt_track_id(.),
 ```
 
 ```{r}
+foxes_bylot_filtered <- movebank_download_study(
+  study_id = 1371322147,
+  'license-md5'='9559cb1b1cca51e9f3fd69812e5e22dc',
+  timestamp_start = as.POSIXct("2012-03-15 00:00:00"),
+  timestamp_end = as.POSIXct("2012-06-15 23:59:00")
+)  
+```
+
+```{r}
 foxes_bylot_monthly_filtered_may <- foxes_bylot_monthly |>
   #filter_track_data(individual_local_identifier == "JBJB_May") # worked for Herschel
   filter_track_data(deployment_id == "1371336385_May")
 ```
-
 
 #### HRP-100
 
@@ -200,7 +213,7 @@ TBD: Do this for foxes first, for bobcat and coyote data later, potentially even
 library("ggplot2")
 library("sf")
 
-w_tracks <- mt_track_lines(foxes_wiltshire_sampled_24h)
+w_tracks <- mt_track_lines(foxes_wiltshire)
 w_mcp <- st_convex_hull(w_tracks)
 w_area <- st_area(w_mcp)
 w_median <- median(w_area)
@@ -208,7 +221,7 @@ print(w_median)
 ggplot(w_mcp, aes(fill = individual_id)) +
   geom_sf(alpha = 0.4)
 
-c1_tracks <- mt_track_lines(foxes_bylot_monthly_filtered_may)
+c1_tracks <- mt_track_lines(foxes_bylot_filtered)
 c1_mcp <- st_convex_hull(c1_tracks)
 c1_area <- st_area(c1_mcp)
 c1_median <- median(c1_area)
