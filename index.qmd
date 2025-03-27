@@ -199,6 +199,7 @@ We start with the simplest possible comparison, which is to ignore the different
 Given finding the selection of best data points to compare involves a complex choice that will influence the results, the first goal is to perform the simplest acceptable comparison. As a first exploratory result we will compare the median home range for the individual animals between the two locations for one year of data. The resulting home ranges are shown in @fig-home-ranges-wiltshire and @fig-home-ranges-bylot. The results show that there are vast differences in home rage between the locations. The median home rage size for the foxes in Herschel (75.3 km<sup>2</sup>) is more than 50 times bigger compared to the foxes in Wiltshire (1.1 km<sup>2</sup>). 
 
 ```{r}
+#| include: false
 foxes_wiltshire_filtered <- movebank_download_study(
   study_id = 3179890710,
   sensor_type_id = c("gps"),
@@ -214,11 +215,13 @@ foxes_bylot_filtered <- movebank_download_study(
 )  
 ```
 
+TBD: Make the chart legend better
+
 ```{r}
 #| label: fig-home-ranges-bylot
-#| fig-cap: "Home ranges calculated from UK wader nesting season 2012 for Bylot foxes"
 #| echo: false
 #| warning: false
+#| fig-cap: Home ranges calculated from UK wader nesting season 2012 for Bylot foxes
 c1_tracks <- mt_track_lines(foxes_bylot_filtered)
 c1_mcp <- st_convex_hull(c1_tracks)
 c1_area <- st_area(c1_mcp)
@@ -275,9 +278,9 @@ ggplot(w_mcp, aes(fill = individual_id)) +
 
 The home range numbers show a very clear result that demonstrates huge differences. The influence of aspects like sampling intervals can be demonstrated but plays a secondary role.
 
-TBD regional differences in activity due to weather conditions. Weather conditions will differ for the same day of the year, leading to animal behavior likely also being different.
+TBD Weather conditions will differ for the same day of the year, leading to animal behavior likely also being different. Decide if we should look at average monthly home ranges.
 
-These differences will with near certainty be influenced by availability of food, but very likely also by many other factors that we are not able to understand or control.
+We can conclude that these differences will with near certainty be influenced by availability of food, but also by many other factors including other human activity. We are not able to distinguish between these influences.
 
 ### TBD
 
