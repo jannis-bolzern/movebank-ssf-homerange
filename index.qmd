@@ -1,6 +1,6 @@
 ---
 title: How does human activity affect the movement patterns of wild animals?
-subtitle: An analysis of selected datasets from the Movebank animal tracking database
+subtitle: An analysis of selected data sets from the Movebank animal tracking database
 author: Jannis Bolzern and Elke Michlmayr
 format:
   html:
@@ -28,17 +28,19 @@ Research questions:
 2. **Temporal Shifts in Activity Patterns:** Do animals become more nocturnal in high human-impact areas to avoid direct human encounters?
 3. **Habitat Selection in Human-Dominated Landscapes:** How do animals select habitats (e.g., forests, agriculture) under varying levels of human influence?
 
+We will be using different data sets for each research question.
+
 Additional challenges:
 
 * We will be using data for purposes that it wasn't originally collected for.
-* We will be comparing between data from different studies (foxes).
-* We will be using parts of datasets (missing animals in the bobcat/coyote study).
+* We will be comparing between data from different studies for the same animals.
+* We will be using parts of data sets (missing animals in the bobcat/coyote study).
 
 ## Material and Methods
 
-This section describes the dataset, the steps taken to prepare and process the different data set in use, and the methodological approach that was employed.
+This section describes the data sets, the steps taken to prepare and process the different data set in use, and the methodological approach that was employed.
 
-### Datasets
+### Data sets
 
 We will use the following wild animal tracking data published on Movebank under a Creative Commons license by three different research groups (see references):
 
@@ -47,15 +49,14 @@ We will use the following wild animal tracking data published on Movebank under 
 
 For the human footprint data, we will use the **global 100 meter resolution terrestrial human footprint data (HFP-100)** by @gassert2023operational. The data can be read in Python, R, or any other script that has libraries that can interpret geospatial data (such as folium).
 
-If required, for **land use** in Washington, US, we will rely on the General Land Use Final Dataset published by Washington Spatial Data ([link](https://geo.wa.gov/datasets/a0ddbd4e0e2141b3841a6a42ff5aff46_0/explore?location=48.347066%2C-118.420235%2C9.91)) and for land use in the UK on gov.uk data ([link](https://www.data.gov.uk/dataset/946ce540-de76-441e-bac8-624f30cace8a/land-cover-map-2021-10m-classified-pixels-gb)).
+If required, for **land use** in Washington, US, we will rely on the General Land Use Final Data set published by Washington Spatial Data ([link](https://geo.wa.gov/datasets/a0ddbd4e0e2141b3841a6a42ff5aff46_0/explore?location=48.347066%2C-118.420235%2C9.91)) and for land use in the UK on gov.uk data ([link](https://www.data.gov.uk/dataset/946ce540-de76-441e-bac8-624f30cace8a/land-cover-map-2021-10m-classified-pixels-gb)).
 
 ### Data preparation and processing
 
 #### Movebank
-We have used data from the Movebank database and system by @kays2022movebank. All the datasets in Movebank have the same format and table definitions, which simplifies data handling since it allows to re-use R code between datasets. A library for data ingestion (see [@fig-code-chunk] for an example) and trajectory handling in R is provided by @bartk_move2.
+We have used data from the Movebank database and system by @kays2022movebank. All the data sets in Movebank have the same format and table definitions, which simplifies data handling since it allows to re-use R code between data sets. A library for data ingestion and trajectory handling in R is provided by @bartk_move2.
 
 ##### Red fox data
-
 
 ```{r}
 #| label: fig-code-chunk
@@ -83,10 +84,6 @@ foxes_herschel <- movebank_download_study(
   attributes = NULL
 )
 ```
-
-The main challenge for this research question is the fact that data from different sources is compared. Upon closer inspection it turns out that even if the datasets have the exact same format, the data itself shows completely different properties across the two sources Wiltshire and Bylot/Herschel.
-
-The Wiltshire data was collected during the UK wader nesting season, which was defined to be 15 March to 15 June, from 2016 to 2019 for 35 foxes in total. It was sampled at 10 or 60 minute rates throughout the day. The research team had the option to select the sampling rate remotely. They used this to save battery at times the data was considered less interesting, such as times when foxes were known to be usually static. 
 
 ```{r}
 #| label: red fox data investigation
@@ -118,11 +115,15 @@ month_count <- combined_data |>
   summarise(count = n())
 ```
 
+The data sets have the exact same format. But the data itself shows completely different properties across the two sources Wiltshire and Bylot/Herschel.
+
+The Wiltshire data was collected during the UK wader nesting season, which was defined to be 15 March to 15 June, from 2016 to 2019 for 35 foxes in total. It was sampled at 10 or 60 minute rates throughout the day. The research team had the option to select the sampling rate remotely. They used this to save battery at times the data was considered less interesting, such as times when foxes were known to be usually static. 
+
 The Bylot/Herschel Canadian data was collected all year round, but at a much lower sampling rate of just once per day. The collection period was from 2011 to 2015 for Bylot and from June 2009 to Feb 2010 for Herschel, at randomly different afternoon times of the day. It included a much lower number of foxes, two per island. @fig-datapoints-year provides an overview of the amount of data points available per year, demonstrating the fact that there is much more data from Wiltshire because of the higher number of foxes and also the higher sampling rate.
 
 ```{r}
 #| label: fig-datapoints-year
-#| fig-cap: "Overview of the number of data points per year in the three different datasets"
+#| fig-cap: "Overview of the number of data points per year in the three different data sets"
 #| echo: false
 #| warning: false
 library("ggplot2")
@@ -130,7 +131,7 @@ library("ggplot2")
 ggplot(year_count, aes(x = factor(year), y = count, color = source)) +
   geom_bar(stat = "identity") +
   facet_wrap(~ source, scales = "free_y") +
-  labs(title = "Number of data points per year per dataset",
+  labs(title = "Number of data points per year per data set",
        x = "Year", y = "# of timestamps") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 90))
@@ -140,18 +141,18 @@ The time of day at which the data was collected poses an interesting challenge b
 
 Given finding the selection of best data points to compare involves a complex choice that will influence the results, the first goal is to perform the simplest acceptable comparison. But what is that?
 
-We need to make sure that the datasets cover comparable time ranges. We can decide to compare the data for the same time of the year. @fig-datapoints-month shows that the Herschel data can not be used for this because it does only minimally overlap with the UK wader nesting season.
+We need to make sure that the data sets cover comparable time ranges. We can decide to compare the data for the same time of the year. @fig-datapoints-month shows that the Herschel data can not be used for this because it does only minimally overlap with the UK wader nesting season.
 
 ```{r}
 #| label: fig-datapoints-month
-#| fig-cap: "Overview of the number of data points per month in the three different datasets"
+#| fig-cap: "Overview of the number of data points per month in the three different data sets"
 #| echo: false
 #| warning: false
 ggplot(month_count, aes(x = month, y = count, color = source)) +
   geom_point() +
   scale_x_continuous(breaks = 1:12, labels = 1:12) +
   facet_wrap(~ source, scales = "free_y") +
-  labs(title = "Number of data points per month per dataset",
+  labs(title = "Number of data points per month per data set",
        x = "Month", y = "# of timestamps") +
   theme_minimal()
 ```
@@ -160,7 +161,7 @@ ggplot(month_count, aes(x = month, y = count, color = source)) +
 
 We will do it anyway and compare the median animal home range between Wiltshire and Bylot for the UK wader season for all years there is data for (five for Bylot, four for Wiltshire) to find out if any conclusion can be drawn. 
 
-@laube2011 have found that the choice of temporal scale has considerable effects on the outcome of movement parameter calculations. Speed, sinuosity and turning angle of animal trajectories will differ based on the sampling interval. Based on these insights we suspect that temporal scale will also affect home range results. Therefore, we need to ensure that the sampling intervals are similar between the datasets for an apples-to-apples comparison. The simplest acceptable solution is to select a random data point from every 24 hour period for the Wiltshire data. This would not be possible for many use cases except for home range calculation.
+@laube2011 have found that the choice of temporal scale has considerable effects on the outcome of movement parameter calculations. Speed, sinuosity and turning angle of animal trajectories will differ based on the sampling interval. Based on these insights we suspect that temporal scale will also affect home range results. Therefore, we need to ensure that the sampling intervals are similar between the data sets for an apples-to-apples comparison. The simplest acceptable solution is to select a random data point from every 24 hour period for the Wiltshire data. This would not be possible for many use cases except for home range calculation.
 
 ```{r}
 # Would be interesting to see the difference w and w/o sampling
@@ -194,7 +195,7 @@ foxes_bylot_monthly_filtered_may <- foxes_bylot_monthly |>
 
 #### HRP-100
 
-Use 2020 data and make a subset as quickly as possible since the dataset is very big.
+Use 2020 data and make a subset as quickly as possible since the data set is very big.
 
 ### Methodology
 
@@ -202,7 +203,13 @@ Use 2020 data and make a subset as quickly as possible since the dataset is very
 Movement paths will be analyzed to identify patterns in speed, direction, and habitat use. Step lengths and turning angles will help infer behavioral states. Step-selection functions (SSFs) will model habitat preferences relative to availability, allowing us to quantify how animals respond to environmental covariates such as human footprint and land use.
 
 #### Home Range Assessment:
-Home range sizes will be calculated using kernel density estimation (KDE) and minimum convex polygons (MCPs). This will provide estimates of the area used by each individual. Home ranges will be compared across regions with varying levels of human activity to test whether access to anthropogenic food sources (e.g., household waste, crops) leads to smaller home ranges due to resource concentration.
+Home range sizes will be calculated using minimum convex polygons (MCPs). This will provide estimates of the area used by each individual. Home ranges will be compared across regions with varying levels of human activity to test whether access to anthropogenic food sources (e.g., household waste, crops) leads to smaller home ranges due to resource concentration.
+
+A big challenge for home range assessment lies i
+
+The main challenge for this research question is the fact that data from different sources is compared. 
+
+TBD: Use kernel density estimation (KDE)
 
 TBD: There are several ways to calculate home range, we could compare (and could focus on only that)
 
