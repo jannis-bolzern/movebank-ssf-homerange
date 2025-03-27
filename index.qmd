@@ -168,21 +168,6 @@ ggplot(month_count, aes(x = month, y = count, color = source)) +
   theme_minimal()
 ```
 
-```{r}
-# Would be interesting to see the difference w and w/o sampling
-foxes_wiltshire_sampled_24h <- foxes_wiltshire |>
-  mt_filter_per_interval(unit = "24 hours")
-```
-
-```{r}
-foxes_bylot_filtered <- movebank_download_study(
-  study_id = 1371322147,
-  'license-md5'='9559cb1b1cca51e9f3fd69812e5e22dc',
-  timestamp_start = as.POSIXct("2012-03-15 00:00:00"),
-  timestamp_end = as.POSIXct("2012-06-15 23:59:00")
-)  
-```
-
 ### Methodology {#sec-methodology}
 
 #### Trajectory Analysis:
@@ -191,60 +176,13 @@ Movement paths will be analyzed to identify patterns in speed, direction, and ha
 #### Home Range Assessment:
 Home range sizes will be calculated using minimum convex polygons (MCPs). This will provide estimates of the area used by each individual. Home ranges will be compared across regions with varying levels of human activity to test whether access to anthropogenic food sources (e.g., household waste, crops) leads to smaller home ranges due to resource concentration.
 
-We will use the red fox data for home range assessment present for a rural and a remote location.
-
-As pointed out in @sec-red-fox-data the red
-
-The main challenge for this research question is the fact that data from different sources is compared. 
-
-A big challenge for home range assessment lies i
-
-* We will be comparing data from different continents where weather conditions will differ for the same day of the year, leading to animal behavior likely also being different.
-
-also reveals there is much less data from Bylot for the time period of the UK wader nesting season compared to other times of the year. It could be that the foxes have different yearly activity patterns on the two continent because of the seasonal differences between the locations.
-
-We need to make sure that the data sets cover comparable time ranges. We can decide to compare the data for the same time of the year. @fig-datapoints-month shows that the Herschel data can not be used for this because it does only minimally overlap with the UK wader nesting season.
-
-
-Given finding the selection of best data points to compare involves a complex choice that will influence the results, the first goal is to perform the simplest acceptable comparison. But what is that?
-
-The simplest acceptable solution would be to select a random data point from every 24 hour period for the Wiltshire data. 
-
-The different sampling intervals 
-The time of day at which the data was collected poses an interesting challenge because 
-
-This would not be possible for many use cases except for home range calculation.
-
-We will do it anyway and compare the median animal home range between Wiltshire and Bylot for the UK wader season for all years there is data for (five for Bylot, four for Wiltshire) to find out if any conclusion can be drawn.
-
+We will use the red fox data for home range assessment present for a rural and a remote location. As pointed out in @sec-red-fox-data the data for the rural and the remote location differ in many aspects because it originates from two separate research groups using different setups, and because it is from geographically different locations.
 
 TBD: Use kernel density estimation (KDE)
 
 TBD: There are several ways to calculate home range, we could compare (and could focus on only that)
 
 TBD: Do this for foxes first, for bobcat and coyote data later, potentially even cross-species analysis
-
-
-```{r}
-library("ggplot2")
-library("sf")
-
-w_tracks <- mt_track_lines(foxes_wiltshire)
-w_mcp <- st_convex_hull(w_tracks)
-w_area <- st_area(w_mcp)
-w_median <- median(w_area)
-print(w_median)
-ggplot(w_mcp, aes(fill = individual_id)) +
-  geom_sf(alpha = 0.4)
-
-c1_tracks <- mt_track_lines(foxes_bylot_filtered)
-c1_mcp <- st_convex_hull(c1_tracks)
-c1_area <- st_area(c1_mcp)
-c1_median <- median(c1_area)
-print(c1_median)
-ggplot(c1_mcp, aes(fill = individual_id)) +
-  geom_sf(alpha = 0.4)
-```
 
 #### Temporal Activity Patterns:
 Movement rates will be used to quantify diel activity shifts. We will test whether animals in high human-impact areas exhibit increased nocturnality, potentially as a strategy to avoid direct human encounters. This analysis will reveal how temporal behavior adapts to human presence.
@@ -254,9 +192,94 @@ SSFs will quantify selection for human-modified habitats (e.g., agricultural are
 
 ## Results
 
+### Research question 1
 
+We start with the simplest possible comparison, which is to ignore the different sampling intervals and to compare the data for the same time of the year. The Herschel data can not be used in this case because it does only minimally overlap with the UK wader nesting season (see @fig-datapoints-month). This leaves the Wiltshire and the Bylot data for comparison.
+
+Given finding the selection of best data points to compare involves a complex choice that will influence the results, the first goal is to perform the simplest acceptable comparison. As a first exploratory result we will compare the median home range for the individual animals between the two locations for one year of data. The resulting home ranges are shown in @fig-home-ranges-wiltshire and @fig-home-ranges-bylot. The results show that there are vast differences in home rage between the locations. The median home rage size for the foxes in Herschel (75.3 km<sup>2</sup>) is more than 50 times bigger compared to the foxes in Wiltshire (1.1 km<sup>2</sup>). 
+
+```{r}
+foxes_wiltshire_filtered <- movebank_download_study(
+  study_id = 3179890710,
+  sensor_type_id = c("gps"),
+  'license-md5'='ffa36f79defe10eac9fe70f6502a17e0',
+  timestamp_start = as.POSIXct("2019-03-15 00:00:00"),
+  timestamp_end = as.POSIXct("2019-06-15 23:59:00")
+)
+foxes_bylot_filtered <- movebank_download_study(
+  study_id = 1371322147,
+  'license-md5'='9559cb1b1cca51e9f3fd69812e5e22dc',
+  timestamp_start = as.POSIXct("2012-03-15 00:00:00"),
+  timestamp_end = as.POSIXct("2012-06-15 23:59:00")
+)  
+```
+
+```{r}
+#| label: fig-home-ranges-bylot
+#| fig-cap: "Home ranges calculated from UK wader nesting season 2012 for Bylot foxes"
+#| echo: false
+#| warning: false
+c1_tracks <- mt_track_lines(foxes_bylot_filtered)
+c1_mcp <- st_convex_hull(c1_tracks)
+c1_area <- st_area(c1_mcp)
+c1_median <- median(c1_area)
+print(c1_median)
+ggplot(c1_mcp, aes(fill = individual_id)) +
+  geom_sf(alpha = 0.4)
+```
+
+```{r}
+#| label: fig-home-ranges-wiltshire
+#| fig-cap: "Home ranges calculated from rom UK wader nesting season 2019 for Wiltshire foxes"
+#| echo: false
+#| warning: false
+library("ggplot2")
+library("sf")
+
+w_tracks <- mt_track_lines(foxes_wiltshire_filtered)
+w_mcp <- st_convex_hull(w_tracks)
+w_area <- st_area(w_mcp)
+w_median <- median(w_area)
+print(w_median)
+ggplot(w_mcp, aes(fill = individual_id)) +
+  geom_sf(alpha = 0.4)
+```
+
+To confirm these results with similar sampling intervals, we plot the home range for the Wiltshire foxes with a 24 hour sampling interval. For simplicity we select a random data point from every 24 hour period. The resulting home range is shown in @fig-home-ranges-wiltshire-sampled24h. The influence from the different sampling interval can clearly be seen since the median home range is only half as with the full amount of data points (0.56 km<sup>2</sup>).
+
+```{r}
+foxes_wiltshire_filtered_sampled_24h <- foxes_wiltshire_filtered |>
+  mt_filter_per_interval(unit = "24 hours")
+```
+
+```{r}
+#| label: fig-home-ranges-wiltshire-sampled24h
+#| fig-cap: "Home ranges calculated from rom UK wader nesting season 2019 for Wiltshire foxes (24 hour sampling interval)"
+#| echo: false
+#| warning: false
+library("ggplot2")
+library("sf")
+
+w_tracks <- mt_track_lines(foxes_wiltshire_filtered_sampled_24h)
+w_mcp <- st_convex_hull(w_tracks)
+w_area <- st_area(w_mcp)
+w_median <- median(w_area)
+print(w_median)
+ggplot(w_mcp, aes(fill = individual_id)) +
+  geom_sf(alpha = 0.4)
+```
 
 ## Discussion
+
+### Research question 1
+
+The home range numbers show a very clear result that demonstrates huge differences. The influence of aspects like sampling intervals can be demonstrated but plays a secondary role.
+
+TBD regional differences in activity due to weather conditions. Weather conditions will differ for the same day of the year, leading to animal behavior likely also being different.
+
+These differences will with near certainty be influenced by availability of food, but very likely also by many other factors that we are not able to understand or control.
+
+### TBD
 
 * Wortlimit mit Patrick besprechen
 * Runder Bericht in dem die research questions zu Ende beantwortet werden
