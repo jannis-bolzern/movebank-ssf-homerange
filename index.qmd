@@ -175,25 +175,12 @@ foxes_wiltshire_sampled_24h <- foxes_wiltshire |>
 ```
 
 ```{r}
-# TBD: Why does this not work with the newer pipe? The dot is the issue
-foxes_bylot_monthly <- foxes_bylot %>% mt_set_track_id(paste(mt_track_id(.),
-    sep = "_", month.name[month(mt_time(.))]
-  ))
-```
-
-```{r}
 foxes_bylot_filtered <- movebank_download_study(
   study_id = 1371322147,
   'license-md5'='9559cb1b1cca51e9f3fd69812e5e22dc',
   timestamp_start = as.POSIXct("2012-03-15 00:00:00"),
   timestamp_end = as.POSIXct("2012-06-15 23:59:00")
 )  
-```
-
-```{r}
-foxes_bylot_monthly_filtered_may <- foxes_bylot_monthly |>
-  #filter_track_data(individual_local_identifier == "JBJB_May") # worked for Herschel
-  filter_track_data(deployment_id == "1371336385_May")
 ```
 
 ### Methodology {#sec-methodology}
