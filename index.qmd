@@ -130,11 +130,24 @@ The Wiltshire data was collected during the UK wader nesting season, which was d
 
 The Bylot/Herschel Canadian data was collected all year round, but at a much lower sampling rate of just once per day. The collection period was from 2011 to 2015 for Bylot and from June 2009 to Feb 2010 for Herschel, at random different afternoon times of the day. It included a much lower number of foxes, two foxes per island. @fig-datapoints-year provides an overview of the amount of data points available per year, demonstrating the fact that there is much more data from Wiltshire because of the higher number of foxes and also the higher sampling rate.
 
+<<<<<<< HEAD
 @laube2011 have found that the choice of temporal scale has considerable effects on the outcome of movement parameter calculations. Speed, sinuosity and turning angle of animal trajectories will differ based on the sampling interval. Based on these insights we suspect that temporal scale will also affect home range results. Therefore, to be able to compare between these dataset, we need to ensure similar sampling intervals between the data sets for an apples-to-apples comparison. 
 
 The obvious approach would be to sample a random afternoon data point for each 24 hour window to achieve similar temporal scales. However, it would not be justified to assume that foxes in remote areas will follow similar daily patterns as the ones living in rural areas. These two groups will have different activity levels because in one case humans will be present in the environment in the afternoon, and in the other case the foxes will be left undisturbed. 
 
 We can conclude that finding the selection of best data points to compare involves a complex choice. It is highly likely that this choice will influence the results. The amount of influence on the results will depend on the use case. This is why we will discuss it as part of section @sec-methodology.
+=======
+@laube2011 have found that the choice of temporal scale has considerable effects on the outcome of movement parameter calculations. Speed, sinuosity and turning angle of animal trajectories will differ based on the sampling interval. Based on these insights we suspect that temporal scale will also affect home range results. Therefore, we need to ensure similar sampling intervals between the data sets for an apples-to-apples comparison. 
+
+The obvious approach would be to sample a random afternoon data point for each 24 hour window to achieve similar temporal scales. However, it would not be justified to assume that foxes in remote areas will follow similar daily patterns as the ones living in rural areas. These two groups will have different activity levels because in one case humans will be present in the environment in the afternoon, and in the other case the foxes will be left undisturbed. 
+
+The simplest acceptable solution would be to select a random data point from every 24 hour period for the Wiltshire data. 
+
+The different sampling intervals 
+The time of day at which the data was collected poses an interesting challenge because 
+
+This would not be possible for many use cases except for home range calculation.
+>>>>>>> 35a92f5c3796d3360af08c56d351a516a63a6aea
 
 ```{r}
 #| label: fig-datapoints-year
@@ -152,7 +165,14 @@ ggplot(year_count, aes(x = factor(year), y = count, color = source)) +
   theme(axis.text.x = element_text(angle = 90))
 ```
 
+<<<<<<< HEAD
 Looking at the breakdowns by month as shown in @fig-datapoints-month shows noticeable seasonal differences in the amount of data available. 
+=======
+
+Given finding the selection of best data points to compare involves a complex choice that will influence the results, the first goal is to perform the simplest acceptable comparison. But what is that?
+
+We need to make sure that the data sets cover comparable time ranges. We can decide to compare the data for the same time of the year. @fig-datapoints-month shows that the Herschel data can not be used for this because it does only minimally overlap with the UK wader nesting season.
+>>>>>>> 35a92f5c3796d3360af08c56d351a516a63a6aea
 
 ```{r}
 #| label: fig-datapoints-month
@@ -168,6 +188,15 @@ ggplot(month_count, aes(x = month, y = count, color = source)) +
   theme_minimal()
 ```
 
+<<<<<<< HEAD
+=======
+@fig-datapoints-month also reveals there is much less data from Bylot for the time period of the UK wader nesting season compared to other times of the year. It could be that the foxes have different yearly activity patterns on the two continent because of the seasonal differences between the locations.
+
+We will do it anyway and compare the median animal home range between Wiltshire and Bylot for the UK wader season for all years there is data for (five for Bylot, four for Wiltshire) to find out if any conclusion can be drawn. 
+
+
+
+>>>>>>> 35a92f5c3796d3360af08c56d351a516a63a6aea
 ```{r}
 # Would be interesting to see the difference w and w/o sampling
 foxes_wiltshire_sampled_24h <- foxes_wiltshire |>
