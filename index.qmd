@@ -119,7 +119,18 @@ The data sets have the exact same format. But the data itself shows completely d
 
 The Wiltshire data was collected during the UK wader nesting season, which was defined to be 15 March to 15 June, from 2016 to 2019 for 35 foxes in total. It was sampled at 10 or 60 minute rates throughout the day. The research team had the option to select the sampling rate remotely. They used this to save battery at times the data was considered less interesting, such as times when foxes were known to be usually static. 
 
-The Bylot/Herschel Canadian data was collected all year round, but at a much lower sampling rate of just once per day. The collection period was from 2011 to 2015 for Bylot and from June 2009 to Feb 2010 for Herschel, at randomly different afternoon times of the day. It included a much lower number of foxes, two per island. @fig-datapoints-year provides an overview of the amount of data points available per year, demonstrating the fact that there is much more data from Wiltshire because of the higher number of foxes and also the higher sampling rate.
+The Bylot/Herschel Canadian data was collected all year round, but at a much lower sampling rate of just once per day. The collection period was from 2011 to 2015 for Bylot and from June 2009 to Feb 2010 for Herschel, at random different afternoon times of the day. It included a much lower number of foxes, two foxes per island. @fig-datapoints-year provides an overview of the amount of data points available per year, demonstrating the fact that there is much more data from Wiltshire because of the higher number of foxes and also the higher sampling rate.
+
+@laube2011 have found that the choice of temporal scale has considerable effects on the outcome of movement parameter calculations. Speed, sinuosity and turning angle of animal trajectories will differ based on the sampling interval. Based on these insights we suspect that temporal scale will also affect home range results. Therefore, we need to ensure similar sampling intervals between the data sets for an apples-to-apples comparison. 
+
+The obvious approach would be to sample a random afternoon data point for each 24 hour window to achieve similar temporal scales. However, it would not be justified to assume that foxes in remote areas will follow similar daily patterns as the ones living in rural areas. These two groups will have different activity levels because in one case humans will be present in the environment in the afternoon, and in the other case the foxes will be left undisturbed. 
+
+The simplest acceptable solution would be to select a random data point from every 24 hour period for the Wiltshire data. 
+
+The different sampling intervals 
+The time of day at which the data was collected poses an interesting challenge because 
+
+This would not be possible for many use cases except for home range calculation.
 
 ```{r}
 #| label: fig-datapoints-year
@@ -137,7 +148,6 @@ ggplot(year_count, aes(x = factor(year), y = count, color = source)) +
   theme(axis.text.x = element_text(angle = 90))
 ```
 
-The time of day at which the data was collected poses an interesting challenge because it would not be reasonable to assume that foxes in remote area will follow the same daily patterns as the ones living in a rural area. These two groups will have different activity levels because in one case humans will be present in the afternoon and in the other case that will not happen. 
 
 Given finding the selection of best data points to compare involves a complex choice that will influence the results, the first goal is to perform the simplest acceptable comparison. But what is that?
 
@@ -161,7 +171,7 @@ ggplot(month_count, aes(x = month, y = count, color = source)) +
 
 We will do it anyway and compare the median animal home range between Wiltshire and Bylot for the UK wader season for all years there is data for (five for Bylot, four for Wiltshire) to find out if any conclusion can be drawn. 
 
-@laube2011 have found that the choice of temporal scale has considerable effects on the outcome of movement parameter calculations. Speed, sinuosity and turning angle of animal trajectories will differ based on the sampling interval. Based on these insights we suspect that temporal scale will also affect home range results. Therefore, we need to ensure that the sampling intervals are similar between the data sets for an apples-to-apples comparison. The simplest acceptable solution is to select a random data point from every 24 hour period for the Wiltshire data. This would not be possible for many use cases except for home range calculation.
+
 
 ```{r}
 # Would be interesting to see the difference w and w/o sampling
