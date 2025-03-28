@@ -131,12 +131,6 @@ The Wiltshire data was collected during the UK wader nesting season, which was d
 
 The Bylot/Herschel Canadian data was collected all year round, at a much lower sampling rate of just once per day. The collection period was from 2011 to 2015 for Bylot and from June 2009 to Feb 2010 for Herschel, at random different afternoon times of the day. It included a much lower number of foxes, two foxes per island. @fig-datapoints-year provides an overview of the amount of data points available per year, demonstrating the fact that there is much more data from Wiltshire because of the higher number of foxes and also the higher sampling rate.
 
-@laube2011 have found that the choice of temporal scale has considerable effects on movement parameter calculations, therefore we suspect that temporal scale will also affect home range results. To compare between data sets, we need to ensure similar sampling intervals between the data sets for an apples-to-apples comparison. 
-
-The obvious approach would be to sample a random afternoon data point for each 24 hour window to achieve similar temporal scales. However, it would not be justified to assume that foxes in remote areas will follow similar daily patterns as the ones living in rural areas. These two groups will have different activity levels because in one case humans will be present in the environment in the afternoon, and in the other case the foxes will be left undisturbed. 
-
-We conclude that selecting the data points to compare involves a complex choice that will influence the results. This is why we will discuss it as part of @sec-methodology.
-
 ```{r}
 #| label: fig-datapoints-year
 #| fig-cap: "Overview of the number of data points per year in the three different data sets"
@@ -179,15 +173,17 @@ Home range sizes will be calculated using minimum convex polygons (MCPs). This w
 
 We will use the red fox data for home range assessment present for a rural and a remote location. As pointed out in @sec-red-fox-data the data for the rural and the remote location differ in many aspects because it originates from two separate research groups using different setups, and because it is from geographically different locations.
 
-We start with the simplest possible comparison, which is to ignore the different sampling intervals and to compare the data for the same time of the year. The Herschel data can not be used since it overlaps minimally with the Wiltshire data (see @fig-datapoints-month). 
+@laube2011 have found that the choice of temporal scale has considerable effects on movement parameter calculations, therefore we suspect that temporal scale will also affect home range results. To compare between data sets, we need to ensure similar sampling intervals between the data sets for an apples-to-apples comparison. 
 
-Given finding the selection of best data points to compare involves a complex choice that will influence the results, the first goal is to perform the simplest acceptable comparison. As a first exploratory result we will compare the median home range for the individual animals between the two locations for one year of data. 
+The obvious approach would be to sample a random afternoon data point for each 24 hour window to achieve similar temporal scales. However, it would not be justified to assume that foxes in remote areas will follow similar daily patterns as the ones living in rural areas. These two groups will have different activity levels because in one case humans will be present in the environment in the afternoon, and in the other case the foxes will be left undisturbed. 
 
-To confirm these results with similar sampling intervals, we plot the home range for the Wiltshire foxes with a 24 hour sampling interval. For simplicity we select a random data point from every 24 hour period. 
+We conclude that selecting the data points to compare involves a complex choice that will influence the results. We decide to start exploring with the simplest possible comparison, which is to ignore the different sampling intervals and to compare the data for the same time of the year. The Herschel data can not be used since it overlaps minimally with the Wiltshire data (see @fig-datapoints-month). 
 
-TBD: Use kernel density estimation (KDE)
+To asses the effect of sampling intervals, we analyse the home range for the Wiltshire foxes with a 24 hour sampling interval. For simplicity we select a random data point from every 24 hour period. 
 
-TBD Weather conditions will differ for the same day of the year, leading to animal behavior likely also being different. Decide if we should look at average monthly home ranges.
+TBD? Weather conditions will differ for the same day of the year, leading to animal behavior likely also being different. 
+
+TBD? Decide if we should look at average monthly home ranges.
 
 #### Temporal Activity Patterns:
 Movement rates will be used to quantify diel activity shifts. We will test whether animals in high human-impact areas exhibit increased nocturnality, potentially as a strategy to avoid direct human encounters. This analysis will reveal how temporal behavior adapts to human presence.
@@ -196,7 +192,6 @@ Movement rates will be used to quantify diel activity shifts. We will test wheth
 SSFs will quantify selection for human-modified habitats (e.g., agricultural areas, urban edges) relative to natural habitats. By comparing selection patterns across species and regions, we will assess how habitat preferences vary with human influence.
 
 ## Results
-
 The resulting home ranges are shown in @fig-home-ranges-bylot and @fig-home-ranges-wiltshire. There are vast differences in home rage between the locations. The median home rage size for the foxes in Herschel (75.3~km<sup>2</sup>) is more than 50 times bigger compared to the foxes in Wiltshire (1.1 km<sup>2</sup>). 
 
 ```{r}
@@ -297,6 +292,7 @@ The fox home range results differ enormously between rural and remote areas. The
 
 * There are several ways to calculate home range, we could compare (and could focus on only that)
 * Do home range for foxes first, for bobcat and coyote data later, potentially even cross-species analysis
+* Use kernel density estimation (KDE)
 
 ### Wordcount
 
