@@ -194,6 +194,8 @@ SSFs will quantify selection for human-modified habitats (e.g., agricultural are
 
 ### Research question 1
 
+TBD: This should only be results.
+
 We start with the simplest possible comparison, which is to ignore the different sampling intervals and to compare the data for the same time of the year. The Herschel data can not be used in this case because it does only minimally overlap with the UK wader nesting season (see @fig-datapoints-month). This leaves the Wiltshire and the Bylot data for comparison.
 
 Given finding the selection of best data points to compare involves a complex choice that will influence the results, the first goal is to perform the simplest acceptable comparison. As a first exploratory result we will compare the median home range for the individual animals between the two locations for one year of data. The resulting home ranges are shown in @fig-home-ranges-wiltshire and @fig-home-ranges-bylot. The results show that there are vast differences in home rage between the locations. The median home rage size for the foxes in Herschel (75.3 km<sup>2</sup>) is more than 50 times bigger compared to the foxes in Wiltshire (1.1 km<sup>2</sup>). 
@@ -280,7 +282,7 @@ The home range numbers show a very clear result that demonstrates huge differenc
 
 TBD Weather conditions will differ for the same day of the year, leading to animal behavior likely also being different. Decide if we should look at average monthly home ranges.
 
-We can conclude that these differences will with near certainty be influenced by availability of food, but also by many other factors including other human activity. We are not able to distinguish between these influences.
+We can conclude that these differences are with near certainty influenced by availability of food, but also by many other factors including other human activity. The main downside of our approach is that we are not able to distinguish between these influences.
 
 ### TBD
 
@@ -294,7 +296,10 @@ We can conclude that these differences will with near certainty be influenced by
 <!-- after installing the wordcountadding (see https://github.com/benmarwick/wordcountaddin), remove the line "#| eval: false" -->
 
 ```{r}
-wordcountaddin::word_count("index.qmd")
+library("wordcountaddin")
+lines <- readLines("./index.qmd")
+wc <- word_count(lines)
+wc
 ```
 
 ### Use of Large Language Models and Generative AI
