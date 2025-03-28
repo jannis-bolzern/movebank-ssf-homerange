@@ -57,10 +57,11 @@ If required, for **land use** in Washington, US, we will rely on the General Lan
 ### Data preparation and processing
 
 #### Movebank
-We have used data from the Movebank database and system by @kays2022movebank. All the data sets in Movebank have the same format and table definitions, which simplifies data handling since it allows to re-use R code between data sets. A library for data ingestion, data filtering,  and trajectory handling in R is provided by @bartk_move2.
+We have used data from the Movebank database by @kays2022movebank. All Movebank data sets have the same format and table definitions. This simplifies data handling since it allows to re-use R code. A library for data processing and trajectory handling in R is provided by @bartk_move2.
 
 ```{r}
 #| label: fig-code-chunk
+#| include: false
 #| output: false
 
 library("dplyr")
@@ -124,11 +125,11 @@ month_count <- combined_data |>
   summarise(count = n())
 ```
 
-The data sets have the exact same format. But the data itself shows completely different properties across the two sources Wiltshire and Bylot/Herschel.
+The data sets have the exact same format. But the data shows different properties across the two sources.
 
-The Wiltshire data was collected during the UK wader nesting season, which was defined to be 15 March to 15 June, from 2016 to 2019 for 35 foxes in total. It was sampled at 10 or 60 minute rates throughout the day. The research team had the option to select the sampling rate remotely. They used this to save battery at times the data was considered less interesting, such as times when foxes were known to be usually static. 
+The Wiltshire data was collected during the UK wader nesting season, which was defined to be 15 March to 15 June, from 2016 to 2019 for 35 foxes in total. It was sampled at 10 or 60 minute rates. The research team could set the sampling rate remotely to save battery at times the data was considered less interesting. 
 
-The Bylot/Herschel Canadian data was collected all year round, but at a much lower sampling rate of just once per day. The collection period was from 2011 to 2015 for Bylot and from June 2009 to Feb 2010 for Herschel, at random different afternoon times of the day. It included a much lower number of foxes, two foxes per island. @fig-datapoints-year provides an overview of the amount of data points available per year, demonstrating the fact that there is much more data from Wiltshire because of the higher number of foxes and also the higher sampling rate.
+The Bylot/Herschel Canadian data was collected all year round, at a much lower sampling rate of just once per day. The collection period was from 2011 to 2015 for Bylot and from June 2009 to Feb 2010 for Herschel, at random different afternoon times of the day. It included a much lower number of foxes, two foxes per island. @fig-datapoints-year provides an overview of the amount of data points available per year, demonstrating the fact that there is much more data from Wiltshire because of the higher number of foxes and also the higher sampling rate.
 
 @laube2011 have found that the choice of temporal scale has considerable effects on the outcome of movement parameter calculations. Speed, sinuosity and turning angle of animal trajectories will differ based on the sampling interval. Based on these insights we suspect that temporal scale will also affect home range results. Therefore, to be able to compare between these dataset, we need to ensure similar sampling intervals between the data sets for an apples-to-apples comparison. 
 
@@ -184,6 +185,8 @@ TBD: There are several ways to calculate home range, we could compare (and could
 
 TBD: Do this for foxes first, for bobcat and coyote data later, potentially even cross-species analysis
 
+TBD Weather conditions will differ for the same day of the year, leading to animal behavior likely also being different. Decide if we should look at average monthly home ranges.
+
 #### Temporal Activity Patterns:
 Movement rates will be used to quantify diel activity shifts. We will test whether animals in high human-impact areas exhibit increased nocturnality, potentially as a strategy to avoid direct human encounters. This analysis will reveal how temporal behavior adapts to human presence.
 
@@ -192,11 +195,13 @@ SSFs will quantify selection for human-modified habitats (e.g., agricultural are
 
 ## Results
 
+TBD: This is for charts and results only.
+
 ### Research question 1
 
 TBD: This should only be results.
 
-We start with the simplest possible comparison, which is to ignore the different sampling intervals and to compare the data for the same time of the year. The Herschel data can not be used in this case because it does only minimally overlap with the UK wader nesting season (see @fig-datapoints-month). This leaves the Wiltshire and the Bylot data for comparison.
+We start with the simplest possible comparison, which is to ignore the different sampling intervals and to compare the data for the same time of the year. The Herschel data can not be used since it overlaps minimally with the Wiltshire data (see @fig-datapoints-month). 
 
 Given finding the selection of best data points to compare involves a complex choice that will influence the results, the first goal is to perform the simplest acceptable comparison. As a first exploratory result we will compare the median home range for the individual animals between the two locations for one year of data. The resulting home ranges are shown in @fig-home-ranges-wiltshire and @fig-home-ranges-bylot. The results show that there are vast differences in home rage between the locations. The median home rage size for the foxes in Herschel (75.3 km<sup>2</sup>) is more than 50 times bigger compared to the foxes in Wiltshire (1.1 km<sup>2</sup>). 
 
@@ -278,32 +283,22 @@ ggplot(w_mcp, aes(fill = individual_id)) +
 
 ### Research question 1
 
-The home range numbers show a very clear result that demonstrates huge differences. The influence of aspects like sampling intervals can be demonstrated but plays a secondary role.
-
-TBD Weather conditions will differ for the same day of the year, leading to animal behavior likely also being different. Decide if we should look at average monthly home ranges.
-
-We can conclude that these differences are with near certainty influenced by availability of food, but also by many other factors including other human activity. The main downside of our approach is that we are not able to distinguish between these influences.
+The fox home range results differ enormously between rural and remote areas. The influence of technical aspects like sampling intervals plays a secondary role in comparison. We can conclude that human presence massively impacts fox behavior based availability of food, but other factors such as human presence. We are not able to distinguish between these influences.
 
 ### TBD
 
-* Wortlimit mit Patrick besprechen
 * Runder Bericht in dem die research questions zu Ende beantwortet werden
 
 ## Appendix
 
 ### Wordcount
 
-<!-- after installing the wordcountadding (see https://github.com/benmarwick/wordcountaddin), remove the line "#| eval: false" -->
-
 ```{r}
-library("wordcountaddin")
-lines <- readLines("./index.qmd")
-wc <- word_count(lines)
-wc
+wordcountaddin::text_stats()
 ```
 
 ### Use of Large Language Models and Generative AI
 
-Elke used @notebooklm for interactively querying the set of research papers cited in the references.
+Elke used @notebooklm for querying the papers cited in the references.
 
 ## References
