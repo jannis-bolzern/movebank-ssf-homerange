@@ -24,9 +24,9 @@ We investigate how human activity influences the movement patterns of wild anima
 
 Research questions:
 
-1. **Access to Anthropogenic Food Sources:** Do animals in high human-impact areas exhibit smaller home ranges due to easier access to food resources?
-2. **Temporal Shifts in Activity Patterns:** Do animals become more nocturnal in high human-impact areas to avoid direct human encounters?
-3. **Habitat Selection in Human-Dominated Landscapes:** How do animals select habitats (e.g., forests, agriculture) under varying levels of human influence?
+1. Access to Anthropogenic Food Sources: Do animals in high human-impact areas exhibit smaller home ranges due to easier access to food resources?
+2. Temporal Shifts in Activity Patterns: Do animals become more nocturnal in high human-impact areas to avoid direct human encounters?
+3. Habitat Selection in Human-Dominated Landscapes: How do animals select habitats (e.g., forests, agriculture) under varying levels of human influence?
 
 We will be using different data sets for each research question.
 
@@ -45,14 +45,14 @@ This section describes the data sets, the steps taken to prepare and process the
 
 ### Data sets
 
-The following Movebank @kays2022movebank data published under Creative Commons licenses will be used:
+Movebank by @kays2022movebank provides means for researchers to publish animal tracking data for public use, e.g. under Creative Commons licenses. The following data was selected:
 
-* **Red fox** data: @porteus2024movement for rural areas (outskirt areas of villages in Wiltshire, UK) will be compared to red fox data from @lai2022red for highly remote areas (uninhabitated islands Bylot and Herschel, Canada)
-* **Bobcat** and **coyote** data from @prugh2023fear for remote areas with some rural structures (northern Washington, US)
+* Red fox data: @porteus2024movement for rural areas (outskirt areas of villages in Wiltshire, UK) will be compared to red fox data from @lai2022red for highly remote areas (uninhabitated islands Bylot and Herschel, Canada)
+* Bobcat and coyote data from @prugh2023fear for remote areas with some rural structures (northern Washington, US)
 
-For the human footprint data, we will use the **global 100 meter resolution terrestrial human footprint data (HFP-100)** by @gassert2023operational.
+For the human footprint data, we will use the global 100 meter resolution terrestrial human footprint data (HFP-100) by @gassert2023operational.
 
-If required, for **land use** in Washington, US, we will rely on the General Land Use Final Data set published by Washington Spatial Data ([link](https://geo.wa.gov/datasets/a0ddbd4e0e2141b3841a6a42ff5aff46_0/explore?location=48.347066%2C-118.420235%2C9.91)) and for land use in the UK on gov.uk data ([link](https://www.data.gov.uk/dataset/946ce540-de76-441e-bac8-624f30cace8a/land-cover-map-2021-10m-classified-pixels-gb)).
+If required, for land use in Washington, US, we will rely on the General Land Use Final Data set published by Washington Spatial Data ([link](https://geo.wa.gov/datasets/a0ddbd4e0e2141b3841a6a42ff5aff46_0/explore?location=48.347066%2C-118.420235%2C9.91)) and for land use in the UK on gov.uk data ([link](https://www.data.gov.uk/dataset/946ce540-de76-441e-bac8-624f30cace8a/land-cover-map-2021-10m-classified-pixels-gb)).
 
 ### Data preparation and processing
 
