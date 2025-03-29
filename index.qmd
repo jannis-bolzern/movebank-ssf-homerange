@@ -127,7 +127,7 @@ month_count <- combined_data |>
 
 The Wiltshire data was collected between 2016 to 2019 during the UK wader nesting season, which was defined to be 15 March to 15 June, for 35 foxes in total. It was sampled at 10 or 60 minute rates. The research team could set the sampling rate remotely to save battery at times the data was considered less interesting. 
 
-The Bylot/Herschel Canadian data was collected all year round, at a much lower sampling rate of once per day, at random different afternoon times of the day. The collection period was from 2011 to 2015 for Bylot and from June 2009 to Feb 2010 for Herschel. It included a much lower number of foxes, two foxes per island. @fig-datapoints-year provides an overview of the amount of data points available per year, with more data from Wiltshire because of the higher number of foxes and the higher sampling rate.
+The Bylot/Herschel Canadian data was collected all year round, at a much lower sampling rate of once per day, at random different afternoon times of the day. The collection period was June 2009 to Feb 2010 for Herschel and from 2011 to 2015 for Bylot for two foxes per island. @fig-datapoints-year provides an overview of the amount of data points available per year, with more data from Wiltshire because of the higher number of foxes and the higher sampling rate.
 
 ```{r}
 #| label: fig-datapoints-year
@@ -147,7 +147,7 @@ ggplot(year_count, aes(x = factor(year), y = count, color = source, fill = sourc
   theme(axis.text.y = element_text(margin = margin(l = 20)))
 ```
 
-Looking at the breakdowns by month as shown in @fig-datapoints-month shows seasonal differences in the amount of data available. 
+Looking at the breakdowns by month as shown in @fig-datapoints-month reveals seasonal differences in the amount of data available. 
 
 ```{r}
 #| label: fig-datapoints-month
@@ -174,20 +174,19 @@ ggplot(month_count, aes(x = as.factor(month_name), y = count, color = source)) +
 Movement paths will be analyzed to identify patterns in speed, direction, and habitat use. Step lengths and turning angles will help infer behavioral states. Step-selection functions (SSFs) will model habitat preferences relative to availability, allowing us to quantify how animals respond to environmental covariates such as human footprint and land use.
 
 #### Home Range Assessment:
+The red fox data will be used for home range assessment present for a rural and a remote location. Home range sizes will be calculated using minimum convex polygons (MCPs). This will provide estimates of the area used by each individual. 
 
-We will use the red fox data for home range assessment present for a rural and a remote location. Home range sizes will be calculated using minimum convex polygons (MCPs). This will provide estimates of the area used by each individual. As pointed out in @sec-red-fox-data the data for the rural and the remote location differ in many aspects because it originates from two separate research groups using different setups, and because it is from geographically different locations.
+As discussed in @sec-red-fox-data the data for the two locations have different temporal scale. @laube2011 have found that the choice of temporal scale has considerable effects on movement parameter calculations, in turn affecting home range results.
 
-@laube2011 have found that the choice of temporal scale has considerable effects on movement parameter calculations, therefore we suspect that temporal scale will also affect home range results. To compare between data sets, similar sampling intervals between the data sets are required for an apples-to-apples comparison. 
+How to make this data comparable? Problem #1 is that the sampling intervals are different. Problem #2 is that the data coverage varies by time of the year. Problem #3 is that there are highly different amounts of data. Selecting the means and parameters for the comparison involves complex choices that will influence the results. 
 
-A possible approach would be to sample a random afternoon data point for each 24 hour window to achieve similar temporal scales. However, it would not be justified to assume that foxes in remote areas will follow similar daily patterns as the ones living in rural areas. These two groups will have different activity levels because in one case humans will be present in the environment in the afternoon, and in the other case the foxes will be left undisturbed. 
+For #1, a possible approach to achieve similar sampling intervals would be to sample a random afternoon data point for each 24 hour window. However, this would include the implicit assumption that foxes will follow similar daily patterns in the different environments. For #2, a possible approach would be to compare the data for the same time of the year. However, the geographical location are different. The weather conditions will differ for the same day of the year, likely leading to different animal behavior. For #3, aggregated comparisons can solve the issue assuming there is enough data for the smaller data source.
 
-This means that selecting the data points to compare involves a complex choice that will influence the results. We decide to start exploring with the simplest possible comparison, which is to ignore the different sampling intervals and to compare the data for the same time of the year. The Herschel data can not be used since it has minimal overlaps with the Wiltshire data (see @fig-datapoints-month). 
+We employed the simplest possible imperfect approach, which is to ignore the different sampling intervals for problem #1, to compare the data for the same time of the year for problem #2, and to use exploratory data analysis to find out if a representative answer can be found given the amount of data present for problem #3. 
 
-To assess the effect of sampling intervals, we analyse the home range for the Wiltshire foxes with a 24 hour sampling interval. For simplicity we select a random data point from every 24 hour period. 
+The Herschel data is not applicable for this approach since it has minimal overlaps with the Wiltshire data (see @fig-datapoints-month). To assess the impact of sampling intervals for problem #1, the Wiltshire data was downsampled. A random data point from every 24 hour period was selected. 
 
-TBD? Weather conditions will differ for the same day of the year, leading to animal behavior likely also being different. 
-
-TBD? Decide if we should look at monthly home ranges? Less activity in winter? Max and min monthly home range per animal and location?
+**TBD:** Decide if we should compare median monthly home range per animal and location
 
 #### Temporal Activity Patterns:
 Movement rates will be used to quantify diel activity shifts. We will test whether animals in high human-impact areas exhibit increased nocturnality, potentially as a strategy to avoid direct human encounters. This analysis will reveal how temporal behavior adapts to human presence.
@@ -196,7 +195,7 @@ Movement rates will be used to quantify diel activity shifts. We will test wheth
 SSFs will quantify selection for human-modified habitats (e.g., agricultural areas, urban edges) relative to natural habitats. By comparing selection patterns across species and regions, we will assess how habitat preferences vary with human influence.
 
 ## Results
-The resulting home ranges are shown in @fig-home-ranges-bylot and @fig-home-ranges-wiltshire. There are vast differences in home rage between the locations. The median home rage size for the foxes in Herschel (75.3~km<sup>2</sup>) is more than 50 times bigger compared to the foxes in Wiltshire (1.1 km<sup>2</sup>). 
+The resulting home ranges are shown in @fig-home-ranges-bylot and @fig-home-ranges-wiltshire. The median home rage size for the foxes in Herschel (75.3 km<sup>2</sup>) is more than 50 times bigger compared to the foxes in Wiltshire (1.1 km<sup>2</sup>). 
 
 ```{r}
 #| include: false
@@ -252,7 +251,7 @@ w_median <- median(w_area)
 print(w_median)
 ```
 
-The resulting home range for the sampled data is shown in @fig-home-ranges-wiltshire-sampled24h. The median home range is half as big compared to the full amount of data points (0.56 km<sup>2</sup>).
+The home range for the sampled Wiltshire data is shown in @fig-home-ranges-wiltshire-sampled24h. The median home range is 0.56 km<sup>2</sup> for the sampled data (and 1.1 km<sup>2</sup> for the full data).
 
 ```{r}
 #| include: false
@@ -282,7 +281,12 @@ print(w_median)
 
 ## Discussion
 
-The fox home range results differ enormously between rural and remote areas. The influence of technical aspects like sampling intervals plays a role, albeit in this case it is secondary in comparison to the fox behavior. We can conclude that human presence massively impacts fox movement behavior, with availability of food likely being relevant, but we are not able to single out that factor.
+The fox home range results differ enormously between rural and remote areas. We can conclude that human presence massively impacts fox movement behavior, with availability of food likely being relevant, but we have not been able to single out that factor.
+
+**TBD:** Should we change the research question 1 to "human activity" instead of "access to food sources"?
+
+The influence of technical aspects like sampling intervals is significant. However, in this case it plays a secondary role in comparison to the fox behavior. This is the enabling factor for the chosen approach of comparing data from heterogeneous sources. 
+
 
 ## Appendix
 
