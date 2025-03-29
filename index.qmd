@@ -125,42 +125,45 @@ month_count <- combined_data |>
   summarise(count = n())
 ```
 
-The data sets have the exact same format. But the data shows different properties across the two sources.
-
 The Wiltshire data was collected between 2016 to 2019 during the UK wader nesting season, which was defined to be 15 March to 15 June, for 35 foxes in total. It was sampled at 10 or 60 minute rates. The research team could set the sampling rate remotely to save battery at times the data was considered less interesting. 
 
 The Bylot/Herschel Canadian data was collected all year round, at a much lower sampling rate of once per day, at random different afternoon times of the day. The collection period was from 2011 to 2015 for Bylot and from June 2009 to Feb 2010 for Herschel. It included a much lower number of foxes, two foxes per island. @fig-datapoints-year provides an overview of the amount of data points available per year, with more data from Wiltshire because of the higher number of foxes and the higher sampling rate.
 
 ```{r}
 #| label: fig-datapoints-year
-#| fig-cap: "Overview of the number of data points per year in the three different data sets"
+#| fig-cap: "Data points per year"
 #| echo: false
 #| warning: false
 library("ggplot2")
 
-ggplot(year_count, aes(x = factor(year), y = count, color = source)) +
-  geom_bar(stat = "identity") +
-  facet_wrap(~ source, scales = "free_y") +
-  labs(title = "Number of data points per year per data set",
-       x = "Year", y = "# of timestamps") +
+ggplot(year_count, aes(x = factor(year), y = count, color = source, fill = source)) +
+  geom_bar(stat = "identity", width = 0.5) +
+  facet_wrap(~ ifelse(source %in% c("Bylot", "Herschel"), "Bylot/Herschel", "Wiltshire"), scales = "free_y") +
+  labs(x = "Year", y = "Number of Data points") +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 90))
+  theme(axis.text.x = element_text(angle = 90)) +
+  theme(axis.text.x = element_text(size = 8)) +
+  theme(axis.text.x = element_text(margin = margin(b = 20))) +
+  theme(axis.text.y = element_text(margin = margin(l = 20)))
 ```
 
-Looking at the breakdowns by month as shown in @fig-datapoints-month shows noticeable seasonal differences in the amount of data available. 
+Looking at the breakdowns by month as shown in @fig-datapoints-month shows seasonal differences in the amount of data available. 
 
 ```{r}
 #| label: fig-datapoints-month
-#| fig-cap: "Overview of the number of data points per month in the three different data sets"
+#| fig-cap: "Data points per month"
 #| echo: false
 #| warning: false
-ggplot(month_count, aes(x = month, y = count, color = source)) +
+ggplot(month_count, aes(x = as.factor(month), y = count, color = source)) +
   geom_point() +
-  scale_x_continuous(breaks = 1:12, labels = 1:12) +
-  facet_wrap(~ source, scales = "free_y") +
-  labs(title = "Number of data points per month per data set",
-       x = "Month", y = "# of timestamps") +
-  theme_minimal()
+  #scale_x_continuous(breaks = 1:12, labels = 1:12) +
+  #scale_x_discrete(expand = c(50, 0)) +
+  facet_wrap(~ ifelse(source %in% c("Bylot", "Herschel"), "Bylot/Herschel", "Wiltshire"), scales = "free_y") +
+  labs(x = "Month", y = "Number of data points") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(size = 8)) +
+  theme(axis.text.x = element_text(margin = margin(b = 20))) +
+  theme(axis.text.y = element_text(margin = margin(l = 20))) +
 ```
 
 ### Methodology {#sec-methodology}
@@ -291,7 +294,7 @@ The fox home range results differ enormously between rural and remote areas. The
 
 ```{r}
 #| echo: false
-#wordcountaddin::text_stats()
+wordcountaddin::text_stats("index.qmd")
 ```
 
 ### Use of Large Language Models and Generative AI
