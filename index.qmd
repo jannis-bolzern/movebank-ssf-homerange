@@ -27,9 +27,9 @@ We investigate how human activity influences the movement patterns of wild anima
 
 Research questions:
 
-1. Access to Anthropogenic Food Sources: Do animals in high human-impact areas exhibit smaller home ranges due to easier access to food resources?
+1. Access to Anthropogenic Food Sources: Do animals exhibit smaller home ranges in high human-impact areas ?
 2. Temporal Shifts in Activity Patterns: Do animals become more nocturnal in high human-impact areas to avoid direct human encounters?
-3. Habitat Selection in Human-Dominated Landscapes: How do animals select habitats (e.g., forests, agriculture) under varying levels of human influence?
+3. Habitat Selection in Human-Dominated Landscapes: How do animals select habitats (e.g., forests, agriculture) under varying levels of human influence? 
 
 We will be using different data sets for each research question.
 
@@ -54,6 +54,8 @@ Movebank by @kays2022movebank provides means for researchers to publish animal t
 * Bobcat and coyote data from @prugh2023fear for remote areas with some rural structures in northern Washington, US.
 
 For the human footprint data, the global 100 meter resolution terrestrial human footprint data (HFP-100) by @gassert2023operational was chosen.
+
+ESA data for land use: [link](https://esa-worldcover.org/en)
 
 If required, for land use in Washington, US, we will rely on the General Land Use Final Data set published by Washington Spatial Data ([link](https://geo.wa.gov/datasets/a0ddbd4e0e2141b3841a6a42ff5aff46_0/explore?location=48.347066%2C-118.420235%2C9.91)) and for land use in the UK on gov.uk data ([link](https://www.data.gov.uk/dataset/946ce540-de76-441e-bac8-624f30cace8a/land-cover-map-2021-10m-classified-pixels-gb)).
 
@@ -128,7 +130,7 @@ month_count <- combined_data |>
   summarise(count = n())
 ```
 
-The Wiltshire data was collected between 2016 to 2019 during the UK wader nesting season, which was defined to be March 15th to June 15th, for 35 foxes in total. It was sampled at 10 or 60 minute rates. The research team could set the sampling rate remotely to save battery at times the data was considered less interesting. 
+The Wiltshire data was collected between 2016 to 2019 during the UK wader nesting season, which was defined to be March 15th to June 15th, for 35 foxes in total. It was sampled at 10 or 60 minute rates. The research team could set the sampling rate remotely to save battery at times the data was considered less interesting.
 
 The Bylot/Herschel Canadian data was collected all year round, at a much lower sampling rate of once per day, at random afternoon times of the day. The collection period was June 2009 to Feb 2010 for Herschel and from 2011 to 2015 for Bylot, for two foxes per island. @fig-datapoints-year provides an overview of the amount of data points available per year. There is much more data from Wiltshire because of the higher number of foxes and the higher sampling rate.
 
