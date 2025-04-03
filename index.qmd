@@ -53,9 +53,7 @@ Movebank by @kays2022movebank provides means for researchers to publish animal t
 * Red fox data from @porteus2024movement for the outskirt areas of villages in Wiltshire, UK and from @lai2022red for the highly remote uninhabitated islands Bylot and Herschel, Canada, and
 * Bobcat and coyote data from @prugh2023fear for remote areas with some rural structures in northern Washington, US.
 
-For the human footprint data, the global 100 meter resolution terrestrial human footprint data (HFP-100) by @gassert2023operational was chosen.
-
-For land use, the ESA WorldCover data [link](https://esa-worldcover.org/en) is preferred.
+For the human footprint data, the global 100 meter resolution terrestrial human footprint data (HFP-100) by @gassert2023operational was chosen. For land use, the ESA WorldCover data @zanaga2022esa is employed.
 
 ## Data preparation and processing
 
@@ -202,7 +200,7 @@ Movement rates will be used to quantify diel activity shifts. We will test wheth
 SSFs will quantify selection for human-modified habitats (e.g., agricultural areas, urban edges) relative to natural habitats. By comparing selection patterns across species and regions, we will assess how habitat preferences vary with human influence.
 
 # Results
-The resulting home ranges are shown in @fig-home-ranges-bylot and @fig-home-ranges-wiltshire. The median home rage size for the foxes in Herschel (75.3 km<sup>2</sup>) is more than 50 times bigger compared to the foxes in Wiltshire (1.1 km<sup>2</sup>). 
+The resulting home ranges are shown in @fig-home-ranges-bylot and @fig-home-ranges-wiltshire. The median home rage size for the foxes in Herschel (75.3 km<sup>2</sup>) is more than 65 times bigger compared to the foxes in Wiltshire (1.1 km<sup>2</sup>). 
 
 ```{r}
 #| include: false
