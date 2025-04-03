@@ -94,7 +94,7 @@ This raster data set uses the Mollweide projection @lapaine2011mollweide. The 20
 
 ### ESA WorldCover
 
-The ESA WorldCover 2021 data at 10m resolution was downloaded via the Microsoft Planetary Computer STAC API [link](https://planetarycomputer.microsoft.com/docs/quickstarts/reading-stac/) for simple programmatic access in R.
+The ESA WorldCover 2021 data at 10m resolution was downloaded via the Microsoft Planetary Computer STAC API [[link]](https://planetarycomputer.microsoft.com/docs/quickstarts/reading-stac/) for simple programmatic access in R.
 
 ## Data exploration and analysis
 
@@ -176,7 +176,7 @@ ggplot(month_count, aes(x = as.factor(month_name), y = count, color = source)) +
 ## Methodology {#sec-methodology}
 
 ### Trajectory Analysis
-Movement paths will be analyzed to identify patterns in speed, direction, and habitat use. Step lengths and turning angles will help infer behavioral states. Step-selection functions (SSFs) will model habitat preferences relative to availability, allowing us to quantify how animals respond to environmental covariates such as human footprint and land use.
+Movement paths will be analyzed to identify patterns in speed, direction, and habitat use. Step lengths and turning angles will help infer behavioral states. Step-selection functions (SSFs, @fortin2005wolves) will be employed as a statistical model for habitat preferences relative to movement patterns, allowing us to quantify how animals respond to environmental covariates such as human footprint and land use.
 
 ### Home Range Assessment
 The red fox data will be used for home range assessment present for a rural and a remote location. Home range sizes will be calculated using minimum convex polygons (MCPs). This will provide estimates of the area used by each individual. 
@@ -190,8 +190,6 @@ For #1, a possible approach to achieve similar sampling intervals would be to sa
 We employed the simplest possible imperfect approach, which is to ignore the different sampling intervals for problem #1, to compare the data for the same time of the year for problem #2, and to use exploratory data analysis to find out if a representative answer can be found given the amount of data present for problem #3. 
 
 The Herschel data is not applicable for this approach since it has minimal overlaps with the Wiltshire data (cf. @fig-datapoints-month). To assess the impact of sampling intervals for problem #1, the Wiltshire data was downsampled. A random data point from every 24 hour period was selected. 
-
-**TBD:** Decide if we should compare median monthly home range per animal and location
 
 ### Temporal Activity Patterns
 Movement rates will be used to quantify diel activity shifts. We will test whether animals in high human-impact areas exhibit increased nocturnality, potentially as a strategy to avoid direct human encounters. This analysis will reveal how temporal behavior adapts to human presence.
@@ -295,6 +293,7 @@ The influence of technical aspects like sampling intervals is significant. Howev
 
 ## Don't do
 
+* Home ranges: Compare median monthly home range per animal and location
 * There are several ways to calculate home range, we could compare (and could focus on only that)
 * Do home range for foxes first, for bobcat and coyote data later, potentially even cross-species analysis
 * Use kernel density estimation (KDE)
