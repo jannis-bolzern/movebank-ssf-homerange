@@ -55,7 +55,7 @@ Movebank by @kays2022movebank provides means for researchers to publish animal t
 
 For the human footprint data, the global 100 meter resolution terrestrial human footprint data (HFP-100) by @gassert2023operational was chosen.
 
-For land use, the ESA WorldCover 10m 2021 data [link](https://esa-worldcover.org/en) is accessed via the Microsoft Planetary Computer STAC API [link](https://planetarycomputer.microsoft.com/docs/quickstarts/reading-stac/) for simple programmatic access in R.
+For land use, the ESA WorldCover data [link](https://esa-worldcover.org/en) is preferred.
 
 ## Data preparation and processing
 
@@ -92,7 +92,11 @@ foxes_herschel <- movebank_download_study(
 
 ### HRP-100
 
-Use 2020 data and make a subset as quickly as possible since the data set is very big.
+This raster data set uses the Mollweide projection @lapaine2011mollweide. The 2020 version of the data was used. Since the data set is very big only the relevant areas were downloaded using a 200 km buffer around the tracking points.
+
+### ESA WorldCover
+
+The ESA WorldCover 2021 data at 10m resolution is downloaded via the Microsoft Planetary Computer STAC API [link](https://planetarycomputer.microsoft.com/docs/quickstarts/reading-stac/) for simple programmatic access in R.
 
 ## Data exploration and analysis
 
