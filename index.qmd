@@ -27,7 +27,7 @@ We investigate how human activity influences the movement patterns of wild anima
 
 Research questions:
 
-1. Access to Anthropogenic Food Sources: Do animals exhibit smaller home ranges in high human-impact areas ?
+1. Home Range Implications: Do animals exhibit smaller home ranges in high human-impact areas?
 2. Temporal Shifts in Activity Patterns: Do animals become more nocturnal in high human-impact areas to avoid direct human encounters?
 3. Habitat Selection in Human-Dominated Landscapes: How do animals select habitats (e.g., forests, agriculture) under varying levels of human influence? 
 
@@ -96,7 +96,7 @@ This raster data set uses the Mollweide projection @lapaine2011mollweide. The 20
 
 ### ESA WorldCover
 
-The ESA WorldCover 2021 data at 10m resolution is downloaded via the Microsoft Planetary Computer STAC API [link](https://planetarycomputer.microsoft.com/docs/quickstarts/reading-stac/) for simple programmatic access in R.
+The ESA WorldCover 2021 data at 10m resolution was downloaded via the Microsoft Planetary Computer STAC API [link](https://planetarycomputer.microsoft.com/docs/quickstarts/reading-stac/) for simple programmatic access in R.
 
 ## Data exploration and analysis
 
@@ -288,9 +288,7 @@ print(w_median)
 
 # Discussion
 
-The fox home range results differ enormously between rural and remote areas. We can conclude that human presence massively impacts fox movement behavior, with availability of food likely being relevant, but we have not been able to single out that factor.
-
-**TBD:** Should we change the research question 1 to "human activity" instead of "access to food sources"?
+The fox home range results differ enormously between rural and remote areas. We can conclude that human presence massively impacts fox movement behavior, with availability of food likely being relevant.
 
 The influence of technical aspects like sampling intervals is significant. However, in this case it plays a secondary role in comparison to the fox behavior. This is the enabling factor for the chosen approach of comparing data from heterogeneous sources. 
 
