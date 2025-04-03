@@ -55,9 +55,7 @@ Movebank by @kays2022movebank provides means for researchers to publish animal t
 
 For the human footprint data, the global 100 meter resolution terrestrial human footprint data (HFP-100) by @gassert2023operational was chosen.
 
-ESA data for land use: [link](https://esa-worldcover.org/en)
-
-If required, for land use in Washington, US, we will rely on the General Land Use Final Data set published by Washington Spatial Data ([link](https://geo.wa.gov/datasets/a0ddbd4e0e2141b3841a6a42ff5aff46_0/explore?location=48.347066%2C-118.420235%2C9.91)) and for land use in the UK on gov.uk data ([link](https://www.data.gov.uk/dataset/946ce540-de76-441e-bac8-624f30cace8a/land-cover-map-2021-10m-classified-pixels-gb)).
+For land use, the ESA WorldCover 10m 2021 data [link](https://esa-worldcover.org/en) is accessed via the Microsoft Planetary Computer STAC API [link](https://planetarycomputer.microsoft.com/docs/quickstarts/reading-stac/) for simple programmatic access in R.
 
 ## Data preparation and processing
 
