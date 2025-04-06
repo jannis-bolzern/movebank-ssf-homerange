@@ -31,11 +31,10 @@ Research questions:
 2.  Temporal Shifts in Activity Patterns: Do animals become more nocturnal in high human-impact areas to avoid direct human encounters?
 3.  Habitat Selection in Human-Dominated Landscapes: How do animals select habitats (e.g., forests, agriculture) under varying levels of human influence?
 
-We will be using different data sets for each research question.
+Different data sets will be used for each research question. Relying on Movebank data, as described in @sec-movebank, presents additional challenges stemming from the fact that the data will be used for purposes it was not originally collected for.
 
 Additional challenges:
 
--   We will be using data for purposes that it wasn't originally collected for.
 -   We will be using parts of data sets (missing animals in the bobcat/coyote study).
 -   We will be comparing between data from different studies for the same animals.
 -   We will be comparing data from different continents where weather conditions will differ for the same day of the year, leading to animal behavior likely also being different.
@@ -57,9 +56,9 @@ For the human footprint data, the global 100 meter resolution terrestrial human 
 
 ## Data preparation and processing
 
-### Movebank
+### Movebank {#sec-movebank}
 
-All Movebank data sets have the same schema. This simplifies data handling, enables code re-use, and requires the data contributors do perform preprocessing on their side to provide the data in an appropriate format. A library for data processing and trajectory handling in R is provided by @kranstauber2024move2. The R code for Movebank data download, preprocessing, and partly visualization can be found the the following documents: [UK wader nesting season home range](preprocessing_uk_wader_nesting_season_home_range.qmd), [montly home range](preprocessing_monthly_home_ranges.qmd).
+All Movebank data sets have the same schema. This simplifies data handling, enables code re-use, and requires the data contributors do perform preprocessing and data cleaning on their side to provide the data in an appropriate format. A library for data processing and trajectory handling in R is provided by @kranstauber2024move2. The R code for Movebank data download, preprocessing, and partly visualization can be found the the following documents: [UK wader nesting season home range](preprocessing_uk_wader_nesting_season_home_range.qmd), [montly home range](preprocessing_monthly_home_ranges.qmd).
 
 ### HRP-100
 
@@ -97,11 +96,11 @@ As discussed in @sec-redfoxdata, the data for the two locations have different t
 
 How to make this data comparable? Problem #1 is that the sampling intervals are different. Problem #2 is that the data coverage varies by time of the year. Problem #3 is that there are highly different amounts of data. Selecting the means and parameters for the comparison involves complex choices that will influence the results.
 
-For #1, a possible approach to achieve similar sampling intervals would be to sample a random afternoon data point for each 24 hour window. However, this would include the implicit assumption that foxes will follow similar daily patterns in the different environments. For #2, a possible approach would be to compare the data for the same time of the year. However, the geographical locations are different. The seasonal weather conditions will differ for the same day of the year, likely leading to different animal behavior. For #3, aggregated comparisons can solve the issue assuming there is enough data for the smaller data source.
+For #1, a possible approach to achieve similar sampling intervals would be to sample a random afternoon data point for each 24 hour window. However, this would include the implicit assumption that foxes will follow similar daily patterns in the different environments. For #2, a possible approach would be to compare the data for the same time of the year. However, the geographical locations are different. The seasonal weather conditions will differ for the same day of the year, likely leading to different animal behavior. For #3, aggregated comparisons can solve the issue, assuming there is enough data for the smaller data source.
 
-For data exploration the simplest possible imperfect approach was employed, which is to ignore the different sampling intervals for problem #1, to compare the data for the same time of the year for problem #2, and to use exploratory data analysis to find out if a representative answer can be found given the amount of data present for problem #3. The Herschel data is not applicable for this approach since it has minimal overlaps with the Wiltshire data (cf. @fig-datapoints-month). To explore the impact of sampling intervals for problem #1, the Wiltshire data was downsampled. A random data point from every 24 hour period was selected.
+For data exploration the simplest possible imperfect approach was employed, which is to ignore the different sampling intervals for problem #1, to compare the data for the same time of the year for problem #2 even if animal behavior might be different, and to use exploratory data analysis to find out if a representative answer can be found given the amount of data present for problem #3. Note that this approach has obvious limits. Among them is that the Herschel data is not applicable, since it has minimal overlaps with the Wiltshire data (cf. @fig-datapoints-month). 
 
-Additionally, an analysis of monthly home ranges was conducted on all three data sets as an alternative solution to address problem #2.
+To explore the impact of sampling intervals for problem #1, the home ranges for the Wiltshire data were additionally calculated on downsampled data, where a random data point from every 24 hour period was selected. Finally, an analysis of monthly home ranges was conducted on all three data sets as an alternative solution to address problem #2.
 
 ### Temporal Activity Patterns
 
