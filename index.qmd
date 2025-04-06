@@ -48,7 +48,7 @@ This section describes the data sets, the steps taken to prepare and process the
 
 ## Data sets
 
-Movebank by @kays2022movebank provides means for researchers to publish animal tracking data for public use, e.g. under Creative Commons licenses. The following data was selected:
+The Movebank database by @kays2022movebank provides means for researchers to publish animal tracking data for public use, e.g. under Creative Commons licenses. The following data was selected:
 
 -   Red fox data from @porteus2024movement for the outskirt areas of villages in Wiltshire, UK and from @lai2022red for the highly remote uninhabitated islands Bylot and Herschel, Canada, and
 -   Bobcat and coyote data from @prugh2023fear for remote areas with some rural structures in northern Washington, US.
@@ -59,11 +59,11 @@ For the human footprint data, the global 100 meter resolution terrestrial human 
 
 ### Movebank
 
-All Movebank data sets have the same schema. This simplifies data handling and enables code re-use. A library for data processing and trajectory handling in R is provided by @kranstauber2024move2. The R code for Movebank data download, preprocessing, and partly visualization can be found the the following documents: [UK wader nesting season home range](preprocessing_uk_wader_nesting_season_home_range.qmd), [montly home range](preprocessing_monthly_home_ranges.qmd).
+All Movebank data sets have the same schema. This simplifies data handling, enables code re-use, and requires the data contributors do perform preprocessing on their side to provide the data in an appropriate format. A library for data processing and trajectory handling in R is provided by @kranstauber2024move2. The R code for Movebank data download, preprocessing, and partly visualization can be found the the following documents: [UK wader nesting season home range](preprocessing_uk_wader_nesting_season_home_range.qmd), [montly home range](preprocessing_monthly_home_ranges.qmd).
 
 ### HRP-100
 
-This raster data set uses the Mollweide projection (see @lapaine2011mollweide). The 2020 version of the data was used. Since the data set is very big only the relevant areas were downloaded using a 200 km buffer around the tracking points.
+This raster data set uses the Mollweide projection as described by @lapaine2011mollweide. The 2020 version of the data was used. Since the data set is very large, only the relevant areas were downloaded using a 200 km buffer around the tracking points.
 
 ### ESA WorldCover
 
@@ -87,7 +87,7 @@ Looking at the breakdowns by month as shown in @fig-datapoints-month reveals sea
 
 ### Trajectory Analysis
 
-Movement paths will be analyzed to identify patterns in speed, direction, and habitat use. Step lengths and turning angles will help infer behavioral states. Step-selection functions (SSFs, @fortin2005wolves) will be employed as a statistical model for habitat preferences relative to movement patterns, allowing us to quantify how animals respond to environmental covariates such as human footprint and land use.
+Movement paths will be analyzed to identify patterns in speed, direction, and habitat use. Step lengths and turning angles will help infer behavioral states. Step-selection functions (SSFs) as described by @fortin2005wolves will be employed as a statistical model for habitat preferences relative to movement patterns, allowing us to quantify how animals respond to environmental covariates such as human footprint and land use.
 
 ### Home Range Assessment
 
