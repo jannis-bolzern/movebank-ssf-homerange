@@ -90,7 +90,7 @@ foxes_herschel <- movebank_download_study(
 
 ### HRP-100
 
-This raster data set uses the Mollweide projection @lapaine2011mollweide. The 2020 version of the data was used. Since the data set is very big only the relevant areas were downloaded using a 200 km buffer around the tracking points.
+This raster data set uses the Mollweide projection (see @lapaine2011mollweide). The 2020 version of the data was used. Since the data set is very big only the relevant areas were downloaded using a 200 km buffer around the tracking points.
 
 ### ESA WorldCover
 
@@ -187,9 +187,9 @@ How to make this data comparable? Problem #1 is that the sampling intervals are 
 
 For #1, a possible approach to achieve similar sampling intervals would be to sample a random afternoon data point for each 24 hour window. However, this would include the implicit assumption that foxes will follow similar daily patterns in the different environments. For #2, a possible approach would be to compare the data for the same time of the year. However, the geographical locations are different. The seasonal weather conditions will differ for the same day of the year, likely leading to different animal behavior. For #3, aggregated comparisons can solve the issue assuming there is enough data for the smaller data source.
 
-We employed the simplest possible imperfect approach, which is to ignore the different sampling intervals for problem #1, to compare the data for the same time of the year for problem #2, and to use exploratory data analysis to find out if a representative answer can be found given the amount of data present for problem #3. 
+For data exploration the simplest possible imperfect approach was employed, which is to ignore the different sampling intervals for problem #1, to compare the data for the same time of the year for problem #2, and to use exploratory data analysis to find out if a representative answer can be found given the amount of data present for problem #3. The Herschel data is not applicable for this approach since it has minimal overlaps with the Wiltshire data (cf. @fig-datapoints-month). To explore the impact of sampling intervals for problem #1, the Wiltshire data was downsampled. A random data point from every 24 hour period was selected. 
 
-The Herschel data is not applicable for this approach since it has minimal overlaps with the Wiltshire data (cf. @fig-datapoints-month). To assess the impact of sampling intervals for problem #1, the Wiltshire data was downsampled. A random data point from every 24 hour period was selected. 
+Additionally, an analysis of monthly home ranges was conducted on all three data sets as an alternative solution to address problem #2.
 
 ### Temporal Activity Patterns
 Movement rates will be used to quantify diel activity shifts. We will test whether animals in high human-impact areas exhibit increased nocturnality, potentially as a strategy to avoid direct human encounters. This analysis will reveal how temporal behavior adapts to human presence.
@@ -198,7 +198,9 @@ Movement rates will be used to quantify diel activity shifts. We will test wheth
 SSFs will quantify selection for human-modified habitats (e.g., agricultural areas, urban edges) relative to natural habitats. By comparing selection patterns across species and regions, we will assess how habitat preferences vary with human influence.
 
 # Results
-The resulting home ranges are shown in @fig-home-ranges-bylot and @fig-home-ranges-wiltshire. The median home rage size for the foxes in Herschel (75.3 km<sup>2</sup>) is more than 65 times bigger compared to the foxes in Wiltshire (1.1 km<sup>2</sup>).
+The resulting home ranges for the UK wader nesting season timeframe are shown in @fig-home-ranges-bylot and @fig-home-ranges-wiltshire. The median home rage size for the foxes in Herschel (75.3 km<sup>2</sup>) is more than 65 times bigger compared to the foxes in Wiltshire (1.1 km<sup>2</sup>). The home range for the sampled Wiltshire data is shown in @fig-home-ranges-wiltshire-sampled24h. It is 0.56 km<sup>2</sup> for the sampled data, which is roughly half as for the full data. This demonstrates that the influence of sampling intervals is definitely present, but is dwarfed in comparison to the difference in fox behavior.
+
+The same effect with differences in order of magnitude between remote and rural fox home range can be seen @fig-home-ranges-boxplot which shows the results for monthly home ranges. 
 
 ```{r}
 #| label: red-fox-data-filtered-download
@@ -223,7 +225,7 @@ foxes_bylot_filtered <- movebank_download_study(
 #| label: fig-home-ranges-bylot
 #| echo: false
 #| warning: false
-#| fig-cap: "Home ranges for Bylot foxes (2012)"
+#| fig-cap: "Home ranges for Bylot foxes (March 15th to June 15th, 2012)"
 library("ggplot2")
 library("sf")
 c1_tracks <- mt_track_lines(foxes_bylot_filtered)
@@ -235,7 +237,7 @@ ggplot(c1_mcp, aes(fill = as.factor(individual_id))) +
 
 ```{r}
 #| label: fig-home-ranges-wiltshire
-#| fig-cap: "Home ranges for Wiltshire foxes (2019)"
+#| fig-cap: "Home ranges for Wiltshire foxes (March 15th to June 15th, 2019)"
 #| echo: false
 #| warning: false
 
@@ -257,8 +259,6 @@ w_median <- median(w_area)
 print(w_median)
 ```
 
-The home range for the sampled Wiltshire data is shown in @fig-home-ranges-wiltshire-sampled24h. The median home range is 0.56 km<sup>2</sup> for the sampled data (and 1.1 km<sup>2</sup> for the full data).
-
 ```{r}
 #| label: red-fox-data-filtered-sampled
 #| include: false
@@ -268,7 +268,7 @@ foxes_wiltshire_filtered_sampled_24h <- foxes_wiltshire_filtered |>
 
 ```{r}
 #| label: fig-home-ranges-wiltshire-sampled24h
-#| fig-cap: "Home ranges for Wiltshire foxes (2019, 24 hour sampling interval)"
+#| fig-cap: "Home ranges for Wiltshire foxes (March 15th to June 15th, 2019, 24 hour sampling interval)"
 #| echo: false
 #| warning: false
 
@@ -292,6 +292,8 @@ print(w_median)
 #| include: false
 library("readr")
 results_bylot <- read_delim("output_bylot.csv", delim = ",")
+# Remove outlier from a month with little data due to collection timeframes
+results_bylot <- results_bylot |> filter(results_bylot.areas > 1000)
 results_herschel <- read_delim("output_herschel.csv", delim = ",")
 results_wiltshire <- read_delim("output_wiltshire.csv", delim = ",")
 ```
@@ -299,7 +301,7 @@ results_wiltshire <- read_delim("output_wiltshire.csv", delim = ",")
 ```{r}
 #| label: red-fox-data-functions
 #| include: false
-remove_outliers <- function(areas) {
+remove_stats_outliers <- function(areas) {
   stats <- boxplot.stats(areas)
   outliers <- stats$out
   return(areas[!areas %in% outliers])
@@ -309,8 +311,6 @@ convert_m2_to_km2 <- function(area) {
 }
 ```
 
-@fig-home-ranges-boxplot shows a comparison of monthly home ranges.
-
 ```{r}
 #| label: fig-home-ranges-boxplot
 #| fig-cap: "Box plot comparing monthly home ranges (outliers removed)"
@@ -318,14 +318,18 @@ convert_m2_to_km2 <- function(area) {
 #| warning: false
 par(mar = c(5, 5, 5, 5)) # To prevent superscripted text being cut.
 boxplot(
-  remove_outliers(convert_m2_to_km2(results_bylot$results_bylot.areas)), 
-  remove_outliers(convert_m2_to_km2(results_herschel$results_herschel.areas)), 
-  remove_outliers(convert_m2_to_km2(results_wiltshire$results_wiltshire.areas)), 
+  remove_stats_outliers(convert_m2_to_km2(results_bylot$results_bylot.areas)), 
+  remove_stats_outliers(convert_m2_to_km2(results_herschel$results_herschel.areas)), 
+  remove_stats_outliers(convert_m2_to_km2(results_wiltshire$results_wiltshire.areas)), 
+  axes = FALSE,
   xlab = "", 
-  ylab = expression("Home range in " *  km^2))
+  log = "y",
+  ylab = expression(paste("Home range in ",  km^2, " (logarithmic scale)")))
 axis(1, at = 1, labels = "Bylot")
 axis(1, at = 2, labels = "Herschel")
 axis(1, at = 3, labels = "Wiltshire")
+axis(2, at = c(0.05, 0.5, 5, 50, 500), labels = c("0.05", "0.5", "5", "50", "500"))
+box()
 ```
 
 # Discussion
