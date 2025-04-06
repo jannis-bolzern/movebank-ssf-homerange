@@ -316,12 +316,13 @@ convert_m2_to_km2 <- function(area) {
 #| fig-cap: "Box plot comparing monthly home ranges (outliers removed)"
 #| echo: false
 #| warning: false
+par(mar = c(5, 5, 5, 5)) # To prevent superscripted text being cut.
 boxplot(
   remove_outliers(convert_m2_to_km2(results_bylot$results_bylot.areas)), 
   remove_outliers(convert_m2_to_km2(results_herschel$results_herschel.areas)), 
   remove_outliers(convert_m2_to_km2(results_wiltshire$results_wiltshire.areas)), 
   xlab = "", 
-  ylab = "Values")
+  ylab = expression("Home range in " *  km^2))
 axis(1, at = 1, labels = "Bylot")
 axis(1, at = 2, labels = "Herschel")
 axis(1, at = 3, labels = "Wiltshire")
