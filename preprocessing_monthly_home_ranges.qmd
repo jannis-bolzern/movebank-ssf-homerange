@@ -1,0 +1,63 @@
+---
+title: "preprocessing_monthly_home_ranges"
+format: html
+---
+
+```{r}
+library("dplyr")
+library("move2")
+library("units")
+library("rnaturalearth")
+library("lubridate")
+library("sf")
+library("readr")
+library("ggplot2") # Keep ggplot related parts even if inaccessible.
+
+flatten_array <- function(areas) {
+  all_areas <- c()
+  for (area in areas) {
+    all_areas <- c(all_areas, area)
+  }
+  return(all_areas)
+}
+
+calculate_monthly_home_ranges <- function(ts_start, num_months, study_id, license_string_with_quotes) {
+  areas <- list()
+  gg <- ggplot()
+  ts_end <- add_with_rollback(ts_start, months(1))
+  for (i in 1:num_months) {
+    print(i)
+    tryCatch({
+      foxes <- movebank_download_study(
+        study_id = study_id,
+        'license-md5'=license_string_with_quotes,
+        timestamp_start = ts_start,
+        timestamp_end = ts_end
+      ) 
+      tracks <- mt_track_lines(foxes)
+      mcp <- st_convex_hull(tracks)
+      areas[[i]] <- st_area(mcp)
+      gg <- gg + geom_sf(data = mcp, aes(fill = as.factor(individual_id)), alpha = 0.4)
+    }, error = function(e) {
+      # There will be an error if there is no data for a month. This does happen
+      # in practice sind some of the studies ran only for parts of the year.
+      # The error is expected and of no concern. We just want to skip the month.
+      print(e)
+    }, finally = {
+      ts_start = ts_end
+      ts_end <- add_with_rollback(ts_end, months(1))
+    })
+  }
+  return(list(gg = gg, areas = flatten_array(areas)))
+}
+
+results_bylot <- calculate_monthly_home_ranges(as.POSIXct("2011-07-01 00:00:00"), 54, 1371322147, '9559cb1b1cca51e9f3fd69812e5e22dc')
+write_csv(data.frame(results_bylot$areas), "output_bylot.csv")
+
+results_herschel = calculate_monthly_home_ranges(as.POSIXct("2009-07-01 00:00:00"), 18, 1371529289, '436e8205d0c2973115e2024b146a6ad5')
+write_csv(data.frame(results_herschel$areas), "output_herschel.csv")
+
+results_wiltshire = calculate_monthly_home_ranges(as.POSIXct("2016-01-01 00:00:00"), 48, 3179890710, 'ffa36f79defe10eac9fe70f6502a17e0')
+write_csv(data.frame(results_wiltshire$areas), "output_wiltshire.csv")
+```
+

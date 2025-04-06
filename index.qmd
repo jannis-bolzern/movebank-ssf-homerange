@@ -101,7 +101,7 @@ The ESA WorldCover 2021 data at 10m resolution was downloaded via the Microsoft 
 ### Red fox data {#sec-redfoxdata}
 
 ```{r}
-#| label: red fox data investigation
+#| label: red-fox-data-investigation
 #| include: false
 library("lubridate")
 library("sf")
@@ -198,10 +198,12 @@ Movement rates will be used to quantify diel activity shifts. We will test wheth
 SSFs will quantify selection for human-modified habitats (e.g., agricultural areas, urban edges) relative to natural habitats. By comparing selection patterns across species and regions, we will assess how habitat preferences vary with human influence.
 
 # Results
-The resulting home ranges are shown in @fig-home-ranges-bylot and @fig-home-ranges-wiltshire. The median home rage size for the foxes in Herschel (75.3 km<sup>2</sup>) is more than 65 times bigger compared to the foxes in Wiltshire (1.1 km<sup>2</sup>). 
+The resulting home ranges are shown in @fig-home-ranges-bylot and @fig-home-ranges-wiltshire. The median home rage size for the foxes in Herschel (75.3 km<sup>2</sup>) is more than 65 times bigger compared to the foxes in Wiltshire (1.1 km<sup>2</sup>).
 
 ```{r}
+#| label: red-fox-data-filtered-download
 #| include: false
+
 foxes_wiltshire_filtered <- movebank_download_study(
   study_id = 3179890710,
   sensor_type_id = c("gps"),
@@ -245,6 +247,7 @@ ggplot(w_mcp, aes(fill = as.factor(individual_id))) +
 ```
 
 ```{r}
+#| label: red-fox-data-filtered-medians
 #| include: false
 c1_area <- st_area(c1_mcp)
 c1_median <- median(c1_area)
@@ -257,6 +260,7 @@ print(w_median)
 The home range for the sampled Wiltshire data is shown in @fig-home-ranges-wiltshire-sampled24h. The median home range is 0.56 km<sup>2</sup> for the sampled data (and 1.1 km<sup>2</sup> for the full data).
 
 ```{r}
+#| label: red-fox-data-filtered-sampled
 #| include: false
 foxes_wiltshire_filtered_sampled_24h <- foxes_wiltshire_filtered |>
   mt_filter_per_interval(unit = "24 hours")
@@ -276,10 +280,51 @@ ggplot(w_mcp, aes(fill = as.factor(individual_id))) +
 ```
 
 ```{r}
+#| label: red-fox-data-filtered-sampled-median
 #| include: false
 w_area <- st_area(w_mcp)
 w_median <- median(w_area)
 print(w_median)
+```
+
+```{r}
+#| label: red-fox-data-read-monthly-results
+#| include: false
+library("readr")
+results_bylot <- read_delim("output_bylot.csv", delim = ",")
+results_herschel <- read_delim("output_herschel.csv", delim = ",")
+results_wiltshire <- read_delim("output_wiltshire.csv", delim = ",")
+```
+
+```{r}
+#| label: red-fox-data-functions
+#| include: false
+remove_outliers <- function(areas) {
+  stats <- boxplot.stats(areas)
+  outliers <- stats$out
+  return(areas[!areas %in% outliers])
+}
+convert_m2_to_km2 <- function(area) {
+  return(area * 0.000001)
+}
+```
+
+@fig-home-ranges-boxplot shows a comparison of monthly home ranges.
+
+```{r}
+#| label: fig-home-ranges-boxplot
+#| fig-cap: "Box plot comparing monthly home ranges (outliers removed)"
+#| echo: false
+#| warning: false
+boxplot(
+  remove_outliers(convert_m2_to_km2(results_bylot$results_bylot.areas)), 
+  remove_outliers(convert_m2_to_km2(results_herschel$results_herschel.areas)), 
+  remove_outliers(convert_m2_to_km2(results_wiltshire$results_wiltshire.areas)), 
+  xlab = "", 
+  ylab = "Values")
+axis(1, at = 1, labels = "Bylot")
+axis(1, at = 2, labels = "Herschel")
+axis(1, at = 3, labels = "Wiltshire")
 ```
 
 # Discussion
@@ -293,7 +338,6 @@ The influence of technical aspects like sampling intervals is significant. Howev
 
 ## Don't do
 
-* Home ranges: Compare median monthly home range per animal and location
 * There are several ways to calculate home range, we could compare (and could focus on only that)
 * Do home range for foxes first, for bobcat and coyote data later, potentially even cross-species analysis
 * Use kernel density estimation (KDE)
