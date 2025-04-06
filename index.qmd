@@ -17,7 +17,7 @@ keep-tex: true
 
 ```{r preprocessing}
 #| code-summary: preprocessing
-``` 
+```
 
 # Abstract
 
@@ -27,20 +27,20 @@ We investigate how human activity influences the movement patterns of wild anima
 
 Research questions:
 
-1. Home Range Implications: Do animals exhibit smaller home ranges in high human-impact areas?
-2. Temporal Shifts in Activity Patterns: Do animals become more nocturnal in high human-impact areas to avoid direct human encounters?
-3. Habitat Selection in Human-Dominated Landscapes: How do animals select habitats (e.g., forests, agriculture) under varying levels of human influence? 
+1.  Home Range Implications: Do animals exhibit smaller home ranges in high human-impact areas?
+2.  Temporal Shifts in Activity Patterns: Do animals become more nocturnal in high human-impact areas to avoid direct human encounters?
+3.  Habitat Selection in Human-Dominated Landscapes: How do animals select habitats (e.g., forests, agriculture) under varying levels of human influence?
 
 We will be using different data sets for each research question.
 
 Additional challenges:
 
-* We will be using data for purposes that it wasn't originally collected for.
-* We will be using parts of data sets (missing animals in the bobcat/coyote study).
-* We will be comparing between data from different studies for the same animals.
-* We will be comparing data from different continents where weather conditions will differ for the same day of the year, leading to animal behavior likely also being different.
-* We will be comparing data from different timezones.
-* The data includes changes of timezone (winter to summer time).
+-   We will be using data for purposes that it wasn't originally collected for.
+-   We will be using parts of data sets (missing animals in the bobcat/coyote study).
+-   We will be comparing between data from different studies for the same animals.
+-   We will be comparing data from different continents where weather conditions will differ for the same day of the year, leading to animal behavior likely also being different.
+-   We will be comparing data from different timezones.
+-   The data includes changes of timezone (winter to summer time).
 
 # Material and Methods
 
@@ -50,43 +50,16 @@ This section describes the data sets, the steps taken to prepare and process the
 
 Movebank by @kays2022movebank provides means for researchers to publish animal tracking data for public use, e.g. under Creative Commons licenses. The following data was selected:
 
-* Red fox data from @porteus2024movement for the outskirt areas of villages in Wiltshire, UK and from @lai2022red for the highly remote uninhabitated islands Bylot and Herschel, Canada, and
-* Bobcat and coyote data from @prugh2023fear for remote areas with some rural structures in northern Washington, US.
+-   Red fox data from @porteus2024movement for the outskirt areas of villages in Wiltshire, UK and from @lai2022red for the highly remote uninhabitated islands Bylot and Herschel, Canada, and
+-   Bobcat and coyote data from @prugh2023fear for remote areas with some rural structures in northern Washington, US.
 
 For the human footprint data, the global 100 meter resolution terrestrial human footprint data (HFP-100) by @gassert2023operational was chosen. For land use, the ESA WorldCover data @zanaga2022esa is employed.
 
 ## Data preparation and processing
 
 ### Movebank
-All Movebank data sets have the same schema. This simplifies data handling and enables code re-use. A library for data processing and trajectory handling in R is provided by @kranstauber2024move2.
 
-```{r}
-#| label: fig-code-chunk
-#| include: false
-#| output: false
-
-library("dplyr")
-library("move2")
-library("units")
-library("rnaturalearth")
-
-foxes_wiltshire <- movebank_download_study(
-  study_id = 3179890710,
-  sensor_type_id = c("gps"),
-  'license-md5'='ffa36f79defe10eac9fe70f6502a17e0',
-  attributes = NULL
-)
-foxes_bylot <- movebank_download_study(
-  study_id = 1371322147,
-  'license-md5'='9559cb1b1cca51e9f3fd69812e5e22dc',
-  attributes = NULL
-)
-foxes_herschel <- movebank_download_study(
-  study_id = 1371529289,
-  'license-md5'='436e8205d0c2973115e2024b146a6ad5',
-  attributes = NULL
-)
-```
+All Movebank data sets have the same schema. This simplifies data handling and enables code re-use. A library for data processing and trajectory handling in R is provided by @kranstauber2024move2. The R code for Movebank data download, preprocessing, and partly visualization can be found the the following documents: [UK wader nesting season home range](preprocessing_uk_wader_nesting_season_home_range.qmd), [montly home range](preprocessing_monthly_home_ranges.qmd).
 
 ### HRP-100
 
@@ -94,118 +67,63 @@ This raster data set uses the Mollweide projection (see @lapaine2011mollweide). 
 
 ### ESA WorldCover
 
-The ESA WorldCover 2021 data at 10m resolution was downloaded via the Microsoft Planetary Computer STAC API [[link]](https://planetarycomputer.microsoft.com/docs/quickstarts/reading-stac/) for simple programmatic access in R.
+The ESA WorldCover 2021 data at 10m resolution was downloaded via the Microsoft Planetary Computer STAC API [\[link\]](https://planetarycomputer.microsoft.com/docs/quickstarts/reading-stac/) for simple programmatic access in R.
 
 ## Data exploration and analysis
 
 ### Red fox data {#sec-redfoxdata}
 
-```{r}
-#| label: red-fox-data-investigation
-#| include: false
-library("lubridate")
-library("sf")
-
-counts_herschel <- data.frame(foxes_herschel) |> 
-  mutate(source = as.character("Herschel")) |>
-  select(source, timestamp)
-st_drop_geometry(counts_herschel)
-counts_bylot <- data.frame(foxes_bylot) |> 
-  mutate(source = as.character("Bylot")) |>
-  select(source, timestamp)
-st_drop_geometry(counts_bylot)
-counts_wiltshire <- data.frame(foxes_wiltshire) |> 
-  mutate(source = as.character("Wiltshire")) |>
-  select(source, timestamp)
-st_drop_geometry(counts_wiltshire)
-
-combined_data <- bind_rows(counts_herschel, counts_bylot, counts_wiltshire)
-combined_data <- combined_data |>
-  mutate(date = as.Date(timestamp), month = month(timestamp), year = as.integer(year(timestamp)))
-year_count <- combined_data |>
-  group_by(source, year) |>
-  summarise(count = n())
-month_count <- combined_data |>
-  group_by(source, month) |>
-  summarise(count = n())
-```
-
 The Wiltshire data was collected between 2016 to 2019 during the UK wader nesting season, which was defined to be March 15th to June 15th, for 35 foxes in total. It was sampled at 10 or 60 minute rates. The research team could set the sampling rate remotely to save battery at times the data was considered less interesting.
 
 The Bylot/Herschel Canadian data was collected all year round, at a much lower sampling rate of once per day, at random afternoon times of the day. The collection period was June 2009 to Feb 2010 for Herschel and from 2011 to 2015 for Bylot, for two foxes per island. @fig-datapoints-year provides an overview of the amount of data points available per year. There is much more data from Wiltshire because of the higher number of foxes and the higher sampling rate.
 
-```{r}
-#| label: fig-datapoints-year
-#| fig-cap: "Data points per year"
-#| echo: false
-#| warning: false
-library("ggplot2")
+![Data points per year](year_count.png){#fig-datapoints-year}
 
-ggplot(year_count, aes(x = factor(year), y = count, color = source, fill = source)) +
-  geom_bar(stat = "identity", width = 0.5) +
-  facet_wrap(~ ifelse(source %in% c("Bylot", "Herschel"), "Bylot/Herschel", "Wiltshire"), scales = "free_y") +
-  labs(x = "Year", y = "Number of data points") +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 90)) +
-  theme(axis.text.x = element_text(size = 6)) +
-  theme(axis.text.x = element_text(margin = margin(b = 20))) +
-  theme(axis.text.y = element_text(margin = margin(l = 20)))
-```
+Looking at the breakdowns by month as shown in @fig-datapoints-month reveals seasonal differences in the amount of data available.
 
-Looking at the breakdowns by month as shown in @fig-datapoints-month reveals seasonal differences in the amount of data available. 
-
-```{r}
-#| label: fig-datapoints-month
-#| fig-cap: "Data points per month"
-#| echo: false
-#| warning: false
-
-month_count$month_name <- factor(month.abb[month_count$month], levels = month.abb)
-ggplot(month_count, aes(x = as.factor(month_name), y = count, color = source)) +
-  geom_point() +
-  scale_x_discrete() +
-  facet_wrap(~ ifelse(source %in% c("Bylot", "Herschel"), "Bylot/Herschel", "Wiltshire"), scales = "free_y") +
-  labs(x = "Month", y = "Number of data points") +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 90)) +
-  theme(axis.text.x = element_text(size = 6)) +
-  theme(axis.text.x = element_text(margin = margin(b = 20))) +
-  theme(axis.text.y = element_text(margin = margin(l = 20)))
-```
+![Data points per month](month_count.png){#fig-datapoints-month}
 
 ## Methodology {#sec-methodology}
 
 ### Trajectory Analysis
+
 Movement paths will be analyzed to identify patterns in speed, direction, and habitat use. Step lengths and turning angles will help infer behavioral states. Step-selection functions (SSFs, @fortin2005wolves) will be employed as a statistical model for habitat preferences relative to movement patterns, allowing us to quantify how animals respond to environmental covariates such as human footprint and land use.
 
 ### Home Range Assessment
-The red fox data will be used for home range assessment present for a rural and a remote location. Home range sizes will be calculated using minimum convex polygons (MCPs). This will provide estimates of the area used by each individual. 
+
+The red fox data will be used for home range assessment present for a rural and a remote location. Home range sizes will be calculated using minimum convex polygons (MCPs). This will provide estimates of the area used by each individual.
 
 As discussed in @sec-redfoxdata, the data for the two locations have different temporal scale. @laube2011 have found that the choice of temporal scale has considerable effects on movement parameter calculations, in turn affecting home range results.
 
-How to make this data comparable? Problem #1 is that the sampling intervals are different. Problem #2 is that the data coverage varies by time of the year. Problem #3 is that there are highly different amounts of data. Selecting the means and parameters for the comparison involves complex choices that will influence the results. 
+How to make this data comparable? Problem #1 is that the sampling intervals are different. Problem #2 is that the data coverage varies by time of the year. Problem #3 is that there are highly different amounts of data. Selecting the means and parameters for the comparison involves complex choices that will influence the results.
 
 For #1, a possible approach to achieve similar sampling intervals would be to sample a random afternoon data point for each 24 hour window. However, this would include the implicit assumption that foxes will follow similar daily patterns in the different environments. For #2, a possible approach would be to compare the data for the same time of the year. However, the geographical locations are different. The seasonal weather conditions will differ for the same day of the year, likely leading to different animal behavior. For #3, aggregated comparisons can solve the issue assuming there is enough data for the smaller data source.
 
-For data exploration the simplest possible imperfect approach was employed, which is to ignore the different sampling intervals for problem #1, to compare the data for the same time of the year for problem #2, and to use exploratory data analysis to find out if a representative answer can be found given the amount of data present for problem #3. The Herschel data is not applicable for this approach since it has minimal overlaps with the Wiltshire data (cf. @fig-datapoints-month). To explore the impact of sampling intervals for problem #1, the Wiltshire data was downsampled. A random data point from every 24 hour period was selected. 
+For data exploration the simplest possible imperfect approach was employed, which is to ignore the different sampling intervals for problem #1, to compare the data for the same time of the year for problem #2, and to use exploratory data analysis to find out if a representative answer can be found given the amount of data present for problem #3. The Herschel data is not applicable for this approach since it has minimal overlaps with the Wiltshire data (cf. @fig-datapoints-month). To explore the impact of sampling intervals for problem #1, the Wiltshire data was downsampled. A random data point from every 24 hour period was selected.
 
 Additionally, an analysis of monthly home ranges was conducted on all three data sets as an alternative solution to address problem #2.
 
 ### Temporal Activity Patterns
+
 Movement rates will be used to quantify diel activity shifts. We will test whether animals in high human-impact areas exhibit increased nocturnality, potentially as a strategy to avoid direct human encounters. This analysis will reveal how temporal behavior adapts to human presence.
 
 ### Habitat Selection
+
 SSFs will quantify selection for human-modified habitats (e.g., agricultural areas, urban edges) relative to natural habitats. By comparing selection patterns across species and regions, we will assess how habitat preferences vary with human influence.
 
 # Results
-The resulting home ranges for the UK wader nesting season timeframe are shown in @fig-home-ranges-bylot and @fig-home-ranges-wiltshire. The median home rage size for the foxes in Herschel (75.3 km<sup>2</sup>) is more than 65 times bigger compared to the foxes in Wiltshire (1.1 km<sup>2</sup>). The home range for the sampled Wiltshire data is shown in @fig-home-ranges-wiltshire-sampled24h. It is 0.56 km<sup>2</sup> for the sampled data, which is roughly half as for the full data. This demonstrates that the influence of sampling intervals is definitely present, but is dwarfed in comparison to the difference in fox behavior.
 
-The same effect with differences in order of magnitude between remote and rural fox home range can be seen @fig-home-ranges-boxplot which shows the results for monthly home ranges. 
+The resulting home ranges for the UK wader nesting season time frame are shown in @fig-home-ranges-bylot and @fig-home-ranges-wiltshire. The median home rage size for the foxes in Herschel (75.3 km<sup>2</sup>) is more than 65 times bigger compared to the foxes in Wiltshire (1.1 km<sup>2</sup>). The home range for the sampled Wiltshire data is shown in @fig-home-ranges-wiltshire-sampled24h. It is 0.56 km<sup>2</sup> for the sampled data, which is roughly half as for the full data. This demonstrates that the influence of sampling intervals is definitely present, but is dwarfed in comparison to the difference in fox behavior.
+
+The same effect with differences in order of magnitude between remote and rural fox home range can be seen @fig-home-ranges-boxplot which shows the results for monthly home ranges.
 
 ```{r}
 #| label: red-fox-data-filtered-download
 #| include: false
-
+library("dplyr")
+library("move2")
+library("units")
+library("rnaturalearth")
 foxes_wiltshire_filtered <- movebank_download_study(
   study_id = 3179890710,
   sensor_type_id = c("gps"),
@@ -334,15 +252,15 @@ box()
 
 # Discussion
 
-The fox home range results differ enormously between rural and remote areas. We can conclude that human presence impacts fox movement behavior significantly, with availability of anthropogenic food sources likely being relevant. The influence of technical aspects like sampling intervals on home range calculation results is significant. However, it plays a secondary role in comparison to the difference in fox behavior, which enables the chosen approach of comparing data from heterogeneous sources. 
+The fox home range results differ enormously between rural and remote areas. We can conclude that human presence impacts fox movement behavior significantly, with availability of anthropogenic food sources likely being relevant. The influence of technical aspects like sampling intervals on home range calculation results is significant. However, it plays a secondary role in comparison to the difference in fox behavior, which enables the chosen approach of comparing data from heterogeneous sources.
 
 # Appendix
 
 ## Don't do
 
-* There are several ways to calculate home range, we could compare (and could focus on only that)
-* Do home range for foxes first, for bobcat and coyote data later, potentially even cross-species analysis
-* Use kernel density estimation (KDE)
+-   There are several ways to calculate home range, we could compare (and could focus on only that)
+-   Do home range for foxes first, for bobcat and coyote data later, potentially even cross-species analysis
+-   Use kernel density estimation (KDE)
 
 ## Wordcount
 

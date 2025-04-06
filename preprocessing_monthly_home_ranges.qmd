@@ -1,5 +1,5 @@
 ---
-title: "preprocessing_monthly_home_ranges"
+title: "Preprocessing: monthly home ranges"
 format: html
 ---
 

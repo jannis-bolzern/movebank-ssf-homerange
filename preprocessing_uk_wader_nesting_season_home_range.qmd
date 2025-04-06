@@ -1,0 +1,86 @@
+---
+title: "Preprocessing: UK wader nesting season home range"
+format: html
+---
+
+```{r}
+library("dplyr")
+library("move2")
+library("units")
+library("rnaturalearth")
+
+foxes_wiltshire <- movebank_download_study(
+  study_id = 3179890710,
+  sensor_type_id = c("gps"),
+  'license-md5'='ffa36f79defe10eac9fe70f6502a17e0',
+  attributes = NULL
+)
+foxes_bylot <- movebank_download_study(
+  study_id = 1371322147,
+  'license-md5'='9559cb1b1cca51e9f3fd69812e5e22dc',
+  attributes = NULL
+)
+foxes_herschel <- movebank_download_study(
+  study_id = 1371529289,
+  'license-md5'='436e8205d0c2973115e2024b146a6ad5',
+  attributes = NULL
+)
+```
+
+```{r}
+library("lubridate")
+library("sf")
+counts_herschel <- data.frame(foxes_herschel) |> 
+  mutate(source = as.character("Herschel")) |>
+  select(source, timestamp)
+st_drop_geometry(counts_herschel)
+counts_bylot <- data.frame(foxes_bylot) |> 
+  mutate(source = as.character("Bylot")) |>
+  select(source, timestamp)
+st_drop_geometry(counts_bylot)
+counts_wiltshire <- data.frame(foxes_wiltshire) |> 
+  mutate(source = as.character("Wiltshire")) |>
+  select(source, timestamp)
+st_drop_geometry(counts_wiltshire)
+
+combined_data <- bind_rows(counts_herschel, counts_bylot, counts_wiltshire)
+combined_data <- combined_data |>
+  mutate(date = as.Date(timestamp), month = month(timestamp), year = as.integer(year(timestamp)))
+year_count <- combined_data |>
+  group_by(source, year) |>
+  summarise(count = n())
+month_count <- combined_data |>
+  group_by(source, month) |>
+  summarise(count = n())
+```
+
+```{r}
+library("ggplot2")
+
+ggplot(year_count, aes(x = factor(year), y = count, color = source, fill = source)) +
+  geom_bar(stat = "identity", width = 0.5) +
+  facet_wrap(~ ifelse(source %in% c("Bylot", "Herschel"), "Bylot/Herschel", "Wiltshire"), scales = "free_y") +
+  labs(x = "Year", y = "Number of data points") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90)) +
+  theme(axis.text.x = element_text(size = 6)) +
+  theme(axis.text.x = element_text(margin = margin(b = 20))) +
+  theme(axis.text.y = element_text(margin = margin(l = 20)))
+ggsave("year_count.png")
+```
+
+```{r}
+month_count$month_name <- factor(month.abb[month_count$month], levels = month.abb)
+ggplot(month_count, aes(x = as.factor(month_name), y = count, color = source)) +
+  geom_point() +
+  scale_x_discrete() +
+  facet_wrap(~ ifelse(source %in% c("Bylot", "Herschel"), "Bylot/Herschel", "Wiltshire"), scales = "free_y") +
+  labs(x = "Month", y = "Number of data points") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90)) +
+  theme(axis.text.x = element_text(size = 6)) +
+  theme(axis.text.x = element_text(margin = margin(b = 20))) +
+  theme(axis.text.y = element_text(margin = margin(l = 20)))
+ggsave("month_count.png")
+```
+
