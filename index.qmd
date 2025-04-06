@@ -334,10 +334,7 @@ box()
 
 # Discussion
 
-The fox home range results differ enormously between rural and remote areas. We can conclude that human presence massively impacts fox movement behavior, with availability of food likely being relevant.
-
-The influence of technical aspects like sampling intervals is significant. However, in this case it plays a secondary role in comparison to the fox behavior. This is the enabling factor for the chosen approach of comparing data from heterogeneous sources. 
-
+The fox home range results differ enormously between rural and remote areas. We can conclude that human presence impacts fox movement behavior significantly, with availability of anthropogenic food sources likely being relevant. The influence of technical aspects like sampling intervals on home range calculation results is significant. However, it plays a secondary role in comparison to the difference in fox behavior, which enables the chosen approach of comparing data from heterogeneous sources. 
 
 # Appendix
 
