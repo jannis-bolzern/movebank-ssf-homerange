@@ -1,9 +1,6 @@
 ---
 title: "Preprocessing: UK wader nesting season home range"
 format: html
-output:
-  html:
-    self-contained: true
 ---
 
 ## EDA over all the study data
@@ -71,7 +68,7 @@ ggplot(year_count, aes(x = factor(year), y = count, color = source, fill = sourc
   theme(axis.text.x = element_text(size = 6)) +
   theme(axis.text.x = element_text(margin = margin(b = 20))) +
   theme(axis.text.y = element_text(margin = margin(l = 20)))
-ggsave("year_count.png")
+ggsave("img/year_count.png")
 ```
 
 ```{r}
@@ -86,10 +83,10 @@ ggplot(month_count, aes(x = as.factor(month_name), y = count, color = source)) +
   theme(axis.text.x = element_text(size = 6)) +
   theme(axis.text.x = element_text(margin = margin(b = 20))) +
   theme(axis.text.y = element_text(margin = margin(l = 20)))
-ggsave("month_count.png")
+ggsave("img/month_count.png")
 ```
 
-### Filtered for UK wader nesting season 
+## Filtered data for UK wader nesting season 
 
 ```{r}
 foxes_wiltshire_filtered <- movebank_download_study(
@@ -119,7 +116,7 @@ c1_mcp <- st_convex_hull(c1_tracks)
 ggplot(c1_mcp, aes(fill = as.factor(individual_id))) +
   geom_sf(alpha = 0.4) +
   labs(fill = "Fox id")
-ggsave("home_range_bylot_wader.png")
+ggsave("img/home_range_bylot_wader.png")
 ```
 
 ```{r}
@@ -133,7 +130,7 @@ w_mcp <- st_convex_hull(w_tracks)
 ggplot(w_mcp, aes(fill = as.factor(individual_id))) +
   geom_sf(alpha = 0.4) +
   labs(fill = "Fox id")
-ggsave("home_range_wiltshire_wader.png")
+ggsave("img/home_range_wiltshire_wader.png")
 ```
 
 ```{r}
@@ -146,6 +143,8 @@ w_area <- st_area(w_mcp)
 w_median <- median(w_area)
 print(w_median)
 ```
+
+## Sampled filtered data for UK wader nesting season 
 
 ```{r}
 #| label: red-fox-data-filtered-sampled
@@ -165,7 +164,7 @@ w_mcp <- st_convex_hull(w_tracks)
 ggplot(w_mcp, aes(fill = as.factor(individual_id))) +
   geom_sf(alpha = 0.4) +
   labs(fill = "Fox id")
-ggsave("home_range_wiltshire_wader_sampled.png")
+ggsave("img/home_range_wiltshire_wader_sampled.png")
 ```
 
 ```{r}
