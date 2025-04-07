@@ -77,11 +77,11 @@ The Wiltshire data was collected between 2016 to 2019 during the UK wader nestin
 
 The Bylot/Herschel Canadian data was collected all year round, at a much lower sampling rate of once per day, at random afternoon times of the day. The collection period was June 2009 to Feb 2010 for Herschel and from 2011 to 2015 for Bylot, for two foxes per island. @fig-datapoints-year provides an overview of the amount of data points available per year. There is much more data from Wiltshire because of the higher number of foxes and the higher sampling rate.
 
-![Data points per year](year_count.png){#fig-datapoints-year}
+![Data points per year](img/year_count.png){#fig-datapoints-year}
 
 Looking at the breakdowns by month as shown in @fig-datapoints-month reveals seasonal differences in the amount of data available.
 
-![Data points per month](month_count.png){#fig-datapoints-month}
+![Data points per month](img/month_count.png){#fig-datapoints-month}
 
 ## Methodology {#sec-methodology}
 
@@ -117,11 +117,11 @@ The resulting home ranges for the UK wader nesting season time frame are shown i
 
 The same effect with differences in order of magnitude between remote and rural fox home range can be seen @fig-home-ranges-boxplot which shows the results for monthly home ranges.
 
-![Home ranges for Bylot foxes (March 15th to June 15th, 2012)](home_range_bylot_wader.png){#fig-home-ranges-bylot}
+![Home ranges for Bylot foxes (March 15th to June 15th, 2012)](img/home_range_bylot_wader.png){#fig-home-ranges-bylot}
 
-![Home ranges for Wiltshire foxes (March 15th to June 15th, 2019)](home_range_wiltshire_wader.png){#fig-home-ranges-wiltshire}
+![Home ranges for Wiltshire foxes (March 15th to June 15th, 2019)](img/home_range_wiltshire_wader.png){#fig-home-ranges-wiltshire}
 
-![Home ranges for Wiltshire foxes (March 15th to June 15th, 2019, 24 hour sampling interval)](home_range_wiltshire_wader_sampled.png){#fig-home-ranges-wiltshire-sampled24h}
+![Home ranges for Wiltshire foxes (March 15th to June 15th, 2019, 24 hour sampling interval)](img/home_range_wiltshire_wader_sampled.png){#fig-home-ranges-wiltshire-sampled24h}
 
 ```{r}
 #| label: red-fox-data-read-monthly-results
