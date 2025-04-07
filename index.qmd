@@ -23,19 +23,11 @@ We investigate how human activity influences the movement patterns of wild anima
 
 Research questions:
 
-1.  Home Range Implications: Do animals exhibit smaller home ranges in high human-impact areas?
+1.  Home Range Implications: Do animals exhibit smaller home ranges in high human-impact areas? Similar to @doherty2021human
 2.  Temporal Shifts in Activity Patterns: Do animals become more nocturnal in high human-impact areas to avoid direct human encounters?
 3.  Habitat Selection in Human-Dominated Landscapes: How do animals select habitats (e.g., forests, agriculture) under varying levels of human influence?
 
-Different data sets will be used for each research question. Relying on Movebank data, as described in @sec-movebank, presents additional challenges stemming from the fact that the data will be used for purposes it was not originally collected for.
-
-Additional challenges:
-
--   We will be using parts of data sets (missing animals in the bobcat/coyote study).
--   We will be comparing between data from different studies for the same animals.
--   We will be comparing data from different continents where weather conditions will differ for the same day of the year, leading to animal behavior likely also being different.
--   We will be comparing data from different timezones.
--   The data includes changes of timezone (winter to summer time).
+Different data sets will be used for each research question. Relying on Movebank data, as described in @sec-movebank, presents additional challenges stemming from the facts that (1) the data will be used for purposes it was not originally collected for and (2) data from different studies that was collected in different manners will be compared, and (3) subsets for existing data set will be employed, i.e. only some of the animals from the existing studies are considered.
 
 # Material and Methods
 
@@ -125,8 +117,7 @@ The same effect with differences in order of magnitude between remote and rural 
 #| include: false
 library("readr")
 library("dplyr")
-results_bylot <- read_delim("data/output_bylot.csv", delim = ";", col_types = cols(
-  areas = col_double()))
+results_bylot <- read_delim("data/output_bylot.csv", delim = ";")
 # Remove outlier from a month with little data due to collection timeframes
 results_bylot <- results_bylot |> 
   filter(areas > 1000)
