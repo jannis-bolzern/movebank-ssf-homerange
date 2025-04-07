@@ -1,7 +1,12 @@
 ---
 title: "Preprocessing: UK wader nesting season home range"
 format: html
+output:
+  html:
+    self-contained: true
 ---
+
+## EDA over all the study data
 
 ```{r}
 library("dplyr")
@@ -84,3 +89,89 @@ ggplot(month_count, aes(x = as.factor(month_name), y = count, color = source)) +
 ggsave("month_count.png")
 ```
 
+### Filtered for UK wader nesting season 
+
+```{r}
+foxes_wiltshire_filtered <- movebank_download_study(
+  study_id = 3179890710,
+  sensor_type_id = c("gps"),
+  'license-md5'='ffa36f79defe10eac9fe70f6502a17e0',
+  timestamp_start = as.POSIXct("2019-03-15 00:00:00"),
+  timestamp_end = as.POSIXct("2019-06-15 23:59:00")
+)
+foxes_bylot_filtered <- movebank_download_study(
+  study_id = 1371322147,
+  'license-md5'='9559cb1b1cca51e9f3fd69812e5e22dc',
+  timestamp_start = as.POSIXct("2012-03-15 00:00:00"),
+  timestamp_end = as.POSIXct("2012-06-15 23:59:00")
+)  
+```
+
+```{r}
+#| label: fig-home-ranges-bylot
+#| echo: false
+#| warning: false
+#| fig-cap: "Home ranges for Bylot foxes (March 15th to June 15th, 2012)"
+library("ggplot2")
+library("sf")
+c1_tracks <- mt_track_lines(foxes_bylot_filtered)
+c1_mcp <- st_convex_hull(c1_tracks)
+ggplot(c1_mcp, aes(fill = as.factor(individual_id))) +
+  geom_sf(alpha = 0.4) +
+  labs(fill = "Fox id")
+ggsave("home_range_bylot_wader.png")
+```
+
+```{r}
+#| label: fig-home-ranges-wiltshire
+#| fig-cap: "Home ranges for Wiltshire foxes (March 15th to June 15th, 2019)"
+#| echo: false
+#| warning: false
+
+w_tracks <- mt_track_lines(foxes_wiltshire_filtered)
+w_mcp <- st_convex_hull(w_tracks)
+ggplot(w_mcp, aes(fill = as.factor(individual_id))) +
+  geom_sf(alpha = 0.4) +
+  labs(fill = "Fox id")
+ggsave("home_range_wiltshire_wader.png")
+```
+
+```{r}
+#| label: red-fox-data-filtered-medians
+#| include: false
+c1_area <- st_area(c1_mcp)
+c1_median <- median(c1_area)
+print(c1_median)
+w_area <- st_area(w_mcp)
+w_median <- median(w_area)
+print(w_median)
+```
+
+```{r}
+#| label: red-fox-data-filtered-sampled
+#| include: false
+foxes_wiltshire_filtered_sampled_24h <- foxes_wiltshire_filtered |>
+  mt_filter_per_interval(unit = "24 hours")
+```
+
+```{r}
+#| label: fig-home-ranges-wiltshire-sampled24h
+#| fig-cap: "Home ranges for Wiltshire foxes (March 15th to June 15th, 2019, 24 hour sampling interval)"
+#| echo: false
+#| warning: false
+
+w_tracks <- mt_track_lines(foxes_wiltshire_filtered_sampled_24h)
+w_mcp <- st_convex_hull(w_tracks)
+ggplot(w_mcp, aes(fill = as.factor(individual_id))) +
+  geom_sf(alpha = 0.4) +
+  labs(fill = "Fox id")
+ggsave("home_range_wiltshire_wader_sampled.png")
+```
+
+```{r}
+#| label: red-fox-data-filtered-sampled-median
+#| include: false
+w_area <- st_area(w_mcp)
+w_median <- median(w_area)
+print(w_median)
+```

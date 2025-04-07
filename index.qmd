@@ -7,6 +7,9 @@ format:
     code-fold: true
   pdf:
     number-sections: true
+output:
+  html:
+    self-contained: true    
 execute:
   warning: false
   message: false
@@ -116,103 +119,24 @@ The resulting home ranges for the UK wader nesting season time frame are shown i
 
 The same effect with differences in order of magnitude between remote and rural fox home range can be seen @fig-home-ranges-boxplot which shows the results for monthly home ranges.
 
-```{r}
-#| label: red-fox-data-filtered-download
-#| include: false
-library("dplyr")
-library("move2")
-library("units")
-library("rnaturalearth")
-foxes_wiltshire_filtered <- movebank_download_study(
-  study_id = 3179890710,
-  sensor_type_id = c("gps"),
-  'license-md5'='ffa36f79defe10eac9fe70f6502a17e0',
-  timestamp_start = as.POSIXct("2019-03-15 00:00:00"),
-  timestamp_end = as.POSIXct("2019-06-15 23:59:00")
-)
-foxes_bylot_filtered <- movebank_download_study(
-  study_id = 1371322147,
-  'license-md5'='9559cb1b1cca51e9f3fd69812e5e22dc',
-  timestamp_start = as.POSIXct("2012-03-15 00:00:00"),
-  timestamp_end = as.POSIXct("2012-06-15 23:59:00")
-)  
-```
+![Home ranges for Bylot foxes (March 15th to June 15th, 2012)](home_range_bylot_wader.png){#fig-home-ranges-bylot}
 
-```{r}
-#| label: fig-home-ranges-bylot
-#| echo: false
-#| warning: false
-#| fig-cap: "Home ranges for Bylot foxes (March 15th to June 15th, 2012)"
-library("ggplot2")
-library("sf")
-c1_tracks <- mt_track_lines(foxes_bylot_filtered)
-c1_mcp <- st_convex_hull(c1_tracks)
-ggplot(c1_mcp, aes(fill = as.factor(individual_id))) +
-  geom_sf(alpha = 0.4) +
-  labs(fill = "Fox id")
-```
+![Home ranges for Wiltshire foxes (March 15th to June 15th, 2019)](home_range_wiltshire_wader.png){#fig-home-ranges-wiltshire}
 
-```{r}
-#| label: fig-home-ranges-wiltshire
-#| fig-cap: "Home ranges for Wiltshire foxes (March 15th to June 15th, 2019)"
-#| echo: false
-#| warning: false
-
-w_tracks <- mt_track_lines(foxes_wiltshire_filtered)
-w_mcp <- st_convex_hull(w_tracks)
-ggplot(w_mcp, aes(fill = as.factor(individual_id))) +
-  geom_sf(alpha = 0.4) +
-  labs(fill = "Fox id")
-```
-
-```{r}
-#| label: red-fox-data-filtered-medians
-#| include: false
-c1_area <- st_area(c1_mcp)
-c1_median <- median(c1_area)
-print(c1_median)
-w_area <- st_area(w_mcp)
-w_median <- median(w_area)
-print(w_median)
-```
-
-```{r}
-#| label: red-fox-data-filtered-sampled
-#| include: false
-foxes_wiltshire_filtered_sampled_24h <- foxes_wiltshire_filtered |>
-  mt_filter_per_interval(unit = "24 hours")
-```
-
-```{r}
-#| label: fig-home-ranges-wiltshire-sampled24h
-#| fig-cap: "Home ranges for Wiltshire foxes (March 15th to June 15th, 2019, 24 hour sampling interval)"
-#| echo: false
-#| warning: false
-
-w_tracks <- mt_track_lines(foxes_wiltshire_filtered_sampled_24h)
-w_mcp <- st_convex_hull(w_tracks)
-ggplot(w_mcp, aes(fill = as.factor(individual_id))) +
-  geom_sf(alpha = 0.4) +
-  labs(fill = "Fox id")
-```
-
-```{r}
-#| label: red-fox-data-filtered-sampled-median
-#| include: false
-w_area <- st_area(w_mcp)
-w_median <- median(w_area)
-print(w_median)
-```
+![Home ranges for Wiltshire foxes (March 15th to June 15th, 2019, 24 hour sampling interval)](home_range_wiltshire_wader_sampled.png){#fig-home-ranges-wiltshire-sampled24h}
 
 ```{r}
 #| label: red-fox-data-read-monthly-results
 #| include: false
 library("readr")
-results_bylot <- read_delim("output_bylot.csv", delim = ",")
+library("dplyr")
+results_bylot <- read_delim("data/output_bylot.csv", delim = ";", col_types = cols(
+  areas = col_double()))
 # Remove outlier from a month with little data due to collection timeframes
-results_bylot <- results_bylot |> filter(results_bylot.areas > 1000)
-results_herschel <- read_delim("output_herschel.csv", delim = ",")
-results_wiltshire <- read_delim("output_wiltshire.csv", delim = ",")
+results_bylot <- results_bylot |> 
+  filter(areas > 1000)
+results_herschel <- read_delim("data/output_herschel.csv", delim = ";")
+results_wiltshire <- read_delim("data/output_wiltshire.csv", delim = ";")
 ```
 
 ```{r}
@@ -235,9 +159,9 @@ convert_m2_to_km2 <- function(area) {
 #| warning: false
 par(mar = c(5, 5, 5, 5)) # To prevent superscripted text being cut.
 boxplot(
-  remove_stats_outliers(convert_m2_to_km2(results_bylot$results_bylot.areas)), 
-  remove_stats_outliers(convert_m2_to_km2(results_herschel$results_herschel.areas)), 
-  remove_stats_outliers(convert_m2_to_km2(results_wiltshire$results_wiltshire.areas)), 
+  remove_stats_outliers(convert_m2_to_km2(results_bylot$areas)), 
+  remove_stats_outliers(convert_m2_to_km2(results_herschel$areas)), 
+  remove_stats_outliers(convert_m2_to_km2(results_wiltshire$areas)), 
   axes = FALSE,
   xlab = "", 
   log = "y",
