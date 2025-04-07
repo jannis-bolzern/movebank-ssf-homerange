@@ -7,9 +7,6 @@ format:
     code-fold: true
   pdf:
     number-sections: true
-output:
-  html:
-    self-contained: true    
 execute:
   warning: false
   message: false
