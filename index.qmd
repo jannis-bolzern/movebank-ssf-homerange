@@ -18,10 +18,6 @@ bibliography: bibliography.bib
 keep-tex: true
 ---
 
-```{r preprocessing}
-#| code-summary: preprocessing
-```
-
 # Abstract
 
 We investigate how human activity influences the movement patterns of wild animals. Using tracking data from red foxes, bobcats, and coyotes across rural and remote areas in England, Canada, and the US, we analyze home range sizes, temporal activity shifts, and habitat selection in relation to human footprint and land use data.
@@ -61,7 +57,9 @@ For the human footprint data, the global 100 meter resolution terrestrial human 
 
 ### Movebank {#sec-movebank}
 
-All Movebank data sets have the same schema. This simplifies data handling, enables code re-use, and requires the data contributors do perform preprocessing and data cleaning on their side to provide the data in an appropriate format. A library for data processing and trajectory handling in R is provided by @kranstauber2024move2. The R code for Movebank data download, preprocessing, and partly visualization can be found the the following documents: [UK wader nesting season home range](preprocessing_uk_wader_nesting_season_home_range.qmd), [montly home range](preprocessing_monthly_home_ranges.qmd).
+All Movebank data sets have the same schema. This simplifies data handling, enables code re-use, and requires the data contributors do perform preprocessing and data cleaning on their side to provide the data in an appropriate format. A library for data processing and trajectory handling in R is provided by @kranstauber2024move2. 
+
+The R code for data download, preprocessing, and serialization of relevant data and charts can be found the the following linked documents: [Red fox: UK wader nesting season home range](preprocessing_uk_wader_nesting_season_home_range.html), [Red fox: montly home ranges](preprocessing_monthly_home_ranges.html).
 
 ### HRP-100
 
