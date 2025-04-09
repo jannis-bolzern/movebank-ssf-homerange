@@ -161,6 +161,12 @@ box()
 
 ## Result validation
 
+CRS Explorer [link]
+
+Use UTM coordinates for both areas
+
+Herschel island: 44.6 sq mi (116 km2)
+
 # Discussion
 
 The fox home range results differ enormously between rural and remote areas. We can conclude that human presence impacts fox movement behavior significantly, with availability of anthropogenic food sources likely being relevant. The influence of technical aspects like sampling intervals on home range calculation results is significant. However, it plays a secondary role in comparison to the difference in fox behavior, which enables the chosen approach of comparing data from heterogeneous sources.

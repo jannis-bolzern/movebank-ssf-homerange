@@ -7,53 +7,63 @@ editor: visual
 #### Kernel Density Estimation (KDE)
  
 ```{r}
+library(sp)
+library(sf)
+library(adehabitatHR)
+
+data <- st_as_sf(data.frame(
+  id = 1:3,
+  longitude = c(-122.4194, -118.2437, -74.0060),
+  latitude = c(37.7749, 34.0522, 40.7128)
+), coords = c("longitude", "latitude"), crs = 4326)
+
 # Convert to SpatialPoints
 sp_points <- as(data, "Spatial")
  
 # Estimate utilisation distribution using kernel method
 # probabilistic estimate of space use based on the input point locations
 # This is a surface showing the probability of the animal being in each location.
-kud <- kernelUD(sp_points)
+#kud <- kernelUD(sp_points)
  
 # Get 95% territory as SpatialPolygons
 # takes this utilisation distribution and extracts the home range polygon that contains 95% of the estimated utilisation, i.e., the area where the animal is estimated to spend 95% of its time. This is a common way to define an animal’s home range.
-terr_kde <- getverticeshr(kud, percent = 95)
+#terr_kde <- getverticeshr(kud, percent = 95)
  
 # ensure the correct CRS (same as shape) and make an sf out of st
-terr_sf_kde <- st_transform(st_as_sf(terr_kde), st_crs(shape))
+#terr_sf_kde <- st_transform(st_as_sf(terr_kde), st_crs(shape))
  
 # reset the index values
-rownames(terr_sf_kde) <- NULL
+#rownames(terr_sf_kde) <- NULL
  
 # remove the area column
-terr_sf_kde <- subset(terr_sf_kde, select=-c(area))
+#terr_sf_kde <- subset(terr_sf_kde, select=-c(area))
  
 # join the area calculated for the home range buffer, the territory according to MCP and the territory according to KDE
-estimated_areas <- rbind(estimated_areas, terr_sf_kde)
-estimated_areas$id <- factor(c("Territory (MCP)", "Buffer", "Territory (KDE)"))
+#estimated_areas <- rbind(estimated_areas, terr_sf_kde)
+#estimated_areas$id <- factor(c("Territory (MCP)", "Buffer", "Territory (KDE)"))
  
 # show the three different estimations
-tmap_mode("view")
-tm_shape(estimated_areas) +
-  tm_polygons(fill_alpha=0.4, fill="id") +
-  tm_basemap("Esri.WorldImagery") +
-  tm_legend(bg.color = "white")
+#tmap_mode("view")
+#tm_shape(estimated_areas) +
+#  tm_polygons(fill_alpha=0.4, fill="id") +
+#  tm_basemap("Esri.WorldImagery") +
+#  tm_legend(bg.color = "white")
  
-rm(sp_points, kud, terr_kde)
+#rm(sp_points, kud, terr_kde)
 ```
  
 Combine the land cover data and the KDE estimation
  
 ```{r}
 # intersect the KDE area with the land cover data
-terr_kde <- st_intersection(terr_sf_kde, shape)
+#terr_kde <- st_intersection(terr_sf_kde, shape)
  
 # group by Ground and calculate the prefered area per Ground in % according to KDE
-data_kde <- terr_kde  |> 
-  group_by(Ground) |>
-  summarise(area_kde=sum(st_area(geometry))) |>
-  mutate(area_kde=as.numeric(area_kde),
-         kde=area_kde/sum(area_kde)*100)
+#data_kde <- terr_kde  |> 
+#  group_by(Ground) |>
+#  summarise(area_kde=sum(st_area(geometry))) |>
+#  mutate(area_kde=as.numeric(area_kde),
+#         kde=area_kde/sum(area_kde)*100)
  
-rm(terr_sf_kde, terr_kde)
+#rm(terr_sf_kde, terr_kde)
 ```
