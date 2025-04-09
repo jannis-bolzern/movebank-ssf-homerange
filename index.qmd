@@ -23,7 +23,7 @@ We investigate how human activity influences the movement patterns of wild anima
 
 Research questions:
 
-1.  Home Range Implications: Do animals exhibit smaller home ranges in high human-impact areas? Similar to @doherty2021human
+1.  Home Range Implications: Do animals exhibit smaller home ranges in high human-impact areas? Similar to @doherty2021human (TBD download via ZHAW)
 2.  Temporal Shifts in Activity Patterns: Do animals become more nocturnal in high human-impact areas to avoid direct human encounters?
 3.  Habitat Selection in Human-Dominated Landscapes: How do animals select habitats (e.g., forests, agriculture) under varying levels of human influence?
 
@@ -31,7 +31,7 @@ Different data sets will be used for each research question. Relying on Movebank
 
 # Material and Methods
 
-This section describes the data sets, the steps taken to prepare and process the different data set in use, and the methodological approach that was employed.
+This section describes the data sets, the steps taken to prepare and process the different data sets in use, and the methodological approach that was employed.
 
 ## Data sets
 
@@ -151,7 +151,7 @@ boxplot(
   axes = FALSE,
   xlab = "", 
   log = "y",
-  ylab = expression(paste("Home range in ",  km^2, " (logarithmic scale)")))
+  ylab = expression(paste("Home range in ",  km^2, " (log scale)")))
 axis(1, at = 1, labels = "Bylot")
 axis(1, at = 2, labels = "Herschel")
 axis(1, at = 3, labels = "Wiltshire")
