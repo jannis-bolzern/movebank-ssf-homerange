@@ -115,7 +115,7 @@ c1_tracks <- mt_track_lines(foxes_bylot_filtered)
 c1_mcp <- st_convex_hull(c1_tracks)
 ggplot(c1_mcp, aes(fill = as.factor(individual_id))) +
   geom_sf(alpha = 0.4) +
-  labs(fill = "Fox id")
+  labs(x = "Longitude", y = "Latitude", fill = "Fox id")
 ggsave("img/home_range_bylot_wader.png")
 ```
 
@@ -129,7 +129,7 @@ w_tracks <- mt_track_lines(foxes_wiltshire_filtered)
 w_mcp <- st_convex_hull(w_tracks)
 ggplot(w_mcp, aes(fill = as.factor(individual_id))) +
   geom_sf(alpha = 0.4) +
-  labs(fill = "Fox id")
+  labs(x = "Longitude", y = "Latitude", fill = "Fox id")
 ggsave("img/home_range_wiltshire_wader.png")
 ```
 
@@ -163,7 +163,7 @@ w_tracks <- mt_track_lines(foxes_wiltshire_filtered_sampled_24h)
 w_mcp <- st_convex_hull(w_tracks)
 ggplot(w_mcp, aes(fill = as.factor(individual_id))) +
   geom_sf(alpha = 0.4) +
-  labs(fill = "Fox id")
+  labs(x = "Longitude", y = "Latitude", fill = "Fox id")
 ggsave("img/home_range_wiltshire_wader_sampled.png")
 ```
 
