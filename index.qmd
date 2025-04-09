@@ -48,7 +48,7 @@ For the human footprint data, the global 100 meter resolution terrestrial human 
 
 All Movebank data sets have the same schema. This simplifies data handling, enables code re-use, and requires the data contributors do perform preprocessing and data cleaning on their side to provide the data in an appropriate format. A library for data processing and trajectory handling in R is provided by @kranstauber2024move2. 
 
-The R code for data download, preprocessing, and serialization of relevant data and charts can be found the the following linked documents: [Red fox: UK wader nesting season home range](preprocessing_uk_wader_nesting_season_home_range.html), [Red fox: montly home ranges](preprocessing_monthly_home_ranges.html).
+The R code for data download, preprocessing, and serialization of relevant data and charts can be found the the following linked documents: [Red fox: UK wader nesting season home range](https://elkeelke.github.io/MovebankProject/preprocessing_uk_wader_nesting_season_home_range.html), [Red fox: montly home ranges](https://elkeelke.github.io/MovebankProject/preprocessing_monthly_home_ranges.html).
 
 ### HRP-100
 
@@ -151,13 +151,15 @@ boxplot(
   axes = FALSE,
   xlab = "", 
   log = "y",
-  ylab = expression(paste("Home range in ",  km^2, " (log scale)")))
+  ylab = expression(paste("Home range in ", km^2, " (log scale)")))
 axis(1, at = 1, labels = "Bylot")
 axis(1, at = 2, labels = "Herschel")
 axis(1, at = 3, labels = "Wiltshire")
 axis(2, at = c(0.05, 0.5, 5, 50, 500), labels = c("0.05", "0.5", "5", "50", "500"))
 box()
 ```
+
+## Result validation
 
 # Discussion
 
