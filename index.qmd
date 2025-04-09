@@ -104,9 +104,9 @@ SSFs will quantify selection for human-modified habitats (e.g., agricultural are
 
 # Results
 
-The resulting home ranges for the UK wader nesting season time frame are shown in @fig-home-ranges-bylot and @fig-home-ranges-wiltshire. The median home rage size for the foxes in Herschel (75.3 km<sup>2</sup>) is more than 65 times bigger compared to the foxes in Wiltshire (1.1 km<sup>2</sup>). The home range for the sampled Wiltshire data is shown in @fig-home-ranges-wiltshire-sampled24h. It is 0.56 km<sup>2</sup> for the sampled data, which is roughly half as for the full data. This demonstrates that the influence of sampling intervals is definitely present, but is dwarfed in comparison to the difference in fox behavior.
+The resulting home ranges for the UK wader nesting season time frame are shown in @fig-home-ranges-bylot and @fig-home-ranges-wiltshire. The median home rage size for the foxes in Bylot (75.3 km<sup>2</sup>) is more than 65 times bigger compared to the foxes in Wiltshire (1.1 km<sup>2</sup>). The home range for the sampled Wiltshire data is shown in @fig-home-ranges-wiltshire-sampled24h. It is 0.56 km<sup>2</sup> for the sampled data, which is roughly half as for the full data. This demonstrates that the influence of sampling intervals is definitely present, but is dwarfed in comparison to the difference in fox behavior.
 
-The same effect, namely differences in order of magnitude between remote and rural fox home range, can be observed for the monthly home ranges as shown in  @fig-home-ranges-boxplot. The accompanying monthly home range plots can be found in the Appendix in @fig-monthly-home-ranges-bylot, @fig-monthly-home-ranges-herschel, and @fig-monthly-home-ranges-wiltshire.
+The same effect, namely differences in order of magnitude between remote and rural fox home ranges, can be observed for the monthly home ranges as shown in  @fig-home-ranges-boxplot. The accompanying monthly home range plots can be found in the Appendix in @fig-monthly-home-ranges-bylot, @fig-monthly-home-ranges-herschel, and @fig-monthly-home-ranges-wiltshire.
 
 ![Home ranges for Bylot foxes (March 15th to June 15th, 2012)](img/home_range_bylot_wader.png){#fig-home-ranges-bylot}
 
@@ -163,15 +163,22 @@ box()
 
 ## Result validation
 
-@rykiel1996testing
+According to @rykiel1996testing, model validation means demonstrating that a model is acceptable for its intended use because it meets specified performance requirements.
+
+purpose, criteria, and context of the model must be specified
 
 CRS Explorer [link](https://crs-explorer.proj.org/)
 
 Use UTM coordinates for both areas
 
-Herschel island: 44.6 sq mi (116 km^2)
+Herschel island: 116 km<sup>2</sup>
+EPSG:3154 NAD83(CSRS) / UTM zone 7N
+Herschel Island, also known as Qikiqtaruk, is located at approximately 69°35'23" N, 139°05'57" W
 
-Bylot island: 11,067 km^2
+Bylot island: 11.067 km<sup>2</sup>
+It is split over two UTM zones
+EPSG:2958	NAD83(CSRS) / UTM zone 17N
+NAD83(CSRS) / UTM zone 18N
 
 # Discussion
 

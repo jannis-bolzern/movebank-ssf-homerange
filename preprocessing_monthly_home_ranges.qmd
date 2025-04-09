@@ -21,7 +21,7 @@ flatten_array <- function(areas) {
   return(all_areas)
 }
 
-calculate_monthly_home_ranges <- function(ts_start, num_months, study_id, license_string_with_quotes) {
+calculate_monthly_home_ranges <- function(ts_start, num_months, study_id, license_string_with_quotes, epsg) {
   areas <- list()
   gg <- ggplot()
   ts_end <- add_with_rollback(ts_start, months(1))
@@ -34,8 +34,14 @@ calculate_monthly_home_ranges <- function(ts_start, num_months, study_id, licens
         timestamp_start = ts_start,
         timestamp_end = ts_end
       ) 
+      
+      # TBD: Should the transform happen here?
       tracks <- mt_track_lines(foxes)
       mcp <- st_convex_hull(tracks)
+      if (epsg > 0) {
+        # TBD: Didn't change anything, is this even executed?
+        st_transform(mcp, epsg) 
+      }
       areas[[i]] <- st_area(mcp)
       gg <- gg + geom_sf(data = mcp, aes(fill = as.factor(individual_id)), alpha = 0.4)
     }, error = function(e) {
@@ -50,20 +56,26 @@ calculate_monthly_home_ranges <- function(ts_start, num_months, study_id, licens
   }
   return(list(gg = gg, areas = flatten_array(areas)))
 }
+```
 
-results_bylot <- calculate_monthly_home_ranges(as.POSIXct("2011-07-01 00:00:00"), 44, 1371322147, '9559cb1b1cca51e9f3fd69812e5e22dc')
+```{r}
+results_bylot <- calculate_monthly_home_ranges(as.POSIXct("2011-07-01 00:00:00"), 44, 1371322147, '9559cb1b1cca51e9f3fd69812e5e22dc', 0)
 write_csv(data.frame(areas = results_bylot$areas), "data/output_bylot.csv")
 results_bylot$gg + labs(x = "Longitude", y = "Latitude", fill = "Fox id")
 ggsave("img/bylot_monthly.png")
+```
 
-results_herschel = calculate_monthly_home_ranges(as.POSIXct("2009-07-01 00:00:00"), 9, 1371529289, '436e8205d0c2973115e2024b146a6ad5')
+```{r}
+#EPSG:3154 NAD83(CSRS) / UTM zone 7N
+results_herschel = calculate_monthly_home_ranges(as.POSIXct("2009-07-01 00:00:00"), 9, 1371529289, '436e8205d0c2973115e2024b146a6ad5', 3154)
 write_csv(data.frame(areas = results_herschel$areas), "data/output_herschel.csv")
 results_herschel$gg + labs(x = "Longitude", y = "Latitude", fill = "Fox id")
 ggsave("img/herschel_monthly.png")
+```
 
-results_wiltshire = calculate_monthly_home_ranges(as.POSIXct("2016-01-01 00:00:00"), 43, 3179890710, 'ffa36f79defe10eac9fe70f6502a17e0')
+```{r}
+results_wiltshire = calculate_monthly_home_ranges(as.POSIXct("2016-01-01 00:00:00"), 43, 3179890710, 'ffa36f79defe10eac9fe70f6502a17e0', 0)
 write_csv(data.frame(areas = results_wiltshire$areas), "data/output_wiltshire.csv")
 results_wiltshire$gg + labs(x = "Longitude", y = "Latitude", fill = "Fox id")
 ggsave("img/wiltshire_monthly.png")
 ```
-
