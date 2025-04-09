@@ -161,11 +161,15 @@ box()
 
 ## Result validation
 
-CRS Explorer [link]
+@rykiel1996testing
+
+CRS Explorer [link](https://crs-explorer.proj.org/)
 
 Use UTM coordinates for both areas
 
-Herschel island: 44.6 sq mi (116 km2)
+Herschel island: 44.6 sq mi (116 km^2)
+
+Bylot island: 11,067 km^2
 
 # Discussion
 
@@ -185,6 +189,13 @@ The fox home range results differ enormously between rural and remote areas. We 
 #| echo: false
 wordcountaddin::text_stats("index.qmd")
 ```
+
+## Additional charts
+
+![Monthly home ranges for Wiltshire foxes](img/wiltshire_monthly.png){#fig-monthly-home-ranges-wiltshire}
+![Monthly home ranges for Bylot foxes](img/bylot_monthly.png){#fig-monthly-home-ranges-bylot}
+
+![Monthly home ranges for Herschel foxes](img/herschel_monthly.png){#fig-monthly-home-ranges-herschel}
 
 ## Use of Large Language Models and Generative AI
 

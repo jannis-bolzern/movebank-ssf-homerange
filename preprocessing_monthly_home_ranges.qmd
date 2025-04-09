@@ -53,11 +53,17 @@ calculate_monthly_home_ranges <- function(ts_start, num_months, study_id, licens
 
 results_bylot <- calculate_monthly_home_ranges(as.POSIXct("2011-07-01 00:00:00"), 44, 1371322147, '9559cb1b1cca51e9f3fd69812e5e22dc')
 write_csv(data.frame(areas = results_bylot$areas), "data/output_bylot.csv")
+gg <- gg + labs(x = "Longitude", y = "Latitude", fill = "Fox id")
+ggsave("img/bylot_monthly.png")
 
 results_herschel = calculate_monthly_home_ranges(as.POSIXct("2009-07-01 00:00:00"), 9, 1371529289, '436e8205d0c2973115e2024b146a6ad5')
 write_csv(data.frame(areas = results_herschel$areas), "data/output_herschel.csv")
+gg <- gg + labs(x = "Longitude", y = "Latitude", fill = "Fox id")
+ggsave("img/herschel_monthly.png")
 
 results_wiltshire = calculate_monthly_home_ranges(as.POSIXct("2016-01-01 00:00:00"), 43, 3179890710, 'ffa36f79defe10eac9fe70f6502a17e0')
 write_csv(data.frame(areas = results_wiltshire$areas), "data/output_wiltshire.csv")
+gg <- gg + labs(x = "Longitude", y = "Latitude", fill = "Fox id")
+ggsave("img/wiltshire_monthly.png")
 ```
 
