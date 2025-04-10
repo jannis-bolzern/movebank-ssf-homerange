@@ -27,7 +27,7 @@ Research questions:
 2.  Temporal Shifts in Activity Patterns: Do animals become more nocturnal in high human-impact areas to avoid direct human encounters?
 3.  Habitat Selection in Human-Dominated Landscapes: How do animals select habitats (e.g., forests, agriculture) under varying levels of human influence?
 
-Different data sets will be used for each research question. Relying on Movebank data, as described in @sec-movebank, presents additional challenges stemming from the facts that (1) the data will be used for purposes it was not originally collected for and (2) data from different studies that was collected in different manners will be compared, and (3) subsets for existing data set will be employed, i.e. only some of the animals from the existing studies are considered.
+Different data sets are used for each research question. Relying on Movebank data, as described in @sec-movebank, presents additional challenges stemming from the facts that (1) the data is used for purposes it was not originally collected for and (2) data from different studies that was collected in different manners is compared, and (3) subsets from existing data sets are employed, i.e. only some of the animals from the existing studies are considered.
 
 # Material and Methods
 
@@ -40,7 +40,7 @@ The Movebank database by @kays2022movebank provides means for researchers to pub
 -   Red fox data from @porteus2024movement for the outskirt areas of villages in Wiltshire, UK and from @lai2022red for the highly remote uninhabitated islands Bylot and Herschel, Canada, and
 -   Bobcat and coyote data from @prugh2023fear for remote areas with some rural structures in northern Washington, US.
 
-For the human footprint data, the global 100 meter resolution terrestrial human footprint data (HFP-100) by @gassert2023operational was chosen. For land use, the ESA WorldCover data described in @zanaga2022esa is employed.
+For the human footprint data, the global 100 meter resolution terrestrial human footprint data (HFP-100) by @gassert2023operational is chosen. For land use, the ESA WorldCover data described in @zanaga2022esa is employed.
 
 ## Data preparation and processing
 
@@ -64,7 +64,19 @@ The ESA WorldCover 2021 data at 10m resolution was downloaded via the Microsoft 
 
 The Wiltshire data was collected between 2016 to 2019 during the UK wader nesting season, which was defined to be March 15th to June 15th, for 35 foxes in total. It was sampled at 10 or 60 minute rates. The research team could set the sampling rate remotely to save battery at times the data was considered less interesting.
 
-The Bylot/Herschel Canadian data was collected all year round, at a much lower sampling rate of once per day, at random afternoon times of the day. The collection period was June 2009 to Feb 2010 for Herschel and from 2011 to 2015 for Bylot, for two foxes per island. @fig-datapoints-year provides an overview of the amount of data points available per year. There is much more data from Wiltshire because of the higher number of foxes and the higher sampling rate.
+::: {#fig-bylot-map .quarto-figure}
+<iframe src="img/bylot_map.html" width="100%" height="400px" frameborder="0"></iframe>
+
+Interactive map of Bylot Island (116 km<sup>2</sup>) with high level view of GPS tracks (unfiltered).
+:::
+
+::: {#fig-herschel-map .quarto-figure}
+<iframe src="img/herschel_map.html" width="100%" height="400px" frameborder="0"></iframe>
+
+Interactive map of Herschel Island (11.067 km<sup>2</sup>) with high level view of GPS tracks (unfiltered), some of them irregular.
+:::
+
+The Bylot (see @fig-bylot-map) and Herschel (see @fig-herschel-map) Canadian data was collected all year round, at a much lower sampling rate of once per day, at random afternoon times of the day. The collection period was June 2009 to Feb 2010 for Herschel and from 2011 to 2015 for Bylot, for two foxes per island. @fig-datapoints-year provides an overview of the amount of data points available per year. There is much more data from Wiltshire because of the higher number of foxes and the higher sampling rate.
 
 ![Data points per year](img/year_count.png){#fig-datapoints-year}
 
@@ -76,39 +88,39 @@ Looking at the breakdowns by month as shown in @fig-datapoints-month reveals sea
 
 ### Trajectory Analysis
 
-Movement paths will be analyzed to identify patterns in speed, direction, and habitat use. Step lengths and turning angles will help infer behavioral states. Step-selection functions (SSFs) as described by @fortin2005wolves will be employed as a statistical model for habitat preferences relative to movement patterns, allowing us to quantify how animals respond to environmental covariates such as human footprint and land use.
+Movement paths are analyzed to identify patterns in speed, direction, and habitat use. Step lengths and turning angleshelp infer behavioral states. Step-selection functions (SSFs) as described by @fortin2005wolves are employed as a statistical model for habitat preferences relative to movement patterns, allowing to quantify how animals respond to environmental covariates such as human footprint and land use.
 
 ### Home Range Assessment
 
-The red fox data will be used for home range assessment present for a rural and a remote location. Home range sizes will be calculated using minimum convex polygons (MCPs). This will provide estimates of the area used by each individual.
+The red fox data is used for home range assessment present for a rural and a remote location. Home range sizes are calculated using minimum convex polygons (MCPs). This provides estimates of the area used by each individual animal.
 
 As discussed in @sec-redfoxdata, the data for the two locations have different temporal scale. @laube2011 have found that the choice of temporal scale has considerable effects on movement parameter calculations, in turn affecting home range results.
 
 How to make this data comparable? Problem #1 is that the sampling intervals are different. Problem #2 is that the data coverage varies by time of the year. Problem #3 is that there are highly different amounts of data. Selecting the means and parameters for the comparison involves complex choices that will influence the results.
 
-For #1, a possible approach to achieve similar sampling intervals would be to sample a random afternoon data point for each 24 hour window. However, this would include the implicit assumption that foxes will follow similar daily patterns in the different environments. For #2, a possible approach would be to compare the data for the same time of the year. However, the geographical locations are different. The seasonal weather conditions will differ for the same day of the year, likely leading to different animal behavior. For #3, aggregated comparisons can solve the issue, assuming there is enough data for the smaller data source.
+For #1, a possible approach to achieve similar sampling intervals would be to sample a random afternoon data point for each 24 hour window. However, this would include the implicit assumption that foxes will follow similar daily patterns in the different environments. For #2, a possible approach would be to compare the data for the same time of the year. But since the geographical locations are different, the seasonal weather conditions will differ for the same day of the year, likely leading to different animal behavior. For #3, aggregated comparisons can solve the issue, assuming there is enough data for the smaller data source.
 
-For data exploration the simplest possible imperfect approach was employed, which is to ignore the different sampling intervals for problem #1, to compare the data for the same time of the year for problem #2 even if animal behavior might be different, and to use exploratory data analysis to find out if a representative answer can be found given the amount of data present for problem #3. Note that this approach has obvious limits. Among them is that the Herschel data is not applicable, since it has minimal overlaps with the Wiltshire data (see @fig-datapoints-month).
+For data exploration the simplest possible imperfect approach is employed, which is to ignore the different sampling intervals for problem #1, to compare the data for the same time of the year for problem #2 even if animal behavior might be different, and to use exploratory data analysis to find out if a representative answer can be found given the amount of data present for problem #3. Note that this approach has obvious limits. Among them is that the Herschel data is not applicable, since it has minimal overlaps with the Wiltshire data (see @fig-datapoints-month).
 
-To explore the impact of sampling intervals for problem #1, the home ranges for the Wiltshire data were additionally calculated on downsampled data, where a random data point from every 24 hour period was selected.
+To explore the impact of sampling intervals for problem #1, the home ranges for the Wiltshire data are additionally calculated on downsampled data, where a random data point from every 24 hour period is selected.
 
-Finally, an analysis of monthly home ranges was conducted on all three data sets as an alternative solution to address problem #2.
+Finally, an analysis of monthly home ranges is conducted on all three data sets as an alternative solution to address problem #2.
 
 ### Temporal Activity Patterns
 
-Movement rates will be used to quantify diel activity shifts. We will test whether animals in high human-impact areas exhibit increased nocturnality, potentially as a strategy to avoid direct human encounters. This analysis will reveal how temporal behavior adapts to human presence.
+Movement rates are used to quantify diel activity shifts. We test whether animals in high human-impact areas exhibit increased nocturnality, potentially as a strategy to avoid direct human encounters. This analysis reveals how temporal behavior adapts to human presence.
 
 ### Habitat Selection
 
-SSFs will quantify selection for human-modified habitats (e.g., agricultural areas, urban edges) relative to natural habitats. By comparing selection patterns across species and regions, we will assess how habitat preferences vary with human influence.
+SSFs quantify selection for human-modified habitats (e.g., agricultural areas, urban edges) relative to natural habitats. By comparing selection patterns across species and regions, we will assess how habitat preferences vary with human influence.
 
 # Results
 
 The resulting home ranges for the UK wader nesting season time frame are shown in @fig-home-ranges-bylot and @fig-home-ranges-wiltshire. The median home range size for the foxes in Bylot (75.3 km<sup>2</sup>) is more than 65 times bigger compared to the foxes in Wiltshire (1.1 km<sup>2</sup>).
 
-The home range for the sampled Wiltshire data is shown in @fig-home-ranges-wiltshire-sampled24h. It is 0.56 km<sup>2</sup> for the sampled data, which is roughly half as for the full data. This demonstrates that the influence of sampling intervals is definitely present, but is dwarfed in comparison to the difference in fox behavior.
+The home range for the sampled Wiltshire data is shown in @fig-home-ranges-wiltshire-sampled24h. It is 0.56 km<sup>2</sup> for the sampled data, which is roughly half as much as for the full data. This demonstrates that the influence of sampling intervals is definitely present, but is dwarfed in comparison to the difference in fox behavior.
 
-The same effect, namely differences in order of magnitude between remote and rural fox home ranges, can be observed for the monthly home ranges as shown in @fig-home-ranges-boxplot. The accompanying monthly home range plots can be found in the Appendix in @fig-monthly-home-ranges-bylot, @fig-monthly-home-ranges-herschel, and @fig-monthly-home-ranges-wiltshire.
+The same effect, namely differences in order of magnitude between remote and rural fox home ranges, can be observed for the monthly home range results shown as a boxplot in @fig-home-ranges-boxplot. The accompanying monthly home range plots can be found in the Appendix in @fig-monthly-home-ranges-wiltshire, @fig-monthly-home-ranges-bylot, and @fig-monthly-home-ranges-herschel.
 
 ![Home ranges for Bylot foxes (March 15th to June 15th, 2012)](img/home_range_bylot_wader.png){#fig-home-ranges-bylot}
 
@@ -165,21 +177,17 @@ box()
 
 ## Model validation
 
-According to @rykiel1996testing, model validation means demonstrating that a model is acceptable for its intended use because it meets specified performance requirements. The purpose, criteria, and context of the model must be specified.
+According to @rykiel1996testing, model validation means demonstrating that a model is acceptable for its intended use. The purpose, criteria, and context of the model must be specified.
 
-Two models: Data + home range calculation
+Two models: Data (several versions) + home range calculation based on minimum convex hulls + selecting the median
 
-To exclude distortions in the coordinate system as a potential reason for the large differences in results, the result for Herschel island were spot checked for three applicable coordinate systems: WGS84, EPSG:3347 (Statistics Canada Lambert), and EPSG:2958 (UTM zone 17N). The latter were identified using the CRS Explorer [link](https://crs-explorer.proj.org/). The differences in the median home rage size results for the foxes in Bylot are minor: 75.3 km<sup>2</sup> for WGS84, 73.3 km<sup>2</sup> for EPSG:3347, and 75.8 km<sup>2</sup> for EPSG:2958.
+Context: Check that the data points are on the islands. There are some outliers for the Herschel data which were left since they didn't affect the results.
 
-```{r}
-#EPSG:3154 NAD83(CSRS) / UTM zone 7N Herschel Island, also known as Qikiqtaruk, is located at approximately 69°35'23" N, 139°05'57" W
-#Bylot island is split over two UTM zones #EPSG:2958 NAD83(CSRS) / UTM zone 17N \# NAD83(CSRS) / UTM zone 18N #This covers them both: EPSG:3347 NAD83 / Statistics Canada Lambert
-```
-
+To exclude distortions in the coordinate system as a potential reason for the large differences in results, the result for Herschel island are spot checked for three applicable coordinate systems: WGS84, EPSG:3347 (Statistics Canada Lambert), and EPSG:2958 (UTM zone 17N). The latter were identified using the CRS Explorer [link](https://crs-explorer.proj.org/). The differences in the median home rage size results for the foxes in Bylot are minor: 75.3 km<sup>2</sup> for WGS84, 73.3 km<sup>2</sup> for EPSG:3347, and 75.8 km<sup>2</sup> for EPSG:2958.
 
 # Discussion
 
-The fox home range results differ enormously between rural and remote areas. We can conclude that human presence impacts fox movement behavior significantly, with availability of anthropogenic food sources likely being relevant. The influence of technical aspects like sampling intervals on home range calculation results is significant. However, it plays a secondary role in comparison to the difference in fox behavior, which enables the chosen approach of comparing data from heterogeneous sources.
+The fox home range results differ enormously between rural and remote areas. We conclude that human presence impacts fox movement behavior significantly, with availability of anthropogenic food sources likely being relevant. The influence of technical aspects like sampling intervals on home range calculation results is significant. However, it plays a secondary role in comparison to the difference in fox behavior, which enables the chosen approach of comparing data from heterogeneous sources.
 
 # Appendix
 
@@ -197,22 +205,6 @@ wordcountaddin::text_stats("index.qmd")
 ```
 
 ## Additional charts
-
-::: {#fig-bylot-map .quarto-figure}
-#<iframe src="img/bylot_map.html" width="100%" height="600px" frameborder="0">
-
-#</iframe>
-
-Interactive map of Bylot Island (116 km<sup>2</sup>) with high level view of GPS tracks (unfiltered).
-:::
-
-::: {#fig-herschel-map .quarto-figure}
-#<iframe src="img/herschel_map.html" width="100%" height="600px" frameborder="0">
-
-#</iframe>
-
-Interactive map of Herschel Island (11.067 km<sup>2</sup>) with high level view of GPS tracks (unfiltered), some of them irregular.
-:::
 
 ![Monthly home ranges for Wiltshire foxes](img/wiltshire_monthly.png){#fig-monthly-home-ranges-wiltshire}
 
