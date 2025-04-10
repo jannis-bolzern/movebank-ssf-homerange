@@ -29,6 +29,34 @@ foxes_herschel <- movebank_download_study(
 )
 ```
 
+### Check if the data is looks correct (i.e., positioned on the correct island)
+
+```{r}
+library("sf")
+library("tmap")
+tmap_options(basemaps = "OpenStreetMap")
+tmap_mode("view")
+bylot_tracks <- mt_track_lines(foxes_bylot)
+bylot_tracks_buffer <- st_buffer(bylot_tracks, dist = 50000)
+map <- tm_shape(bylot_tracks_buffer) + 
+  tm_borders(alpha = 0) +
+  tm_shape(bylot_tracks) +
+  tm_lines()
+tmap_save(map, filename = "img/bylot_map.html")
+```
+
+```{r}
+herschel_tracks <- mt_track_lines(foxes_herschel)
+herschel_tracks_buffer <- st_buffer(herschel_tracks, dist = 50000)
+map <- tm_shape(herschel_tracks_buffer) + 
+  tm_borders(alpha = 0) +
+  tm_shape(herschel_tracks) +
+  tm_lines()
+tmap_save(map, filename = "img/herschel_map.html")
+```
+
+## Counts
+
 ```{r}
 library("lubridate")
 library("sf")
@@ -55,6 +83,8 @@ month_count <- combined_data |>
   group_by(source, month) |>
   summarise(count = n())
 ```
+
+## Count visualization
 
 ```{r}
 library("ggplot2")
@@ -86,7 +116,7 @@ ggplot(month_count, aes(x = as.factor(month_name), y = count, color = source)) +
 ggsave("img/month_count.png")
 ```
 
-## Filtered data for UK wader nesting season 
+## Filtered data (UK wader nesting season)
 
 ```{r}
 foxes_wiltshire_filtered <- movebank_download_study(
@@ -110,9 +140,9 @@ foxes_bylot_filtered <- movebank_download_study(
 #| warning: false
 #| fig-cap: "Home ranges for Bylot foxes (March 15th to June 15th, 2012)"
 library("ggplot2")
-library("sf")
 c1_tracks <- mt_track_lines(foxes_bylot_filtered)
 c1_mcp <- st_convex_hull(c1_tracks)
+
 ggplot(c1_mcp, aes(fill = as.factor(individual_id))) +
   geom_sf(alpha = 0.4) +
   labs(x = "Longitude", y = "Latitude", fill = "Fox id")
@@ -142,6 +172,24 @@ print(c1_median)
 w_area <- st_area(w_mcp)
 w_median <- median(w_area)
 print(w_median)
+```
+
+### Check if there is distortion in the coordinate system (Bylot is high up North)
+
+```{r}
+# c1 is Bylot island, which is 11.067 km^2 and split over two UTM zones:
+# EPSG:2958	NAD83(CSRS) / UTM zone 17N
+# EPSG:2959 NAD83(CSRS) / UTM zone 18N
+# This coordinate system covers them both: EPSG:3347 NAD83 / Statistics Canada Lambert
+
+c1_mcp_3347 <- st_transform(c1_mcp, 3347)
+print(median(st_area(c1_mcp_3347)))
+
+# See what happens if we use the partial coordinate systems
+c1_mcp_2958 <- st_transform(c1_mcp, 2958)
+print(median(st_area(c1_mcp_2958)))
+c1_mcp_2959 <- st_transform(c1_mcp, 2959)
+print(median(st_area(c1_mcp_2959)))
 ```
 
 ## Sampled filtered data for UK wader nesting season 
@@ -174,3 +222,4 @@ w_area <- st_area(w_mcp)
 w_median <- median(w_area)
 print(w_median)
 ```
+

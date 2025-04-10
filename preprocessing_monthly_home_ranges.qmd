@@ -35,12 +35,10 @@ calculate_monthly_home_ranges <- function(ts_start, num_months, study_id, licens
         timestamp_end = ts_end
       ) 
       
-      # TBD: Should the transform happen here?
       tracks <- mt_track_lines(foxes)
       mcp <- st_convex_hull(tracks)
       if (epsg > 0) {
-        # TBD: Didn't change anything, is this even executed?
-        st_transform(mcp, epsg) 
+        mcp <- st_transform(mcp, epsg) 
       }
       areas[[i]] <- st_area(mcp)
       gg <- gg + geom_sf(data = mcp, aes(fill = as.factor(individual_id)), alpha = 0.4)
