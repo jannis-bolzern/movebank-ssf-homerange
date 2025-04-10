@@ -38,7 +38,8 @@ tmap_options(basemaps = "OpenStreetMap")
 tmap_mode("view")
 bylot_tracks <- mt_track_lines(foxes_bylot)
 bylot_tracks_buffer <- st_buffer(bylot_tracks, dist = 50000)
-map <- tm_shape(bylot_tracks_buffer) + 
+map <- 
+  tm_shape(bylot_tracks_buffer) + 
   tm_borders(alpha = 0) +
   tm_shape(bylot_tracks) +
   tm_lines()
@@ -62,7 +63,7 @@ map <- tm_shape(wilt_tracks_buffer) +
   tm_borders(alpha = 0) +
   tm_shape(wilt_tracks) +
   tm_lines()
-tmap_save(map, filename = "img/wiltshire_map.html")
+#tmap_save(map, filename = "img/wiltshire_map.html")
 ```
 
 ## Counts
