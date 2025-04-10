@@ -204,6 +204,11 @@ wordcountaddin::text_stats("index.qmd")
 
 ## Additional charts
 
+::: {.quarto-figure #fig-wiltshire-map}
+<iframe src="img/wiltshire_map.html" width="100%" height="600px" frameborder="0"></iframe>
+Interactive map of Wiltshire, UK, with high level view of GPS tracks (unfiltered).
+:::
+
 ::: {.quarto-figure #fig-bylot-map}
 <iframe src="img/bylot_map.html" width="100%" height="600px" frameborder="0"></iframe>
 Interactive map of Bylot Island with high level view of GPS tracks (unfiltered).

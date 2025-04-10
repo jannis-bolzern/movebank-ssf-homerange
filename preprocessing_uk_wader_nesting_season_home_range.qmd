@@ -55,6 +55,16 @@ map <- tm_shape(herschel_tracks_buffer) +
 tmap_save(map, filename = "img/herschel_map.html")
 ```
 
+```{r}
+wilt_tracks <- mt_track_lines(foxes_wiltshire)
+wilt_tracks_buffer <- st_buffer(wilt_tracks, dist = 200)
+map <- tm_shape(wilt_tracks_buffer) + 
+  tm_borders(alpha = 0) +
+  tm_shape(wilt_tracks) +
+  tm_lines()
+tmap_save(map, filename = "img/wiltshire_map.html")
+```
+
 ## Counts
 
 ```{r}
