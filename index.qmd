@@ -163,9 +163,11 @@ axis(2, at = c(0.05, 0.5, 5, 50, 500), labels = c("0.05", "0.5", "5", "50", "500
 box()
 ```
 
-## Result validation
+## Model validation
 
-TBD According to @rykiel1996testing, model validation means demonstrating that a model is acceptable for its intended use because it meets specified performance requirements. The purpose, criteria, and context of the model must be specified.
+According to @rykiel1996testing, model validation means demonstrating that a model is acceptable for its intended use because it meets specified performance requirements. The purpose, criteria, and context of the model must be specified.
+
+Two models: Data + home range calculation
 
 To exclude distortions in the coordinate system as a potential reason for the large differences in results, the result for Herschel island were spot checked for three applicable coordinate systems: WGS84, EPSG:3347 (Statistics Canada Lambert), and EPSG:2958 (UTM zone 17N). The latter were identified using the CRS Explorer [link](https://crs-explorer.proj.org/). The differences in the median home rage size results for the foxes in Bylot are minor: 75.3 km<sup>2</sup> for WGS84, 73.3 km<sup>2</sup> for EPSG:3347, and 75.8 km<sup>2</sup> for EPSG:2958.
 
@@ -195,14 +197,6 @@ wordcountaddin::text_stats("index.qmd")
 ```
 
 ## Additional charts
-
-::: {#fig-wiltshire-map .quarto-figure}
-#<iframe src="img/wiltshire_map.html" width="100%" height="600px" frameborder="0">
-
-#</iframe>
-
-Interactive map of Wiltshire, UK, with high level view of GPS tracks (unfiltered).
-:::
 
 ::: {#fig-bylot-map .quarto-figure}
 #<iframe src="img/bylot_map.html" width="100%" height="600px" frameborder="0">

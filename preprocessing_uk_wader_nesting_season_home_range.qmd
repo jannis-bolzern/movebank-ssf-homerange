@@ -188,6 +188,8 @@ print(w_median)
 ### Check if there is distortion in the coordinate system (Bylot is high up North)
 
 ```{r}
+# EPSG:3154 NAD83(CSRS) / UTM zone 7N Herschel Island, also known as Qikiqtaruk,  69°35'23" N, 139°05'57" W
+
 # c1 is Bylot island, which is 11.067 km^2 and split over two UTM zones:
 # EPSG:2958	NAD83(CSRS) / UTM zone 17N
 # EPSG:2959 NAD83(CSRS) / UTM zone 18N
