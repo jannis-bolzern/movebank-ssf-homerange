@@ -40,7 +40,7 @@ The Movebank database by @kays2022movebank provides means for researchers to pub
 -   Red fox data from @porteus2024movement for the outskirt areas of villages in Wiltshire, UK and from @lai2022red for the highly remote uninhabitated islands Bylot and Herschel, Canada, and
 -   Bobcat and coyote data from @prugh2023fear for remote areas with some rural structures in northern Washington, US.
 
-For the human footprint data, the global 100 meter resolution terrestrial human footprint data (HFP-100) by @gassert2023operational was chosen. For land use, the ESA WorldCover data @zanaga2022esa is employed.
+For the human footprint data, the global 100 meter resolution terrestrial human footprint data (HFP-100) by @gassert2023operational was chosen. For land use, the ESA WorldCover data described in @zanaga2022esa is employed.
 
 ## Data preparation and processing
 
@@ -165,23 +165,9 @@ box()
 
 ## Result validation
 
-According to @rykiel1996testing, model validation means demonstrating that a model is acceptable for its intended use because it meets specified performance requirements.
+TBD According to @rykiel1996testing, model validation means demonstrating that a model is acceptable for its intended use because it meets specified performance requirements. The purpose, criteria, and context of the model must be specified.
 
-purpose, criteria, and context of the model must be specified
-
-CRS Explorer [link](https://crs-explorer.proj.org/)
-
-Use UTM coordinates for both areas
-
-Herschel island is much smaller: 116 km<sup>2</sup>
-EPSG:3154 NAD83(CSRS) / UTM zone 7N
-Herschel Island, also known as Qikiqtaruk, is located at approximately 69°35'23" N, 139°05'57" W
-
-Bylot island is much bigger: 11.067 km<sup>2</sup>
-It is split over two UTM zones
-EPSG:2958	NAD83(CSRS) / UTM zone 17N
-          NAD83(CSRS) / UTM zone 18N
-This covers them both: EPSG:3347	NAD83 / Statistics Canada Lambert
+To exclude distortions in the coordinate system as a potential reason for the large differences in results, the result for Herschel island were spot checked for three applicable coordinate systems: WGS84, EPSG:3347 (Statistics Canada Lambert), and EPSG:2958 (UTM zone 17N). The latter were identified using the CRS Explorer [link](https://crs-explorer.proj.org/). The differences in the median home rage size results for the foxes in Bylot are minor: 75.3 km<sup>2</sup> for WGS84, 73.3 km<sup>2</sup> for EPSG:3347, and 75.8 km<sup>2</sup> for EPSG:2958.
 
 # Discussion
 
@@ -211,13 +197,21 @@ Interactive map of Wiltshire, UK, with high level view of GPS tracks (unfiltered
 
 ::: {.quarto-figure #fig-bylot-map}
 <iframe src="img/bylot_map.html" width="100%" height="600px" frameborder="0"></iframe>
-Interactive map of Bylot Island with high level view of GPS tracks (unfiltered).
+Interactive map of Bylot Island (116 km<sup>2</sup>) with high level view of GPS tracks (unfiltered).
 :::
+
+#EPSG:3154 NAD83(CSRS) / UTM zone 7N
+#Herschel Island, also known as Qikiqtaruk, is located at approximately 69°35'23" N, 139°05'57" W
 
 ::: {.quarto-figure #fig-herschel-map}
 <iframe src="img/herschel_map.html" width="100%" height="600px" frameborder="0"></iframe>
-Interactive map of Herschel Island with high level view of GPS tracks (unfiltered), some of them irregular.
+Interactive map of Herschel Island (11.067 km<sup>2</sup>) with high level view of GPS tracks (unfiltered), some of them irregular.
 :::
+
+#Bylot island is split over two UTM zones
+#EPSG:2958	NAD83(CSRS) / UTM zone 17N
+#          NAD83(CSRS) / UTM zone 18N
+#This covers them both: EPSG:3347	NAD83 / Statistics Canada Lambert
 
 ![Monthly home ranges for Wiltshire foxes](img/wiltshire_monthly.png){#fig-monthly-home-ranges-wiltshire}
 
