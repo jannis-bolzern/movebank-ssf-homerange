@@ -67,13 +67,13 @@ The Wiltshire data was collected between 2016 to 2019 during the UK wader nestin
 ::: {#fig-bylot-map .quarto-figure}
 <iframe src="img/bylot_map.html" width="100%" height="400px" frameborder="0"></iframe>
 
-Interactive map of Bylot Island (116 km<sup>2</sup>) with high level view of GPS tracks (unfiltered).
+Interactive map of Bylot Island (11.067 km<sup>2</sup>) with high level view of GPS tracks (unfiltered).
 :::
 
 ::: {#fig-herschel-map .quarto-figure}
 <iframe src="img/herschel_map.html" width="100%" height="400px" frameborder="0"></iframe>
 
-Interactive map of Herschel Island (11.067 km<sup>2</sup>) with high level view of GPS tracks (unfiltered), some of them irregular.
+Interactive map of Herschel Island (116 km<sup>2</sup>) with high level view of GPS tracks (unfiltered), some of them irregular.
 :::
 
 The Bylot (see @fig-bylot-map) and Herschel (see @fig-herschel-map) Canadian data was collected all year round, at a much lower sampling rate of once per day, at random afternoon times of the day. The collection period was June 2009 to Feb 2010 for Herschel and from 2011 to 2015 for Bylot, for two foxes per island. @fig-datapoints-year provides an overview of the amount of data points available per year. There is much more data from Wiltshire because of the higher number of foxes and the higher sampling rate.
@@ -120,7 +120,7 @@ The resulting home ranges for the UK wader nesting season time frame are shown i
 
 The home range for the sub-sampled Wiltshire data is shown in @fig-home-ranges-wiltshire-sampled24h. It is 0.56 km<sup>2</sup> for the sampled data, which is roughly half as much as for the full data, which shows that the Wiltshire fox home ranges are overestimated in comparison to Bylot fox home ranges because of the higher amount of data points available. This demonstrates that the influence of sampling intervals is definitely present. However, it is secondary in comparison to the difference in fox behavior. 
 
-Similar differences in order of magnitude between remote and rural fox home ranges can also be observed for the monthly home range results shown as a boxplot in @fig-home-ranges-boxplot. Note that outliers are removed, in particular the irregular data for Herschel (as seen in @fig-herschel-map). The accompanying monthly home range plots can be found in the Appendix in @fig-monthly-home-ranges-wiltshire, @fig-monthly-home-ranges-bylot, and @fig-monthly-home-ranges-herschel.
+Similar differences in order of magnitude between remote and rural fox home ranges can also be observed for the monthly home range results shown as a boxplot in @fig-home-ranges-boxplot. It's interesting to see that the fox home ranges for Bylot and Herschel are similar even if the islands are different in size with Bylot being a hundred times larger. Note that outliers are removed, in particular the irregular data for Herschel (as seen in @fig-herschel-map). The accompanying monthly home range plots can be found in the Appendix in @fig-monthly-home-ranges-wiltshire, @fig-monthly-home-ranges-bylot, and @fig-monthly-home-ranges-herschel.
 
 ![Home ranges for Bylot foxes (March 15th to June 15th, 2012)](img/home_range_bylot_wader.png){#fig-home-ranges-bylot}
 
