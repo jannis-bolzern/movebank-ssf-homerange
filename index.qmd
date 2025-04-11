@@ -56,7 +56,7 @@ This raster data set uses the Mollweide projection as described by @lapaine2011m
 
 ### ESA WorldCover
 
-The ESA WorldCover 2021 data at 10m resolution was downloaded via the Microsoft Planetary Computer STAC API [\[link\]](https://planetarycomputer.microsoft.com/docs/quickstarts/reading-stac/) for simple programmatic access in R.
+The ESA WorldCover 2021 data at 10m resolution was downloaded via the Microsoft Planetary Computer [STAC API](https://planetarycomputer.microsoft.com/docs/quickstarts/reading-stac/) for simple programmatic access in R.
 
 ## Data exploration and analysis
 
@@ -181,7 +181,7 @@ According to @rykiel1996testing, model validation means demonstrating that a mod
 
 For the purpose of home range comparison, two models were defined comprised of data, home range calculation based on minimum convex hulls, and median selection. The validation criteria required the amount of difference between the results to be significantly larger (i.e., by a factor of more than 10 times) than the effects on the results introduced by data properties.
 
-Since the geographic location context was diverse, to exclude distortions in the coordinate system as a potential unwanted influence, the results for Bylot island were spot checked for three applicable coordinate systems: WGS84 geographic coordinate system (EPSG:4326), NAD 83 / Statistics Canada Lambert projection (EPSG:3347), and Universal Transverse Mercator (UTM) zone 17N (EPSG:2958). These were identified using the CRS Explorer [link](https://crs-explorer.proj.org/). The differences in the median home rage size results (UK wader season) for the foxes in Bylot were minor: 75.3 km<sup>2</sup> for WGS84, 73.3 km<sup>2</sup> for EPSG:3347, and 75.8 km<sup>2</sup> for EPSG:2958.
+Since the geographic location context was diverse, to exclude distortions in the coordinate system as a potential unwanted influence, the results for Bylot island were spot checked for three applicable coordinate systems: WGS84 geographic coordinate system (EPSG:4326), NAD 83 / Statistics Canada Lambert projection (EPSG:3347), and Universal Transverse Mercator (UTM) zone 17N (EPSG:2958). These were identified using the [CRS Explorer](https://crs-explorer.proj.org/). The differences in the median home rage size results (UK wader season) for the foxes in Bylot were minor: 75.3 km<sup>2</sup> for WGS84, 73.3 km<sup>2</sup> for EPSG:3347, and 75.8 km<sup>2</sup> for EPSG:2958.
 
 # Discussion
 
