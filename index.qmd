@@ -88,11 +88,11 @@ Looking at the breakdowns by month as shown in @fig-datapoints-month reveals sea
 
 ### Trajectory Analysis
 
-Movement paths are analyzed to identify patterns in speed, direction, and habitat use. Step lengths and turning angleshelp infer behavioral states. Step-selection functions (SSFs) as described by @fortin2005wolves are employed as a statistical model for habitat preferences relative to movement patterns, allowing to quantify how animals respond to environmental covariates such as human footprint and land use.
+Movement paths are analyzed to identify patterns in speed, direction, and habitat use. Step lengths and turning angles help infer behavioral states. Step-selection functions as described by @fortin2005wolves are employed as a statistical model for habitat preferences relative to movement patterns, allowing to quantify how animals respond to environmental covariates such as human footprint and land use.
 
 ### Home Range Assessment
 
-The red fox data is used for home range assessment present for a rural and a remote location. Home range sizes are calculated using minimum convex polygons (MCPs). This provides estimates of the area used by each individual animal.
+The red fox data is used for home range assessment present for a rural and a remote location. Home range sizes are calculated using minimum convex polygons. This provides estimates of the area used by each individual animal.
 
 As discussed in @sec-redfoxdata, the data for the two locations have different temporal scale. @laube2011 have found that the choice of temporal scale has considerable effects on movement parameter calculations, in turn affecting home range results.
 
@@ -112,7 +112,7 @@ Movement rates are used to quantify diel activity shifts. We test whether animal
 
 ### Habitat Selection
 
-SSFs quantify selection for human-modified habitats (e.g., agricultural areas, urban edges) relative to natural habitats. By comparing selection patterns across species and regions, we will assess how habitat preferences vary with human influence.
+Step-selection functions quantify selection for human-modified habitats (e.g., agricultural areas, urban edges) relative to natural habitats. By comparing selection patterns across species and regions, we will assess how habitat preferences vary with human influence.
 
 # Results
 
@@ -120,7 +120,7 @@ The resulting home ranges for the UK wader nesting season time frame are shown i
 
 The home range for the sampled Wiltshire data is shown in @fig-home-ranges-wiltshire-sampled24h. It is 0.56 km<sup>2</sup> for the sampled data, which is roughly half as much as for the full data. This demonstrates that the influence of sampling intervals is definitely present, but is dwarfed in comparison to the difference in fox behavior.
 
-The same effect, namely differences in order of magnitude between remote and rural fox home ranges, can be observed for the monthly home range results shown as a boxplot in @fig-home-ranges-boxplot. The accompanying monthly home range plots can be found in the Appendix in @fig-monthly-home-ranges-wiltshire, @fig-monthly-home-ranges-bylot, and @fig-monthly-home-ranges-herschel.
+The same effect, namely differences in order of magnitude between remote and rural fox home ranges, can be observed for the monthly home range results shown as a boxplot in @fig-home-ranges-boxplot. Note that outliers removed, in particular the irregular data for Herschel (as seen in @fig-herschel-map) were removed. The accompanying monthly home range plots can be found in the Appendix in @fig-monthly-home-ranges-wiltshire, @fig-monthly-home-ranges-bylot, and @fig-monthly-home-ranges-herschel.
 
 ![Home ranges for Bylot foxes (March 15th to June 15th, 2012)](img/home_range_bylot_wader.png){#fig-home-ranges-bylot}
 
@@ -177,17 +177,15 @@ box()
 
 ## Model validation
 
-According to @rykiel1996testing, model validation means demonstrating that a model is acceptable for its intended use. The purpose, criteria, and context of the model must be specified.
+According to @rykiel1996testing, model validation means demonstrating that a model is acceptable for its intended use. The purpose, criteria, and context of the model must be specified. 
 
-Two models: Data (several versions) + home range calculation based on minimum convex hulls + selecting the median
+For the purpose of home range comparison, two models were defined comprised of data, home range calculation based on minimum convex hulls, and median selection. The validation criteria requires that the amount of difference between the results is significantly larger than the effects introduced by data properties, which differed between the models.
 
-Context: Check that the data points are on the islands. There are some outliers for the Herschel data which were left since they didn't affect the results.
-
-To exclude distortions in the coordinate system as a potential reason for the large differences in results, the result for Herschel island are spot checked for three applicable coordinate systems: WGS84, EPSG:3347 (Statistics Canada Lambert), and EPSG:2958 (UTM zone 17N). The latter were identified using the CRS Explorer [link](https://crs-explorer.proj.org/). The differences in the median home rage size results for the foxes in Bylot are minor: 75.3 km<sup>2</sup> for WGS84, 73.3 km<sup>2</sup> for EPSG:3347, and 75.8 km<sup>2</sup> for EPSG:2958.
+Since the geographic location context was diverse, to exclude distortions in the coordinate system as a potential reason for the large differences in results, the result for Herschel island were spot checked for three applicable coordinate systems: WGS84, EPSG:3347 (Statistics Canada Lambert), and EPSG:2958 (UTM zone 17N). The latter were identified using the CRS Explorer [link](https://crs-explorer.proj.org/). The differences in the median home rage size results for the foxes in Bylot were minor: 75.3 km<sup>2</sup> for WGS84, 73.3 km<sup>2</sup> for EPSG:3347, and 75.8 km<sup>2</sup> for EPSG:2958.
 
 # Discussion
 
-The fox home range results differ enormously between rural and remote areas. We conclude that human presence impacts fox movement behavior significantly, with availability of anthropogenic food sources likely being relevant. The influence of technical aspects like sampling intervals on home range calculation results is significant. However, it plays a secondary role in comparison to the difference in fox behavior, which enables the chosen approach of comparing data from heterogeneous sources.
+The fox home range results differ enormously between rural and remote areas. We conclude that human presence impacts fox movement behavior significantly, with availability of anthropogenic food sources likely being relevant. The influence of technical aspects, like sampling intervals, on home range calculation results is significant. However, it plays a secondary role in comparison to the difference in fox behavior, which enables the chosen approach of comparing data from heterogeneous sources.
 
 # Appendix
 
