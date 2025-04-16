@@ -7,6 +7,7 @@ pacman::p_load(
 
 # 2. PREPARE TRACKING DATA -----------------------------------------------------
 # Read and prepare tracking data
+# From https://www.movebank.org/cms/webapp?gwt_fragment=page%3Dstudies%2Cpath%3Dstudy2636372210
 tracking_data <- read_delim("bobcat_coyotes_wa_gps.csv")
 
 # Convert to SF object and project to Mollweide
