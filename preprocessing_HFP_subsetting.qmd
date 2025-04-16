@@ -43,31 +43,28 @@ check_overlap <- function(tif_file, boundary) {
   return(st_intersects(r_poly, boundary, sparse = FALSE)[1,1])
 }
 
-file_path <- "data/output_HFP_washington_mollweide.tif"
-if (!file.exists(file_path)) {
-  # Get list of all HFP tiles (ca. 20 GB of data)
-  # Download as a tgz from https://datadryad.org/downloads/file_stream/2679334 
-  # and extract to the given directory
-  tif_files <- list.files("data/input_HFP-100m-2020/", pattern = "\\.tif$", full.names = TRUE)
-  
-  # Find tiles intersecting our buffer
-  overlap_results <- sapply(tif_files, check_overlap, boundary = tracking_buffer)
-  rasters_list <- lapply(tif_files[overlap_results], rast)
+# Get list of all HFP tiles (ca. 20 GB of data)
+# Download as a tgz from https://datadryad.org/downloads/file_stream/2679334 
+# and extract to the given directory
+tif_files <- list.files("data/input_HFP-100m-2020/", pattern = "\\.tif$", full.names = TRUE)
 
-  # 5. PROCESS HFP DATA ----------------------------------------------------------
-  # Merge and crop relevant tiles
-  merged_relevant_files <- do.call(merge, rasters_list)
-  hfp_cropped <- crop(merged_relevant_files, tracking_buffer)
+# Find tiles intersecting our buffer
+overlap_results <- sapply(tif_files, check_overlap, boundary = tracking_buffer)
+rasters_list <- lapply(tif_files[overlap_results], rast)
 
-  # Save the final cropped HFP raster
-  writeRaster(
-    hfp_cropped,
-    file_path,
-    overwrite = TRUE,
-    datatype = "FLT4S",          # Maintain decimal precision for HFP values
-    gdal = c("COMPRESS=LZW")     # Reduce file size
-  )
-}
+# 5. PROCESS HFP DATA ----------------------------------------------------------
+# Merge and crop relevant tiles
+merged_relevant_files <- do.call(merge, rasters_list)
+hfp_cropped <- crop(merged_relevant_files, tracking_buffer)
+
+# Save the final cropped HFP raster
+writeRaster(
+  hfp_cropped,
+  file_path,
+  overwrite = TRUE,
+  datatype = "FLT4S",          # Maintain decimal precision for HFP values
+  gdal = c("COMPRESS=LZW")     # Reduce file size
+)
 
 # 6. VISUAL CHECK --------------------------------------------------------------
 # Quick verification plot
