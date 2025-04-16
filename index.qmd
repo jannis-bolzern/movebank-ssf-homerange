@@ -2,7 +2,6 @@
 title: How does human activity affect the movement patterns of wild animals?
 subtitle: An analysis of selected data sets from the Movebank animal tracking database
 author: Jannis Bolzern and Elke Michlmayr
-toc: true
 format:
   html:
     code-fold: true
