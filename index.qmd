@@ -55,11 +55,15 @@ The R code for data download, preprocessing, and serialization of relevant data 
 
 ### HFP-100
 
-The global 100 meter resolution terrestrial human footprint data (HFP-100) is a raster data set that uses the Mollweide projection as described by @lapaine2011mollweide. The 2020 version of the data was used. Since the data set is very large, only the relevant areas were downloaded using a 200 km buffer around the tracking points in the following linked document: [HFP-100 download](https://elkeelke.github.io/MovebankProject/preprocessing_HFP_subsetting.html)
+The global 100 meter resolution terrestrial human footprint data (HFP-100) is a raster data set that uses the Mollweide projection as described by @lapaine2011mollweide. The 2020 version of the data was used. Since the data set is very large, only the relevant areas were downloaded using a 200 km buffer around the tracking points in the following linked document: [HFP-100 download](https://elkeelke.github.io/MovebankProject/preprocessing_HFP_subsetting.html). @fig-hfp shows a plot of the extracted data.
+
+![Relevant HFP-100 data](img/hfp_plot_output.png){#fig-hfp}
 
 ### ESA WorldCover
 
-The relevant ESA WorldCover 2021 data at 10m resolution was downloaded via the Microsoft Planetary Computer [STAC API](https://planetarycomputer.microsoft.com/docs/quickstarts/reading-stac/) for simple programmatic access in R in the following linked document: [ESA download](https://elkeelke.github.io/MovebankProject/preprocessing_ESA_world_cover.html)
+The relevant ESA WorldCover 2021 data at 10m resolution was downloaded via the Microsoft Planetary Computer [STAC API](https://planetarycomputer.microsoft.com/docs/quickstarts/reading-stac/) for simple programmatic access in R in the following linked document: [ESA download](https://elkeelke.github.io/MovebankProject/preprocessing_ESA_world_cover.html). @fig-esa shows a plot of the extracted data.
+
+![Relevant ESA WorldCover data](img/esa_landcover.png){#fig-esa}
 
 ## Data exploration and analysis
 
