@@ -60,7 +60,7 @@ hfp_cropped <- crop(merged_relevant_files, tracking_buffer)
 # Save the final cropped HFP raster
 writeRaster(
   hfp_cropped,
-  file_path,
+  "data/output_HFP_washington_mollweide.tif",
   overwrite = TRUE,
   datatype = "FLT4S",          # Maintain decimal precision for HFP values
   gdal = c("COMPRESS=LZW")     # Reduce file size
