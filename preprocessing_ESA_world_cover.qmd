@@ -69,12 +69,6 @@ combined <- do.call(merge, rasters_list)
 esa_cropped <- crop(combined, vect(study_area))
 land_cover <- mask(esa_cropped, vect(study_area))
 
-land_cover <- esa_tiles |>
-  lapply(rast) |>
-  do.call(mosaic) |>    # Combine all tiles
-  crop(vect(study_area)) |> 
-  mask(vect(study_area))
-
 # Convert to factor for plotting
 land_cover <- as.factor(land_cover)
 
