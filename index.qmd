@@ -2,6 +2,7 @@
 title: How does human activity affect the movement patterns of wild animals?
 subtitle: An analysis of selected data sets from the Movebank animal tracking database
 author: Jannis Bolzern and Elke Michlmayr
+toc: true
 format:
   html:
     code-fold: true
@@ -50,11 +51,11 @@ For the human footprint data, the global 100 meter resolution terrestrial human 
 
 All Movebank data sets have the same schema. This simplifies data handling, enables code re-use, and requires the data contributors do perform preprocessing and data cleaning on their side to provide the data in an appropriate format. A library for data processing and trajectory handling in R is provided by @kranstauber2024move2.
 
-The R code for data download, preprocessing, and serialization of relevant data and charts can be found the the following linked documents: [Red fox: UK wader nesting season home range](https://elkeelke.github.io/MovebankProject/preprocessing_uk_wader_nesting_season_home_range.html), [Red fox: montly home ranges](https://elkeelke.github.io/MovebankProject/preprocessing_monthly_home_ranges.html).
+The R code for data download, preprocessing, and serialization of relevant data and charts can be found in the following linked documents: [Red fox: UK wader nesting season home range](https://elkeelke.github.io/MovebankProject/preprocessing_uk_wader_nesting_season_home_range.html), [Red fox: montly home ranges](https://elkeelke.github.io/MovebankProject/preprocessing_monthly_home_ranges.html).
 
-### HRP-100
+### HFP-100
 
-This raster data set uses the Mollweide projection as described by @lapaine2011mollweide. The 2020 version of the data was used. Since the data set is very large, only the relevant areas were downloaded using a 200 km buffer around the tracking points.
+The global 100 meter resolution terrestrial human footprint data (HFP-100) is a raster data set that uses the Mollweide projection as described by @lapaine2011mollweide. The 2020 version of the data was used. Since the data set is very large, only the relevant areas were downloaded using a 200 km buffer around the tracking points in the following linked document: [HFP-100 download](https://elkeelke.github.io/MovebankProject/preprocessing_HFP_subsetting.html)
 
 ### ESA WorldCover
 
@@ -94,7 +95,7 @@ Movement paths are analyzed to identify patterns in speed, direction, and habita
 
 ### Home Range Assessment
 
-The red fox data is used for home range assessment present for a rural and a remote location. Home range sizes are calculated using minimum convex polygons. This provides estimates of the area used by each individual animal.
+The red fox data is used for home range assessment present for a rural and a remote location. Home range sizes are calculated using minimum convex polygons. This provides estimates of the area used by each individual animal that are easy to compare to each other.
 
 As discussed in @sec-redfoxdata, the data for the two locations have different temporal scale. @laube2011 have found that the choice of temporal scale has considerable effects on movement parameter calculations, in turn affecting home range results.
 
@@ -118,7 +119,7 @@ Step-selection functions quantify selection for human-modified habitats (e.g., a
 
 # Results
 
-The resulting home ranges for the UK wader nesting season time frame are shown in @fig-home-ranges-bylot and @fig-home-ranges-wiltshire. The median home range size for the foxes in Bylot (75.3 km<sup>2</sup>) is more than 65 times bigger compared to the foxes in Wiltshire (1.1 km<sup>2</sup>).
+The resulting home ranges for the UK wader nesting season time frame are shown in @fig-home-ranges-bylot and @fig-home-ranges-wiltshire. The median home range size for the foxes in Bylot (75.3 km<sup>2</sup>) is more than 65 times bigger compared to the foxes in Wiltshire (1.1 km<sup>2</sup>). Note that there is one fox with an extraordinarily large home range in @fig-home-ranges-wiltshire. @kobryn2023foxes report similar patterns with a small number of foxes covering much larger areas than others. They conclude that potential for extensive movement patterns in urban foxes exists, and that in some studies such outlier data is either removed or not trackable, therefore underestimating home ranges.
 
 The home ranges for the sub-sampled Wiltshire data are shown in @fig-home-ranges-wiltshire-sampled24h. The median home range size is 0.56 km<sup>2</sup> for the sampled data, which is roughly half as much as for the full data. This shows that the Wiltshire fox home ranges are overestimated in comparison to Bylot fox home ranges, because of the higher amount of data points available. It also demonstrates that the influence of sampling intervals is definitely present. However, it is secondary in comparison to the difference in fox behavior. 
 
