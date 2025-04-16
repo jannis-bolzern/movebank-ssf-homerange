@@ -21,9 +21,11 @@ We investigate how human activity influences the movement patterns of wild anima
 
 # Introduction
 
+Disturbance by humans has widespread impacts on the movements of animals, as @doherty2021human found in a large-scale meta study. Human activities, such as recreation and hunting, have stronger impacts on animal movement than habitat modification, such as logging and agriculture.
+
 Research questions:
 
-1.  Home Range Implications: Do animals exhibit smaller home ranges in high human-impact areas? Similar to @doherty2021human (TBD download via ZHAW)
+1.  Home Range Implications: Do animals exhibit smaller home ranges in high human impact areas? We analyse this for the red fox (vulpes vulpes) by comparing home ranges based on data from low and high human impact areas.
 2.  Temporal Shifts in Activity Patterns: Do animals become more nocturnal in high human-impact areas to avoid direct human encounters?
 3.  Habitat Selection in Human-Dominated Landscapes: How do animals select habitats (e.g., forests, agriculture) under varying levels of human influence?
 
@@ -37,7 +39,7 @@ This section describes the data sets, the steps taken to prepare and process the
 
 The Movebank database by @kays2022movebank provides means for researchers to publish animal tracking data for public use, e.g. under Creative Commons licenses. The following data was selected:
 
--   Red fox data from @porteus2024movement for the outskirt areas of villages in Wiltshire, UK and from @lai2022red for the highly remote uninhabitated islands Bylot and Herschel, Canada, and
+-   Red fox data from @porteus2024movement for the outskirt areas of villages in Wiltshire, UK and from @lai2022red for the highly remote uninhabited islands Bylot and Herschel, Canada, and
 -   Bobcat and coyote data from @prugh2023fear for remote areas with some rural structures in northern Washington, US.
 
 For the human footprint data, the global 100 meter resolution terrestrial human footprint data (HFP-100) by @gassert2023operational is chosen. For land use, the ESA WorldCover data described in @zanaga2022esa is employed.
