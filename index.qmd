@@ -31,7 +31,7 @@ Different data sets are used for each research question. Relying on Movebank dat
 
 # Material and Methods
 
-This section describes the data sets, the steps taken to prepare and process the different data sets in use, and the methodological approach that was employed.
+This section describes the data sets, the steps taken to prepare and process the different data sets in use, and the methodological approach.
 
 ## Data sets
 
