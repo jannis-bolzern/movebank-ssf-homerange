@@ -37,7 +37,7 @@ study_area <- animal_sf |>
 # Connect to Microsoft Planetary Computer STAC
 
 esa_data = file.path(getwd(), "data/esa-worldcover/v200/2021/map")
-if(!file.exists("esa_data")) {
+if(!file.exists(esa_data)) {
   stac_api <- stac("https://planetarycomputer.microsoft.com/api/stac/v1")
   
   # Search for ESA WorldCover 2021 data within study area
