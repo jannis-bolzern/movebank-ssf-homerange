@@ -46,7 +46,7 @@ hfp_combined <- relevant_files %>%
 
 hfp_wgs84 <- project(
   hfp_combined, "EPSG:4326",
-  method = "average",
+  method = "near", #Using nearest neighbor method for data integrity
   res = c(0.00134, 0.0009)) # (x, y) = (long, lat)
 
 # Quick verification plot
