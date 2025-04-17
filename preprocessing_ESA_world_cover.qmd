@@ -3,6 +3,7 @@ title: "preprocessing_ESA_world_cover"
 format: html
 editor: visual
 ---
+
 ```{r}
 # 1. LOAD LIBRARIES ------------------------------------------------------------
 pacman::p_load(
@@ -34,31 +35,34 @@ study_area <- animal_sf |>
 
 # 3. DOWNLOAD ESA WORLDCOVER DATA ----------------------------------------------
 # Connect to Microsoft Planetary Computer STAC
-stac_api <- stac("https://planetarycomputer.microsoft.com/api/stac/v1")
 
-# Search for ESA WorldCover 2021 data within study area
-esa_items <- stac_search(
-  q = stac_api,
-  collections = "esa-worldcover",
-  datetime = "2021-01-01/2021-12-31",  # 2021 version
-  bbox = st_bbox(study_area),           # Study area bounding box
-  limit = 100
-) |>
-  get_request() |>
-  items_sign(sign_planetary_computer())  # Authenticate
-
-# Download all assets
-assets_download(
-  items = esa_items,
-  asset_names = "map",
-  output_dir = file.path(getwd(), "data/"),
-  overwrite = TRUE
-)
-
+esa_data = file.path(getwd(), "data/esa-worldcover/v200/2021/map")
+  if(!file.exists("esa_data"))
+  stac_api <- stac("https://planetarycomputer.microsoft.com/api/stac/v1")
+  
+  # Search for ESA WorldCover 2021 data within study area
+  esa_items <- stac_search(
+    q = stac_api,
+    collections = "esa-worldcover",
+    datetime = "2021-01-01/2021-12-31",  # 2021 version
+    bbox = st_bbox(study_area),           # Study area bounding box
+    limit = 100
+  ) |>
+    get_request() |>
+    items_sign(sign_planetary_computer())  # Authenticate
+  
+  # Download all assets
+  assets_download(
+    items = esa_items,
+    asset_names = "map",
+    output_dir = file.path(getwd(), "data/"),
+    overwrite = TRUE
+  )
+}  
 # 4. PROCESS ESA DATA ----------------------------------------------------------
 # Get all downloaded tiles
 esa_tiles <- list.files(
-  path = file.path(getwd(), "data/esa-worldcover/v200/2021/map"),
+  path = esa_data,
   pattern = "\\.tif$",
   full.names = TRUE
 )
@@ -120,10 +124,9 @@ ggplot() +
     alpha = 0.7
   ) +
   labs(
-    title = "Animal Tracks Over Land Cover",
-    fill = "Land Cover Class"
+    title = "Animal tracks over land cover",
+    fill = "Land cover class"
   ) +
   theme_minimal()
 ggsave("img/esa_landcover.png")
 ```
-

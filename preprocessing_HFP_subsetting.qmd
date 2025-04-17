@@ -55,11 +55,11 @@ rasters_list <- lapply(tif_files[overlap_results], rast)
 # 5. PROCESS HFP DATA ----------------------------------------------------------
 # Merge and crop relevant tiles
 merged_relevant_files <- do.call(merge, rasters_list)
-hfp_cropped <- crop(merged_relevant_files, tracking_buffer)
+human_footprint <- crop(merged_relevant_files, tracking_buffer)
 
 # Save the final cropped HFP raster
 writeRaster(
-  hfp_cropped,
+  human_footprint,
   "data/output_HFP_washington_mollweide.tif",
   overwrite = TRUE,
   datatype = "FLT4S",          # Maintain decimal precision for HFP values
@@ -67,11 +67,27 @@ writeRaster(
 )
 
 # 6. VISUAL CHECK --------------------------------------------------------------
-# Quick verification plot
-png("img/hfp_plot_output.png", width = 800, height = 600, res = 300)
-plot(hfp_cropped)
-plot(st_geometry(tracking_buffer), add = TRUE, border = "red")
-plot(st_geometry(animal_sf), add = TRUE, col = "blue", pch = 16, cex = 0.5)
-dev.off()
+ggplot() +
+  tidyterra::geom_spatraster(
+    data = human_footprint,
+    maxcell = 1e6
+  ) +
+  geom_sf(
+    data = animal_sf,
+    color = "black",
+    size = 1,
+    alpha = 0.7
+  ) +
+  geom_sf(
+    data = tracking_buffer,
+    color = "red",
+    size = 1,
+    alpha = 0
+  ) +  
+  labs(
+    title = "Animal tracks (in black) over human footprint",
+    fill = "Human footprint"
+  ) +
+  theme_minimal()
+ggsave("img/hfp.png")
 ```
-
