@@ -94,7 +94,7 @@ class_labels <- c(
   "40" = "Cropland",
   "50" = "Built-up",
   "60" = "Bare/sparse vegetation",
-  "70" = "Snow and Ice",
+  "70" = "Snow and ice",
   "80" = "Permanent water bodies",
   "90" = "Herbaceous wetland",
   "95" = "Mangroves",
