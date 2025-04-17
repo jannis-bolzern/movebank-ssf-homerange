@@ -8,6 +8,8 @@ library(tidyverse)
 library(leaflet)
 library(geosphere)
 library(terra)
+library(glmmTMB)
+library(DHARMa)
 
 options(scipen = 999) # turn off scientific notation
 options(digits = 15) # set digits to 15 to ensure GPS coordinates aren't truncated
@@ -167,8 +169,6 @@ write_csv(bobcat_final, "data/bobcat_ssf_data.csv")
 
 # Coyote Step Selection Function ---------------------------------------------
 
-library(glmmTMB)
-
 coyote_ssf <- glmmTMB(
   case_ ~ 
     human_footprint +          # Fixed effect of human footprint
@@ -180,8 +180,20 @@ coyote_ssf <- glmmTMB(
   data = coyote_final
 )
 
+coyote_ssf <- glmmTMB(
+  case_ ~ 
+    # Habitat selection under human influence:
+    land_use * human_footprint +          # Interaction: land use × human footprint
+    I(human_footprint^2) +                # Non-linear human footprint effect
+    # Random effects:
+    (1 | animal_id) +                     # Individual baseline selection
+    (1 | step_id_) +                      # Stratum (matched steps)
+    offset(log_sl_),                      # Step length control
+  family = poisson,
+  data = coyote_final
+)
+
 summary(coyote_ssf)
 
-library(DHARMa)
 sim_res <- simulateResiduals(coyote_ssf)
 plot(sim_res)
