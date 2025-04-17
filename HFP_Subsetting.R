@@ -10,8 +10,7 @@ pacman::p_load(
 # Load Washington boundary in Mollweide
 wa_boundary <- ne_states(
   country = "United States of America",
-  returnclass = "sf"
-) %>%
+  returnclass = "sf") %>%
   filter(name == "Washington") %>%
   st_transform("ESRI:54009")  # Convert to Mollweide
 
@@ -25,7 +24,7 @@ check_overlap <- function(tif_file, boundary) {
 }
 
 # Get list of all HFP tiles
-tif_files <- list.files("data/HFP-100m-2020/", pattern = "\\.tif$", full.names = TRUE)
+tif_files <- list.files("data/hfp-100m-2020/", pattern = "\\.tif$", full.names = TRUE)
 
 # Find tiles intersecting our buffer
 overlap_results <- sapply(tif_files, check_overlap, boundary = wa_boundary)
@@ -56,9 +55,9 @@ plot(hfp_wgs84)
 # Save the final cropped HFP raster
 writeRaster(
   hfp_wgs84,
-  "HFP_washington.tif",
+  "data/HFP_washington.tif",
   overwrite = TRUE,
   datatype = "FLT4S",          # Maintain decimal precision for HFP values
   gdal = c("COMPRESS=LZW")     # Reduce file size
 )
-# 
+ 
