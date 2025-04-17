@@ -14,7 +14,7 @@ options(digits = 15) # set digits to 15 to ensure GPS coordinates aren't truncat
 sf_use_s2(FALSE) # workaround for one of the amt functions 
 
 # Read, rename, select, and filter tracking data
-tracking_data <- read_delim("bobcat_coyotes_wa_gps.csv") %>%
+tracking_data <- read_delim("data/bobcat_coyotes_wa_gps.csv") %>%
   dplyr::rename(
     id = `event-id`,
     long = `location-long`, 
@@ -94,8 +94,8 @@ bobcat1 <- bobcat %>%
   unnest(cols = stp) %>%
   mutate(case_binary = ifelse(case_ == TRUE, 1, 0))
 
-write_csv(coyote1, "coyote_extracted_20250415.csv")
-write_csv(bobcat1, "bobcat_extracted_20250415.csv")
+write_csv(coyote1, "data/coyote_extracted.csv")
+write_csv(bobcat1, "data/bobcat_extracted.csv")
 
 coyote_extracted <- read_delim("coyote_extracted_20250415.csv") %>%
   dplyr::select(-log_sl_, -sl_) %>%
