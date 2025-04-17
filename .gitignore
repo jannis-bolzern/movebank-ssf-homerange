@@ -3,5 +3,6 @@
 .RData
 .Ruserdata
 .tif
+*.tif
 .tif.aux.xml
 data/HFP-100m-2020/
