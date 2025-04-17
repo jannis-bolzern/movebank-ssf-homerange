@@ -10,3 +10,5 @@ data/esa-worldcover/
 /data/bobcat_coyotes_wa_gps.csv
 /data/bobcat_extracted.csv
 /data/coyote_extracted.csv
+/data/coyote_ssf_data.csv
+/data/bobcat_ssf_data.csv

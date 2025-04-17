@@ -115,34 +115,52 @@ bobcat_extracted <- read_delim("data/bobcat_extracted.csv") %>%
     analysis_year = ifelse(month(t2_) == 12, year(t2_) + 1, year(t2_)),
     season = ifelse(month(t2_) %in% 4:11, "summer", "winter")) 
 
-# Load and clean the Human Footprint raster
+
+# Load and preprocess rasters --------------------------------------------------
 hfp <- rast("data/HFP_washington.tif")
+NAflag(hfp) <- 64536  # Set no-data value
+hfp_capped <- classify(hfp, matrix(c(50000, Inf, 50000), ncol = 3, byrow = TRUE)) # Cap at 50k
+hfp_scaled <- app(hfp_capped, \(x) (x / 50000) - 0.5)  # Scale to -0.5–0.5
+                       
+land_use <- rast("data/ESA_washington.tif")  # Ensure CRS matches tracking data
+                       
+# Land use class labels (ESA WorldCover 2021)
+class_labels <- c(
+  "10" = "Tree cover", "20" = "Shrubland", "30" = "Grassland",
+  "40" = "Cropland", "50" = "Built-up", "60" = "Bare/sparse vegetation",
+  "70" = "Snow and Ice", "80" = "Permanent water bodies",
+  "90" = "Herbaceous wetland", "95" = "Mangroves", "100" = "Moss and lichen"
+)
 
-# Set no-data value
-NAflag(hfp) <- 64536
+# Extract covariates -----------------------------------------------------------
+extract_covariates <- function(data) {
+  data %>%
+    mutate(
+      human_footprint = terra::extract(hfp_scaled, cbind(x2_, y2_))[, 1],
+      land_use_code = terra::extract(land_use, cbind(x2_, y2_))[, 1]
+    ) %>%
+    mutate(
+      land_use = factor(land_use_code, 
+                        levels = names(class_labels),
+                        labels = class_labels)
+    )
+}
+  
+coyote_extracted1 <- extract_covariates(coyote_extracted)
+bobcat_extracted1 <- extract_covariates(bobcat_extracted)
 
-# Cap max values at 50000 and scale to range 0–50
-hfp_capped <- classify(hfp, matrix(c(50000, Inf, 50000), ncol = 3, byrow = TRUE))
+# Final formatting -------------------------------------------------------------
+format_for_ssf <- function(data) {
+  data %>%
+    mutate(
+      step_id_ = paste(animal_id, step_id_, sep = "_")) %>% # Unique stratum ID
+    group_by(animal_id) %>%
+    mutate(n = n()/11) %>%  # 1 used + 10 available steps per stratum
+    ungroup()
+}
 
-# Scale to -0.5–0.5 range
-hfp_scaled <- app(hfp_capped, fun = function(x) (x / 50000) - 0.5)
+coyote_final <- format_for_ssf(coyote_extracted1)
+bobcat_final <- format_for_ssf(bobcat_extracted1)
 
-# Load ESA land use raster
-land_use <- rast("data/ESA_washington.tif")
-
-
-# Extract covariates for coyotes
-coyote_extracted1 <- coyote_extracted %>%
-  # Extract HFP at step endpoints (x2_, y2_)
-  mutate(
-    human_footprint = terra::extract(hfp_scaled, cbind(.$x2_, .$y2_))[, 1],
-    land_use = terra::extract(land_use, cbind(.$x2_, .$y2_))[, 1]
-  )
-
-# Repeat for bobcats
-bobcat_extracted1 <- bobcat_extracted %>%
-  mutate(
-    human_footprint = terra::extract(hfp_scaled, cbind(.$x2_, .$y2_))[, 1],
-    land_use = terra::extract(land_use, cbind(.$x2_, .$y2_))[, 1]
-  )
-
+write_csv(coyote_final, "data/coyote_ssf_data.csv")
+write_csv(bobcat_final, "data/bobcat_ssf_data.csv")
