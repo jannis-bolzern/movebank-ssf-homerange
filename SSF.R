@@ -122,8 +122,10 @@ hfp <- rast("data/HFP_washington.tif")
 NAflag(hfp) <- 64536
 
 # Cap max values at 50000 and scale to range 0–50
-hfp_scaled <- classify(hfp, matrix(c(50000, Inf, 50000), ncol = 3, byrow = TRUE))
-hfp_scaled <- hfp_scaled / 1000
+hfp_capped <- classify(hfp, matrix(c(50000, Inf, 50000), ncol = 3, byrow = TRUE))
+
+# Scale to -0.5–0.5 range
+hfp_scaled <- app(hfp_capped, fun = function(x) (x / 50000) - 0.5)
 
 # Load ESA land use raster
 land_use <- rast("data/ESA_washington.tif")
@@ -143,3 +145,4 @@ bobcat_extracted1 <- bobcat_extracted %>%
     human_footprint = terra::extract(hfp_scaled, cbind(.$x2_, .$y2_))[, 1],
     land_use = terra::extract(land_use, cbind(.$x2_, .$y2_))[, 1]
   )
+
