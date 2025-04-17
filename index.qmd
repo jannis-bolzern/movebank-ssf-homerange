@@ -56,7 +56,7 @@ The R code for data download, preprocessing, and serialization of relevant data 
 
 The global 100 meter resolution terrestrial human footprint data (HFP-100) is a raster data set that uses the Mollweide projection as described by @lapaine2011mollweide. The 2020 version of the data was used. Since the data set is very large, only the relevant areas were downloaded using a 200 km buffer around the tracking points in the following linked document: [HFP-100 download](https://elkeelke.github.io/MovebankProject/preprocessing_HFP_subsetting.html). @fig-hfp shows a plot of the extracted data.
 
-![Relevant HFP-100 data with animal tracks shown in black and relevant area in red](img/hfp.png){#fig-hfp}
+![Relevant HFP-100 data with animal tracks shown in black and relevant area in red (Mollweide projection)](img/hfp.png){#fig-hfp}
 
 ### ESA WorldCover
 
