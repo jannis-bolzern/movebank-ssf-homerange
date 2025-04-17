@@ -101,7 +101,7 @@ coyote_extracted <- read_delim("data/coyote_extracted.csv") %>%
   dplyr::select(-log_sl_, -sl_) %>%
   mutate(# step lengths from amt are in degrees; overwrite to meters
     sl_ = distGeo(.[,c("x1_","y1_")],.[,c("x2_","y2_")]),
-    log_sl = log(sl_),
+    log_sl_ = log(sl_),
     # instead of using calendar years, we start the year on 1 Dec of the prior year
     analysis_year = ifelse(month(t2_) == 12, year(t2_) + 1, year(t2_)),
     season = ifelse(month(t2_) %in% 4:11, "summer", "winter")) 
@@ -110,7 +110,7 @@ bobcat_extracted <- read_delim("data/bobcat_extracted.csv") %>%
   dplyr::select(-sl_) %>%
   mutate(# step lengths from amt are in degrees; overwrite to meters
     sl_ = distGeo(.[,c("x1_","y1_")],.[,c("x2_","y2_")]),
-    log_sl = log(sl_),
+    log_sl_ = log(sl_),
     # instead of using calendar years, we start the year on 1 Dec of the prior year
     analysis_year = ifelse(month(t2_) == 12, year(t2_) + 1, year(t2_)),
     season = ifelse(month(t2_) %in% 4:11, "summer", "winter")) 
@@ -149,7 +149,7 @@ extract_covariates <- function(data) {
 coyote_extracted1 <- extract_covariates(coyote_extracted)
 bobcat_extracted1 <- extract_covariates(bobcat_extracted)
 
-# Final formatting -------------------------------------------------------------
+# Final formatting --------------------------------------------------------
 format_for_ssf <- function(data) {
   data %>%
     mutate(
@@ -164,3 +164,24 @@ bobcat_final <- format_for_ssf(bobcat_extracted1)
 
 write_csv(coyote_final, "data/coyote_ssf_data.csv")
 write_csv(bobcat_final, "data/bobcat_ssf_data.csv")
+
+# Coyote Step Selection Function ---------------------------------------------
+
+library(glmmTMB)
+
+coyote_ssf <- glmmTMB(
+  case_ ~ 
+    human_footprint +          # Fixed effect of human footprint
+    land_use +                 # Fixed effect of land use (categorical)
+    (1 + human_footprint | animal_id) +  # Random slopes: individual variation in HFP response
+    (1 | step_id_) +           # Stratum-specific intercept (matched used/available)
+    offset(log_sl_),            # Control for step length
+  family = poisson,            # Likelihood-equivalent to conditional logistic
+  data = coyote_final
+)
+
+summary(coyote_ssf)
+
+library(DHARMa)
+sim_res <- simulateResiduals(coyote_ssf)
+plot(sim_res)
