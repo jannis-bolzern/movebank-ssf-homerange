@@ -97,7 +97,7 @@ bobcat1 <- bobcat %>%
 write_csv(coyote1, "data/coyote_extracted.csv")
 write_csv(bobcat1, "data/bobcat_extracted.csv")
 
-coyote_extracted <- read_delim("coyote_extracted_20250415.csv") %>%
+coyote_extracted <- read_delim("data/coyote_extracted.csv") %>%
   dplyr::select(-log_sl_, -sl_) %>%
   mutate(# step lengths from amt are in degrees; overwrite to meters
     sl_ = distGeo(.[,c("x1_","y1_")],.[,c("x2_","y2_")]),
@@ -106,7 +106,7 @@ coyote_extracted <- read_delim("coyote_extracted_20250415.csv") %>%
     analysis_year = ifelse(month(t2_) == 12, year(t2_) + 1, year(t2_)),
     season = ifelse(month(t2_) %in% 4:11, "summer", "winter")) 
 
-bobcat_extracted <- read_delim("bobcat_extracted_20250415.csv") %>%
+bobcat_extracted <- read_delim("data/bobcat_extracted.csv") %>%
   dplyr::select(-sl_) %>%
   mutate(# step lengths from amt are in degrees; overwrite to meters
     sl_ = distGeo(.[,c("x1_","y1_")],.[,c("x2_","y2_")]),
@@ -115,15 +115,15 @@ bobcat_extracted <- read_delim("bobcat_extracted_20250415.csv") %>%
     analysis_year = ifelse(month(t2_) == 12, year(t2_) + 1, year(t2_)),
     season = ifelse(month(t2_) %in% 4:11, "summer", "winter")) 
 
+# Load and clean the Human Footprint raster ----------------------------------
+# Load raster
+hfp <- raster("data/HFP_washington.tif")
 
-land_cover <- raster("ESA_land_cover_washington.tif") %>% project(hfp)
+# Set no-data value
+NAvalue(hfp) <- 64536 
 
-hfp <- raster("HFP_washington_mollweide.tif")
-NAvalue(hfp) <- 64536
-
-# Cap values > 50000 and scale
+# Cap max values at 50000 and scale to range 0–50
 hfp_scaled <- calc(hfp, fun = function(x) {
   x[x > 50000] <- 50000
   x / 1000
 })
-
