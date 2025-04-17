@@ -115,15 +115,31 @@ bobcat_extracted <- read_delim("data/bobcat_extracted.csv") %>%
     analysis_year = ifelse(month(t2_) == 12, year(t2_) + 1, year(t2_)),
     season = ifelse(month(t2_) %in% 4:11, "summer", "winter")) 
 
-# Load and clean the Human Footprint raster ----------------------------------
-# Load raster
-hfp <- raster("data/HFP_washington.tif")
+# Load and clean the Human Footprint raster
+hfp <- rast("data/HFP_washington.tif")
 
 # Set no-data value
-NAvalue(hfp) <- 64536 
+NAflag(hfp) <- 64536
 
 # Cap max values at 50000 and scale to range 0–50
-hfp_scaled <- calc(hfp, fun = function(x) {
-  x[x > 50000] <- 50000
-  x / 1000
-})
+hfp_scaled <- classify(hfp, matrix(c(50000, Inf, 50000), ncol = 3, byrow = TRUE))
+hfp_scaled <- hfp_scaled / 1000
+
+# Load ESA land use raster
+land_use <- rast("data/ESA_washington.tif")
+
+
+# Extract covariates for coyotes
+coyote_extracted1 <- coyote_extracted %>%
+  # Extract HFP at step endpoints (x2_, y2_)
+  mutate(
+    human_footprint = terra::extract(hfp_scaled, cbind(.$x2_, .$y2_))[, 1],
+    land_use = terra::extract(land_use, cbind(.$x2_, .$y2_))[, 1]
+  )
+
+# Repeat for bobcats
+bobcat_extracted1 <- bobcat_extracted %>%
+  mutate(
+    human_footprint = terra::extract(hfp_scaled, cbind(.$x2_, .$y2_))[, 1],
+    land_use = terra::extract(land_use, cbind(.$x2_, .$y2_))[, 1]
+  )
