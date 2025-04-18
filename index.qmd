@@ -52,8 +52,6 @@ All Movebank data sets have the same schema. This simplifies data handling, enab
 
 The R code for data download, preprocessing, and serialization of relevant data and charts can be found in: [Red fox: UK wader nesting season home range](https://elkeelke.github.io/MovebankProject/preprocessing_uk_wader_nesting_season_home_range.html), [Red fox: montly home ranges](https://elkeelke.github.io/MovebankProject/preprocessing_monthly_home_ranges.html).
 
-TBD Add bobcat/coyote processing, e.g. resampling to 4 hours.
-
 ### Human footprint data
 
 The global 100 meter resolution terrestrial human footprint data (HFP-100) is a raster data set that uses the Mollweide projection as described by @lapaine2011mollweide. The 2020 version of the data was used. Since the data set is very large, only the relevant areas were downloaded using a 200 km buffer around the tracking points, and projected to the WGS84 geographic coordinate system (EPSG:4326): [HFP-100 download](https://elkeelke.github.io/MovebankProject/preprocessing_HFP_subsetting.html). 
@@ -102,10 +100,6 @@ The data sampling intervals different for the two species, as shown in @fig-bobc
 
 ## Methodology {#sec-methodology}
 
-### Trajectory Analysis
-
-Movement paths are analyzed to identify patterns in speed, direction, and habitat use. Step lengths and turning angles help infer behavioral states. Step-selection functions as described by @fortin2005wolves are employed as a statistical model for habitat preferences relative to movement patterns, allowing to quantify how animals respond to environmental covariates such as human footprint and land cover.
-
 ### Home Range Assessment
 
 The red fox data is used for home range assessment present for a rural and a remote location. Home range sizes are calculated using minimum convex polygons. This provides estimates of the area used by each individual animal that are easy to compare to each other.
@@ -122,15 +116,16 @@ To explore the impact of sampling intervals for problem #1, the home ranges for 
 
 Finally, an analysis of monthly home ranges is conducted on all three data sets as an alternative solution to address problem #2.
 
-### Temporal Activity Patterns
+### Trajectory Analysis and Habitat Selection
+
+Movement paths are analyzed to identify patterns in speed, direction, and habitat use. Step lengths and turning angles help infer behavioral states. Step-selection functions (SSFs9 as described by @fortin2005wolves are employed as a statistical model for habitat preferences relative to movement patterns, allowing to quantify how animals respond to environmental covariates such as human footprint and land cover. Selection patterns across species and regions are compared to assess how habitat preferences vary with human influence.
+
+Since SSFs requires a regular sampling rate, the animals tracks were re-sampled using the amt library's track_resample() function, which only keeps relocations that are approximately 4 hours apart with a specified tolerance window of 10 minutes. These tracks are translated into animals steps with certain step lengths and turning angles. The control group is comprised of randomly generated steps. Each animal location within its is joined with the relevant covariates, which are the accompanying land cover category, and the human footprint index value.
+
+
+### Temporal Activity Patterns (TBR)
 
 Movement rates are used to quantify diel activity shifts. We test whether animals in high human-impact areas exhibit increased nocturnality, potentially as a strategy to avoid direct human encounters. This analysis reveals how temporal behavior adapts to human presence.
-
-### Habitat Selection
-
-Step-selection functions quantify selection for human-modified habitats (e.g., agricultural areas, urban edges) relative to natural habitats. By comparing selection patterns across species and regions, we will assess how habitat preferences vary with human influence.
-
-Each animal location was joined with the accompanying land cover and human footprint index value.
 
 # Results
 
