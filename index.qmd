@@ -17,17 +17,14 @@ keep-tex: true
 
 # Abstract
 
-We investigate how human activity influences the movement patterns of wild animals. Using tracking data from red foxes, bobcats, and coyotes across rural and remote areas in England, Canada, and the US, we analyze home range sizes, temporal activity shifts, and habitat selection in relation to human footprint and land cover data.
+We investigate how human activity influences the movement patterns of wild animals. Using tracking data from red foxes, bobcats, and coyotes across rural and remote areas in England, Canada, and the US, we analyze home range sizes and habitat selection in relation to human footprint and land cover data.
 
 # Introduction
 
-Disturbance by humans has widespread impacts on the movements of animals, as @doherty2021human found in a large-scale meta study. Human activities, such as recreation and hunting, have stronger impacts on animal movement than habitat modification, such as logging and agriculture.
+Disturbance by humans has widespread impacts on the movements of animals, as confirmed by a large-scale meta study by @doherty2021human. In the followind two related research questions will be adressed:
 
-Research questions:
-
-1.  Home Range Implications: Do animals exhibit smaller home ranges in high human impact areas? We analyse this for the red fox (vulpes vulpes) by comparing home ranges based on data from low and high human impact areas.
-2.  Temporal Shifts in Activity Patterns: Do animals become more nocturnal in high human-impact areas to avoid direct human encounters?
-3.  Habitat Selection in Human-Dominated Landscapes: How do animals select habitats (e.g., forests, agriculture) under varying levels of human influence?
+1.  Home Range Implications: Do animals exhibit smaller home ranges in high human impact areas? We analyse this for the red fox (vulpes vulpes) by comparing home ranges in low and high human impact areas.
+2.  Habitat Selection in Human-Dominated Landscapes: How do animals select habitats (e.g., forests, agriculture) under varying levels of human influence?
 
 Different data sets are used for each research question. Relying on Movebank data, as described in @sec-movebank, presents additional challenges stemming from the facts that (1) the data is used for purposes it was not originally collected for and (2) data from different studies that was collected in different manners is compared, and (3) subsets from existing data sets are employed, i.e. only some of the animals from the existing studies are considered.
 
@@ -37,12 +34,7 @@ This section describes the data sets, the steps taken to prepare and process the
 
 ## Data sets
 
-The Movebank database by @kays2022movebank provides means for researchers to publish animal tracking data for public use, e.g. under Creative Commons licenses. The following data is selected:
-
--   Red fox data from @porteus2024movement for the outskirt areas of villages in Wiltshire, UK and from @lai2022red for the remote uninhabited islands Bylot and Herschel in Canada, and
--   Bobcat and coyote data from @prugh2023fear for remote areas with some rural structures in northern Washington, US.
-
-For the human footprint data, the global 100 meter resolution terrestrial human footprint data (HFP-100) by @gassert2023operational is chosen. For land cover, the ESA WorldCover data described in @zanaga2022esa is employed.
+The Movebank database by @kays2022movebank provides means for researchers to publish animal tracking data for public use, e.g. under Creative Commons licenses. The following data is selected: Red fox data from @porteus2024movement for the outskirt areas of villages in Wiltshire, UK and from @lai2022red for the remote uninhabited islands Bylot and Herschel in Canada, and Bobcat and coyote data from @prugh2023fear for remote areas with some rural structures in northern Washington, US. For the human footprint data, the global 100 meter resolution terrestrial human footprint data (HFP-100) by @gassert2023operational is chosen. For land cover, the ESA WorldCover data described in @zanaga2022esa is employed.
 
 ## Data preparation and processing
 
@@ -88,13 +80,13 @@ Looking at the breakdowns by month as shown in @fig-datapoints-month reveals sea
 
 ### Bobcat and coyote data
 
-The bobcat (Lynx rufus) and coyote (Canis latrans) data from @prugh2023fear for remote areas with some rural structures in northern Washington, US contains data for 29 coyotes and 30 bobcats collected between June 2018 and June 2022. They reside on two separated geographical areas and have species-interspersed home ranges. @fig-esa shows a plot of the bobcat and coyote locations in the context of the extracted land cover data. @fig-hfp reveals the human footprint in the area, which is generally low except for some settlements and country roads.
+The bobcat (Lynx rufus) and coyote (Canis latrans) data from @prugh2023fear contains data for 29 coyotes and 30 bobcats collected between June 2018 and June 2022. They reside in two separated geographical areas and have species-interspersed home ranges. @fig-esa shows a plot of the bobcat and coyote locations in the context of the extracted land cover data. @fig-hfp reveals the human footprint in the area, which is generally low except for some settlements and country roads.
 
 ![Bobcat and coyote locations in the context of the land cover data](img/esa_landcover_study_area_with_animals.png){#fig-esa}
 
 ![HFP-100 data with bobcat and coyote tracks shown in black and relevant area in red](img/hfp.png){#fig-hfp}
 
-The data sampling intervals different for the two species, as shown in @fig-bobcat-coyote-mean-sampling. The coyote data is better suited as SSF input since it has a higher sampling rate. 
+The data sampling intervals different for the two species, as shown in @fig-bobcat-coyote-mean-sampling. 
 
 ![Mean sampling rates for bobcat and coyote data](img/bobcat_coyote_mean_sampling_rates.png){#fig-bobcat-coyote-mean-sampling}
 
@@ -118,14 +110,9 @@ Finally, an analysis of monthly home ranges is conducted on all three data sets 
 
 ### Trajectory Analysis and Habitat Selection
 
-Movement paths are analyzed to identify patterns in speed, direction, and habitat use. Step lengths and turning angles help infer behavioral states. Step-selection functions (SSFs9 as described by @fortin2005wolves are employed as a statistical model for habitat preferences relative to movement patterns, allowing to quantify how animals respond to environmental covariates such as human footprint and land cover. Selection patterns across species and regions are compared to assess how habitat preferences vary with human influence.
+Movement paths are analyzed to identify patterns in speed, direction, and habitat use. Step lengths and turning angles help infer behavioral states. Step-selection functions (SSFs) as described by @fortin2005wolves are employed as a statistical model for habitat preferences relative to movement patterns, allowing to quantify how animals respond to environmental covariates such as human footprint and land cover. Selection patterns across species and regions are compared to assess how habitat preferences vary with human influence.
 
 Since SSFs requires a regular sampling rate, the animals tracks were re-sampled using the amt library's track_resample() function, which only keeps relocations that are approximately 4 hours apart with a specified tolerance window of 10 minutes. These tracks are translated into animals steps with certain step lengths and turning angles. The control group is comprised of randomly generated steps. Each animal location within its is joined with the relevant covariates, which are the accompanying land cover category, and the human footprint index value.
-
-
-### Temporal Activity Patterns (TBR)
-
-Movement rates are used to quantify diel activity shifts. We test whether animals in high human-impact areas exhibit increased nocturnality, potentially as a strategy to avoid direct human encounters. This analysis reveals how temporal behavior adapts to human presence.
 
 # Results
 
@@ -196,24 +183,13 @@ For the purpose of home range comparison, two models were defined comprised of d
 
 Since the geographic location context was diverse, to exclude distortions in the coordinate system as a potential unwanted influence, the results for Bylot island were spot checked for three applicable coordinate systems: WGS84 geographic coordinate system (EPSG:4326), NAD 83 / Statistics Canada Lambert projection (EPSG:3347), and Universal Transverse Mercator (UTM) zone 17N (EPSG:2958). These were identified using the [CRS Explorer](https://crs-explorer.proj.org/). The differences in the median home rage size results (UK wader season) for the foxes in Bylot were minor: 75.3 km<sup>2</sup> for WGS84, 73.3 km<sup>2</sup> for EPSG:3347, and 75.8 km<sup>2</sup> for EPSG:2958.
 
+For the habitat selection TBD
+
 # Discussion
 
 The fox home range results differ enormously between rural and remote areas. We conclude that human presence impacts fox movement behavior significantly, with availability of anthropogenic food sources likely being relevant. The influence of technical aspects, like sampling intervals, on home range calculation results is significant. However, it plays a secondary role in comparison to the difference in fox behavior, which enables the chosen approach of comparing data from heterogeneous sources.
 
 # Appendix
-
-## Don't do
-
--   There are several ways to calculate home range, we could compare (and could focus on only that)
--   Do home range for foxes first, for bobcat and coyote data later, potentially even cross-species analysis
--   Use kernel density estimation (KDE)
-
-## Wordcount
-
-```{r}
-#| echo: false
-wordcountaddin::text_stats("index.qmd")
-```
 
 ## Additional charts
 
