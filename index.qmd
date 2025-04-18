@@ -52,9 +52,11 @@ All Movebank data sets have the same schema. This simplifies data handling, enab
 
 The R code for data download, preprocessing, and serialization of relevant data and charts can be found in: [Red fox: UK wader nesting season home range](https://elkeelke.github.io/MovebankProject/preprocessing_uk_wader_nesting_season_home_range.html), [Red fox: montly home ranges](https://elkeelke.github.io/MovebankProject/preprocessing_monthly_home_ranges.html).
 
+TBD Add bobcat/coyote processing, e.g. resampling to 4 hours.
+
 ### Human footprint data
 
-The global 100 meter resolution terrestrial human footprint data (HFP-100) is a raster data set that uses the Mollweide projection as described by @lapaine2011mollweide. The 2020 version of the data was used. Since the data set is very large, only the relevant areas were downloaded using a 200 km buffer around the tracking points: [HFP-100 download](https://elkeelke.github.io/MovebankProject/preprocessing_HFP_subsetting.html). 
+The global 100 meter resolution terrestrial human footprint data (HFP-100) is a raster data set that uses the Mollweide projection as described by @lapaine2011mollweide. The 2020 version of the data was used. Since the data set is very large, only the relevant areas were downloaded using a 200 km buffer around the tracking points, and projected to the WGS84 geographic coordinate system (EPSG:4326): [HFP-100 download](https://elkeelke.github.io/MovebankProject/preprocessing_HFP_subsetting.html). 
 
 ### Land cover data
 
@@ -88,22 +90,15 @@ Looking at the breakdowns by month as shown in @fig-datapoints-month reveals sea
 
 ### Bobcat and coyote data
 
-The bobcat (Lynx rufus) and coyote (Canis latrans) data from @prugh2023fear for remote areas with some rural structures in northern Washington, US contains data for 29 coyotes and 30 bobcats collected between June 2018 and June 2022. The data sampling intervals different for the two species, as shown in @fig-bobcat-coyote-mean-sampling. The coyote data is better suited as SSF input since it has a higher sampling rate. 
-
-![Mean sampling rates for bobcat and coyote data](img/bobcat_coyote_mean_sampling_rates.png){#fig-bobcat-coyote-mean-sampling}
-
-@fig-esa shows a plot of the bobcat and coyote locations in the context of the extracted land cover data.
+The bobcat (Lynx rufus) and coyote (Canis latrans) data from @prugh2023fear for remote areas with some rural structures in northern Washington, US contains data for 29 coyotes and 30 bobcats collected between June 2018 and June 2022. They reside on two separated geographical areas and have species-interspersed home ranges. @fig-esa shows a plot of the bobcat and coyote locations in the context of the extracted land cover data. @fig-hfp reveals the human footprint in the area, which is generally low except for some settlements and country roads.
 
 ![Bobcat and coyote locations in the context of the land cover data](img/esa_landcover_study_area_with_animals.png){#fig-esa}
 
-TBD It was resampled to 4 hours.
-
-
-### Human footprint data
-
-@fig-hfp shows a plot of the extracted human footprint data projected to the WGS84 geographic coordinate system (EPSG:4326).
-
 ![HFP-100 data with bobcat and coyote tracks shown in black and relevant area in red](img/hfp.png){#fig-hfp}
+
+The data sampling intervals different for the two species, as shown in @fig-bobcat-coyote-mean-sampling. The coyote data is better suited as SSF input since it has a higher sampling rate. 
+
+![Mean sampling rates for bobcat and coyote data](img/bobcat_coyote_mean_sampling_rates.png){#fig-bobcat-coyote-mean-sampling}
 
 ## Methodology {#sec-methodology}
 
@@ -134,6 +129,8 @@ Movement rates are used to quantify diel activity shifts. We test whether animal
 ### Habitat Selection
 
 Step-selection functions quantify selection for human-modified habitats (e.g., agricultural areas, urban edges) relative to natural habitats. By comparing selection patterns across species and regions, we will assess how habitat preferences vary with human influence.
+
+Each animal location was joined with the accompanying land cover and human footprint index value.
 
 # Results
 
