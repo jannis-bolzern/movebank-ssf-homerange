@@ -17,7 +17,7 @@ keep-tex: true
 
 # Abstract
 
-We investigate how human activity influences the movement patterns of wild animals. Using tracking data from red foxes, bobcats, and coyotes across rural and remote areas in England, Canada, and the US, we analyze home range sizes, temporal activity shifts, and habitat selection in relation to human footprint and land use data.
+We investigate how human activity influences the movement patterns of wild animals. Using tracking data from red foxes, bobcats, and coyotes across rural and remote areas in England, Canada, and the US, we analyze home range sizes, temporal activity shifts, and habitat selection in relation to human footprint and land cover data.
 
 # Introduction
 
@@ -39,30 +39,26 @@ This section describes the data sets, the steps taken to prepare and process the
 
 The Movebank database by @kays2022movebank provides means for researchers to publish animal tracking data for public use, e.g. under Creative Commons licenses. The following data was selected:
 
--   Red fox data from @porteus2024movement for the outskirt areas of villages in Wiltshire, UK and from @lai2022red for the highly remote uninhabited islands Bylot and Herschel, Canada, and
+-   Red fox data from @porteus2024movement for the outskirt areas of villages in Wiltshire, UK and from @lai2022red for the remote uninhabited islands Bylot and Herschel in Canada, and
 -   Bobcat and coyote data from @prugh2023fear for remote areas with some rural structures in northern Washington, US.
 
-For the human footprint data, the global 100 meter resolution terrestrial human footprint data (HFP-100) by @gassert2023operational is chosen. For land use, the ESA WorldCover data described in @zanaga2022esa is employed.
+For the human footprint data, the global 100 meter resolution terrestrial human footprint data (HFP-100) by @gassert2023operational is chosen. For land cover, the ESA WorldCover data described in @zanaga2022esa is employed.
 
 ## Data preparation and processing
 
-### Movebank {#sec-movebank}
+### Movebank data {#sec-movebank}
 
 All Movebank data sets have the same schema. This simplifies data handling, enables code re-use, and requires the data contributors do perform preprocessing and data cleaning on their side to provide the data in an appropriate format. A library for data processing and trajectory handling in R is provided by @kranstauber2024move2.
 
 The R code for data download, preprocessing, and serialization of relevant data and charts can be found in the following linked documents: [Red fox: UK wader nesting season home range](https://elkeelke.github.io/MovebankProject/preprocessing_uk_wader_nesting_season_home_range.html), [Red fox: montly home ranges](https://elkeelke.github.io/MovebankProject/preprocessing_monthly_home_ranges.html).
 
-### HFP-100
+### Human footprint data
 
-The global 100 meter resolution terrestrial human footprint data (HFP-100) is a raster data set that uses the Mollweide projection as described by @lapaine2011mollweide. The 2020 version of the data was used. Since the data set is very large, only the relevant areas were downloaded using a 200 km buffer around the tracking points in the following linked document: [HFP-100 download](https://elkeelke.github.io/MovebankProject/preprocessing_HFP_subsetting.html). @fig-hfp shows a plot of the extracted data re-projected to the WGS84 geographic coordinate system (EPSG:4326).
+The global 100 meter resolution terrestrial human footprint data (HFP-100) is a raster data set that uses the Mollweide projection as described by @lapaine2011mollweide. The 2020 version of the data was used. Since the data set is very large, only the relevant areas were downloaded using a 200 km buffer around the tracking points in the following linked document: [HFP-100 download](https://elkeelke.github.io/MovebankProject/preprocessing_HFP_subsetting.html). 
 
-![Relevant HFP-100 data with animal tracks shown in black and relevant area in red](img/hfp.png){#fig-hfp}
+### Land cover data
 
-### ESA WorldCover
-
-The relevant ESA WorldCover 2021 data at 10m resolution was downloaded via the Microsoft Planetary Computer [STAC API](https://planetarycomputer.microsoft.com/docs/quickstarts/reading-stac/) for simple programmatic access in R in the following linked document: [ESA download](https://elkeelke.github.io/MovebankProject/preprocessing_ESA_world_cover.html). @fig-esa shows a plot of the extracted data.
-
-![Relevant ESA WorldCover data with animal tracks shown in black](img/esa_landcover_study_area.png){#fig-esa}
+The relevant ESA WorldCover 2021 data at 10m resolution was downloaded via the Microsoft Planetary Computer [STAC API](https://planetarycomputer.microsoft.com/docs/quickstarts/reading-stac/) for simple programmatic access in R in the following linked document: [ESA download](https://elkeelke.github.io/MovebankProject/preprocessing_ESA_world_cover.html).
 
 ## Data exploration and analysis
 
@@ -90,11 +86,29 @@ Looking at the breakdowns by month as shown in @fig-datapoints-month reveals sea
 
 ![Data points per month](img/month_count.png){#fig-datapoints-month}
 
+### Bobcat and coyote data
+
+It contains data for 29 coyotes and 30 bobcats.
+
+The sampling interval for this data varies TBD is 4 or 8 hours. 
+
+### Human footprint data
+
+@fig-hfp shows a plot of the extracted human footprint data. It was projected to the WGS84 geographic coordinate system (EPSG:4326).
+
+![HFP-100 data with bobcat and coyote tracks shown in black and relevant area in red](img/hfp.png){#fig-hfp}
+
+### Land cover data
+
+@fig-esa shows a plot of the extracted land cover data.
+
+![Relevant ESA WorldCover data with bobcat and coyote tracks shown in black](img/esa_landcover_study_area.png){#fig-esa}
+
 ## Methodology {#sec-methodology}
 
 ### Trajectory Analysis
 
-Movement paths are analyzed to identify patterns in speed, direction, and habitat use. Step lengths and turning angles help infer behavioral states. Step-selection functions as described by @fortin2005wolves are employed as a statistical model for habitat preferences relative to movement patterns, allowing to quantify how animals respond to environmental covariates such as human footprint and land use.
+Movement paths are analyzed to identify patterns in speed, direction, and habitat use. Step lengths and turning angles help infer behavioral states. Step-selection functions as described by @fortin2005wolves are employed as a statistical model for habitat preferences relative to movement patterns, allowing to quantify how animals respond to environmental covariates such as human footprint and land cover.
 
 ### Home Range Assessment
 
