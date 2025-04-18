@@ -10,6 +10,7 @@ library(geosphere)
 library(terra)
 library(glmmTMB)
 library(DHARMa)
+library(emmeans)
 
 options(scipen = 999) # turn off scientific notation
 options(digits = 15) # set digits to 15 to ensure GPS coordinates aren't truncated
@@ -136,7 +137,7 @@ land_use <- rast("data/ESA_washington.tif")  # Ensure CRS matches tracking data
 class_labels <- c(
   "10" = "Tree cover", "20" = "Shrubland", "30" = "Grassland",
   "40" = "Cropland", "50" = "Built-up", "60" = "Bare/sparse vegetation",
-  "70" = "Snow and Ice", "80" = "Permanent water bodies",
+  "70" = "Snow and ice", "80" = "Permanent water bodies",
   "90" = "Herbaceous wetland", "95" = "Mangroves", "100" = "Moss and lichen"
 )
 
@@ -203,3 +204,14 @@ summary(coyote_ssf)
 
 sim_res <- simulateResiduals(coyote_ssf)
 plot(sim_res)
+
+# Estimate the trends of human_footprint at different levels of land_use.
+emtrends_result <- emtrends(coyote_ssf, ~ land_use, var = "human_footprint")
+summary(emtrends_result)
+plot(emtrends_result)
+
+m2 <- coyote_final |> fit_clogit(case_ ~ human_footprint * land_use + strata(step_id_))
+summary(m2)
+
+m3 <- bobcat_final |> fit_clogit(case_ ~ human_footprint * land_use + strata(step_id_))
+summary(m3)
