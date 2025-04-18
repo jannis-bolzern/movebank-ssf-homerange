@@ -37,7 +37,7 @@ This section describes the data sets, the steps taken to prepare and process the
 
 ## Data sets
 
-The Movebank database by @kays2022movebank provides means for researchers to publish animal tracking data for public use, e.g. under Creative Commons licenses. The following data was selected:
+The Movebank database by @kays2022movebank provides means for researchers to publish animal tracking data for public use, e.g. under Creative Commons licenses. The following data is selected:
 
 -   Red fox data from @porteus2024movement for the outskirt areas of villages in Wiltshire, UK and from @lai2022red for the remote uninhabited islands Bylot and Herschel in Canada, and
 -   Bobcat and coyote data from @prugh2023fear for remote areas with some rural structures in northern Washington, US.
@@ -50,15 +50,15 @@ For the human footprint data, the global 100 meter resolution terrestrial human 
 
 All Movebank data sets have the same schema. This simplifies data handling, enables code re-use, and requires the data contributors do perform preprocessing and data cleaning on their side to provide the data in an appropriate format. A library for data processing and trajectory handling in R is provided by @kranstauber2024move2.
 
-The R code for data download, preprocessing, and serialization of relevant data and charts can be found in the following linked documents: [Red fox: UK wader nesting season home range](https://elkeelke.github.io/MovebankProject/preprocessing_uk_wader_nesting_season_home_range.html), [Red fox: montly home ranges](https://elkeelke.github.io/MovebankProject/preprocessing_monthly_home_ranges.html).
+The R code for data download, preprocessing, and serialization of relevant data and charts can be found in: [Red fox: UK wader nesting season home range](https://elkeelke.github.io/MovebankProject/preprocessing_uk_wader_nesting_season_home_range.html), [Red fox: montly home ranges](https://elkeelke.github.io/MovebankProject/preprocessing_monthly_home_ranges.html).
 
 ### Human footprint data
 
-The global 100 meter resolution terrestrial human footprint data (HFP-100) is a raster data set that uses the Mollweide projection as described by @lapaine2011mollweide. The 2020 version of the data was used. Since the data set is very large, only the relevant areas were downloaded using a 200 km buffer around the tracking points in the following linked document: [HFP-100 download](https://elkeelke.github.io/MovebankProject/preprocessing_HFP_subsetting.html). 
+The global 100 meter resolution terrestrial human footprint data (HFP-100) is a raster data set that uses the Mollweide projection as described by @lapaine2011mollweide. The 2020 version of the data was used. Since the data set is very large, only the relevant areas were downloaded using a 200 km buffer around the tracking points: [HFP-100 download](https://elkeelke.github.io/MovebankProject/preprocessing_HFP_subsetting.html). 
 
 ### Land cover data
 
-The relevant ESA WorldCover 2021 data at 10m resolution was downloaded via the Microsoft Planetary Computer [STAC API](https://planetarycomputer.microsoft.com/docs/quickstarts/reading-stac/) for simple programmatic access in R in the following linked document: [ESA download](https://elkeelke.github.io/MovebankProject/preprocessing_ESA_world_cover.html).
+The relevant ESA WorldCover 2021 data at 10m resolution was downloaded via the Microsoft Planetary Computer [STAC API](https://planetarycomputer.microsoft.com/docs/quickstarts/reading-stac/) for simple programmatic access in R: [ESA download](https://elkeelke.github.io/MovebankProject/preprocessing_ESA_world_cover.html).
 
 ## Data exploration and analysis
 
@@ -88,9 +88,9 @@ Looking at the breakdowns by month as shown in @fig-datapoints-month reveals sea
 
 ### Bobcat and coyote data
 
-It contains data for 29 coyotes and 30 bobcats.
+The bobcat (Lynx rufus) and coyote (Canis latrans) data from @prugh2023fear for remote areas with some rural structures in northern Washington, US contains data for 29 coyotes and 30 bobcats. Sampling intervals are variable and different for the two species as shown in @fig-bobcat-coyote-mean-sampling.
 
-The sampling interval for this data varies TBD is 4 or 8 hours. 
+![Mean sampling rates for bobcat and coyote data](img/bobcat_coyote_mean_sampling_rates.png){#fig-bobcat-coyote-mean-sampling}
 
 ### Human footprint data
 

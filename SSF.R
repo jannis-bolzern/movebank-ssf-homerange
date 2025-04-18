@@ -72,6 +72,12 @@ trackSummary <- track %>% mutate(sr = lapply(trk, summarize_sampling_rate, time_
 
 print(trackSummary, n = 70)
 
+png("img/bobbat_coyote_sampling_rates.png", width = 800, height = 600)
+boxplot(median ~ species, data = trackSummary, 
+        xlab = "", 
+        ylab = "Median sampling interval in hours")
+dev.off()
+
 # separate by species
 coyote <- track %>% filter(grepl("COY", animal_id))
 bobcat <- track %>% filter(grepl("BOB", animal_id))
