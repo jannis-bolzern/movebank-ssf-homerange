@@ -21,12 +21,12 @@ We investigate how human activity influences the movement patterns of wild anima
 
 # Introduction
 
-Disturbance by humans has widespread impacts on the movements of animals, as confirmed by a large-scale meta study by @doherty2021human. In the followind two related research questions will be adressed:
+Disturbance by humans has widespread impacts on the movements of animals, as confirmed by a large-scale meta study by @doherty2021human. In this paper, two related research questions will be addressed:
 
-1.  Home Range Implications: Do animals exhibit smaller home ranges in high human impact areas? We analyse this for the red fox (vulpes vulpes) by comparing home ranges in low and high human impact areas.
-2.  Habitat Selection in Human-Dominated Landscapes: How do animals select habitats (e.g., forests, agriculture) under varying levels of human influence?
+1.  Home Range Implications: Do animals exhibit smaller home ranges in high human impact areas? This will be analysed by comparing red fox (vulpes vulpes) home ranges in low and high human impact areas.
+2.  Habitat Selection in Human-Dominated Landscapes: How do animals select habitats (e.g., forests, agriculture) under varying levels of human influence? This will be analysed by TBD.
 
-Different data sets are used for each research question. Relying on Movebank data, as described in @sec-movebank, presents additional challenges stemming from the facts that (1) the data is used for purposes it was not originally collected for and (2) data from different studies that was collected in different manners is compared, and (3) subsets from existing data sets are employed, i.e. only some of the animals from the existing studies are considered.
+Different data sets are used for each research question. Relying on Movebank data, as described in @sec-movebank, presents additional challenges stemming from the facts that (1) the data is used for purposes it was not originally collected for and (2) data from different studies that was collected in different manners is compared, and (3) TBD subsets from existing data sets are employed, i.e. only some of the animals from the existing studies are considered.
 
 # Material and Methods
 
@@ -38,19 +38,21 @@ The Movebank database by @kays2022movebank provides means for researchers to pub
 
 ## Data preparation and processing
 
+This section describes data preparation and processing for all the datasets employed.
+
 ### Movebank data {#sec-movebank}
 
 All Movebank data sets have the same schema. This simplifies data handling, enables code re-use, and requires the data contributors do perform preprocessing and data cleaning on their side to provide the data in an appropriate format. A library for data processing and trajectory handling in R is provided by @kranstauber2024move2.
 
-The R code for data download, preprocessing, and serialization of relevant data and charts can be found in: [Red fox: UK wader nesting season home range](https://elkeelke.github.io/MovebankProject/preprocessing_uk_wader_nesting_season_home_range.html), [Red fox: montly home ranges](https://elkeelke.github.io/MovebankProject/preprocessing_monthly_home_ranges.html).
+The R code for data download, preprocessing, and serialization of relevant data and charts can be found in: [Red fox: UK wader nesting season home range](https://elkeelke.github.io/MovebankProject/preprocessing_uk_wader_nesting_season_home_range.html), [Red fox: montly home ranges](https://elkeelke.github.io/MovebankProject/preprocessing_monthly_home_ranges.html), TBD Bobcat/coyote.
 
 ### Human footprint data
 
-The global 100 meter resolution terrestrial human footprint data (HFP-100) is a raster data set that uses the Mollweide projection as described by @lapaine2011mollweide. The 2020 version of the data was used. Since the data set is very large, only the relevant areas were downloaded using a 200 km buffer around the tracking points, and projected to the WGS84 geographic coordinate system (EPSG:4326): [HFP-100 download](https://elkeelke.github.io/MovebankProject/preprocessing_HFP_subsetting.html). 
+The global 100 meter resolution terrestrial human footprint data (HFP-100) is a raster data set using Mollweide projection as described by @lapaine2011mollweide. The 2020 version of the data was used. Only the relevant areas were downloaded using a 200 km buffer around the tracking points, and projected to the WGS84 coordinate system: [HFP-100 download](https://elkeelke.github.io/MovebankProject/preprocessing_HFP_subsetting.html). 
 
 ### Land cover data
 
-The relevant ESA WorldCover 2021 data at 10m resolution was downloaded via the Microsoft Planetary Computer [STAC API](https://planetarycomputer.microsoft.com/docs/quickstarts/reading-stac/) for simple programmatic access in R: [ESA download](https://elkeelke.github.io/MovebankProject/preprocessing_ESA_world_cover.html).
+The relevant ESA WorldCover 2021 data at 10 m resolution was downloaded via the Microsoft Planetary Computer [STAC API](https://planetarycomputer.microsoft.com/docs/quickstarts/reading-stac/) for simple programmatic access in R: [ESA download](https://elkeelke.github.io/MovebankProject/preprocessing_ESA_world_cover.html).
 
 ## Data exploration and analysis
 
@@ -86,7 +88,7 @@ The bobcat (Lynx rufus) and coyote (Canis latrans) data from @prugh2023fear cont
 
 ![HFP-100 data with bobcat and coyote tracks shown in black and relevant area in red](img/hfp.png){#fig-hfp}
 
-The data sampling intervals different for the two species, as shown in @fig-bobcat-coyote-mean-sampling. 
+The mean (TBD?) data sampling intervals differ for the two species, as shown in @fig-bobcat-coyote-mean-sampling. 
 
 ![Mean sampling rates for bobcat and coyote data](img/bobcat_coyote_mean_sampling_rates.png){#fig-bobcat-coyote-mean-sampling}
 
@@ -120,7 +122,7 @@ The resulting home ranges for the UK wader nesting season time frame are shown i
 
 The home ranges for the sub-sampled Wiltshire data are shown in @fig-home-ranges-wiltshire-sampled24h. The median home range size is 0.56 km<sup>2</sup> for the sampled data, which is roughly half as much as for the full data. This shows that the Wiltshire fox home ranges are overestimated in comparison to Bylot fox home ranges, because of the higher amount of data points available. It also demonstrates that the influence of sampling intervals is definitely present. However, it is secondary in comparison to the difference in fox behavior. 
 
-Similar differences in order of magnitude between remote and rural fox home ranges can also be observed for the monthly home range results shown as a boxplot in @fig-home-ranges-boxplot. It is interesting to see that the fox home ranges for Bylot and Herschel are similar even if the islands are different in size with Bylot being a hundred times larger. Note that outliers are removed, in particular the irregular data for Herschel (as seen in @fig-herschel-map). The accompanying monthly home range plots can be found in the Appendix in @fig-monthly-home-ranges-wiltshire, @fig-monthly-home-ranges-bylot, and @fig-monthly-home-ranges-herschel.
+Similar differences in order of magnitude between remote and rural fox home ranges can also be observed for the monthly home range results shown as a boxplot in @fig-home-ranges-boxplot. It is interesting to see that the fox home ranges for Bylot and Herschel are similar, even if the islands are different in size with Bylot being a hundred times larger. Note that outliers are removed, in particular the irregular data for Herschel (as seen in @fig-herschel-map). The accompanying monthly home range plots can be found in the Appendix in @fig-monthly-home-ranges-wiltshire, @fig-monthly-home-ranges-bylot, and @fig-monthly-home-ranges-herschel.
 
 ![Home ranges for Bylot foxes (March 15th to June 15th, 2012)](img/home_range_bylot_wader.png){#fig-home-ranges-bylot}
 
@@ -188,6 +190,8 @@ For the habitat selection TBD
 # Discussion
 
 The fox home range results differ enormously between rural and remote areas. We conclude that human presence impacts fox movement behavior significantly, with availability of anthropogenic food sources likely being relevant. The influence of technical aspects, like sampling intervals, on home range calculation results is significant. However, it plays a secondary role in comparison to the difference in fox behavior, which enables the chosen approach of comparing data from heterogeneous sources.
+
+
 
 # Appendix
 
