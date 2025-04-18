@@ -81,7 +81,7 @@ class_labels <- c(
   "40" = "Cropland",
   "50" = "Built-up",
   "60" = "Bare/sparse vegetation",
-  "70" = "Snow and Ice",
+  "70" = "Snow and ice",
   "80" = "Permanent water bodies",
   "90" = "Herbaceous wetland",
   "95" = "Mangroves",
@@ -111,7 +111,7 @@ ggplot() +
     alpha = 0.7
   ) +
   labs(
-    title = "Animal Tracks Over Land Cover",
-    fill = "Land Cover Class"
+    title = "Animal tracks over land cover",
+    fill = "Land cover class"
   ) +
   theme_minimal()
