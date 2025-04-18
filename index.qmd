@@ -88,21 +88,22 @@ Looking at the breakdowns by month as shown in @fig-datapoints-month reveals sea
 
 ### Bobcat and coyote data
 
-The bobcat (Lynx rufus) and coyote (Canis latrans) data from @prugh2023fear for remote areas with some rural structures in northern Washington, US contains data for 29 coyotes and 30 bobcats. Sampling intervals are variable and different for the two species as shown in @fig-bobcat-coyote-mean-sampling.
+The bobcat (Lynx rufus) and coyote (Canis latrans) data from @prugh2023fear for remote areas with some rural structures in northern Washington, US contains data for 29 coyotes and 30 bobcats collected between June 2018 and June 2022. The data sampling intervals different for the two species, as shown in @fig-bobcat-coyote-mean-sampling. The coyote data is better suited as SSF input since it has a higher sampling rate. 
 
 ![Mean sampling rates for bobcat and coyote data](img/bobcat_coyote_mean_sampling_rates.png){#fig-bobcat-coyote-mean-sampling}
 
+@fig-esa shows a plot of the bobcat and coyote locations in the context of the extracted land cover data.
+
+![Bobcat and coyote locations in the context of the land cover data](img/esa_landcover_study_area_with_animals.png){#fig-esa}
+
+TBD It was resampled to 4 hours.
+
+
 ### Human footprint data
 
-@fig-hfp shows a plot of the extracted human footprint data. It was projected to the WGS84 geographic coordinate system (EPSG:4326).
+@fig-hfp shows a plot of the extracted human footprint data projected to the WGS84 geographic coordinate system (EPSG:4326).
 
 ![HFP-100 data with bobcat and coyote tracks shown in black and relevant area in red](img/hfp.png){#fig-hfp}
-
-### Land cover data
-
-@fig-esa shows a plot of the extracted land cover data.
-
-![Relevant ESA WorldCover data with bobcat and coyote tracks shown in black](img/esa_landcover_study_area.png){#fig-esa}
 
 ## Methodology {#sec-methodology}
 

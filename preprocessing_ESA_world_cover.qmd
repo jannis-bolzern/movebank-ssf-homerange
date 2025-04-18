@@ -31,7 +31,7 @@ study_area <- animal_sf |>
   st_union() |>
   st_convex_hull() |>    # Create minimum convex polygon
   st_buffer(10000) |>    # 10km buffer in CRS units
-  st_transform(4326)      # Ensure WGS84 for ESA download
+  st_transform(4326)     # Ensure WGS84 for ESA download
 
 # 3. DOWNLOAD ESA WORLDCOVER DATA ----------------------------------------------
 # Connect to Microsoft Planetary Computer STAC
@@ -45,7 +45,7 @@ if(!file.exists(esa_data)) {
     q = stac_api,
     collections = "esa-worldcover",
     datetime = "2021-01-01/2021-12-31",  # 2021 version
-    bbox = st_bbox(study_area),           # Study area bounding box
+    bbox = st_bbox(study_area),          # Study area bounding box
     limit = 100
   ) |>
     get_request() |>
@@ -79,7 +79,7 @@ land_cover <- as.factor(land_cover)
 # Save the final cropped/merged land cover
 writeRaster(
   land_cover,
-  "data/ESA_study_area.tif",  # Output filename
+  "data/ESA_study_area.tif",   # Output filename
   overwrite = TRUE,            # Overwrite if exists
   datatype = "INT1U",          # Optimize for categorical data
   gdal = c("COMPRESS=LZW")     # Reduce file size
@@ -119,14 +119,39 @@ ggplot() +
   ) +
   geom_sf(
     data = animal_sf,
-    color = "black",
+    aes(color = `individual-taxon-canonical-name`),
     size = 1,
     alpha = 0.7
   ) +
+  scale_color_manual(values = c("Canis latrans" = "black", "Lynx rufus" = "white"), 
+                     name = "Species") +
   labs(
     title = "Animal tracks over land cover",
     fill = "Land cover class"
   ) +
   theme_minimal()
-ggsave("img/esa_landcover_study_area.png")
+ggsave("img/esa_landcover_study_area_with_animals.png")
+
+# Create plot
+ggplot() +
+  tidyterra::geom_spatraster(
+    data = land_cover,
+    maxcell = 1e6
+  ) +
+  scale_fill_manual(
+    values = c(
+      "10" = "#006400", "20" = "#FFBB22", "30" = "#FFFF4C",
+      "40" = "#F096FF", "50" = "#FA0000", "60" = "#B4B4B4",
+      "70" = "#F0F0F0", "80" = "#0064C8", "90" = "#0096A0",
+      "95" = "#00CF75", "100" = "#FAE6A0"
+    ),
+    labels = class_labels,
+    na.value = NA
+  ) +
+  labs(
+    title = "Land cover",
+    fill = "Land cover class"
+  ) +
+  theme_minimal()
+ggsave("img/esa_landcover_study_area_without_animals.png")
 ```
