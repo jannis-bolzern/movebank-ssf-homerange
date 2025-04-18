@@ -46,7 +46,7 @@ check_overlap <- function(tif_file, boundary) {
 # Get list of all HFP tiles (ca. 20 GB of data)
 # Download as a tgz from https://datadryad.org/downloads/file_stream/2679334 
 # and extract to the given directory
-tif_files <- list.files("data/input_HFP-100m-2020/", pattern = "\\.tif$", full.names = TRUE)
+tif_files <- list.files("data/hfp-100m-2020/", pattern = "\\.tif$", full.names = TRUE)
 
 # Find tiles intersecting our buffer
 overlap_results <- sapply(tif_files, check_overlap, boundary = tracking_buffer)
