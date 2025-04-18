@@ -55,11 +55,22 @@ rasters_list <- lapply(tif_files[overlap_results], rast)
 # 5. PROCESS HFP DATA ----------------------------------------------------------
 # Merge and crop relevant tiles
 merged_relevant_files <- do.call(merge, rasters_list)
-human_footprint <- crop(merged_relevant_files, tracking_buffer)
+hfp_combined <- crop(merged_relevant_files, tracking_buffer)
+
+# Project to WGS 84
+# Length of 1 degree longitude at latitude φ ≈ 111,320 × cos(φ) meters
+# cos(48°) ≈ 0.6691
+# So 1° longitude ≈ 111,320 × 0.6691 ≈ 74,500 meters
+# 1° latitude is still ≈ 111,000 meters
+# Divide 100 by 111,000 and 74,500 to match resolution
+hfp_wgs84 <- project(
+  hfp_combined, "EPSG:4326",
+  method = "near", # Using nearest neighbor method for data integrity
+  res = c(0.00134, 0.0009)) # (x, y) = (long, lat)
 
 # Save the final cropped HFP raster
 writeRaster(
-  human_footprint,
+  hfp_wgs84,
   "data/output_HFP_washington_mollweide.tif",
   overwrite = TRUE,
   datatype = "FLT4S",          # Maintain decimal precision for HFP values
@@ -69,7 +80,7 @@ writeRaster(
 # 6. VISUAL CHECK --------------------------------------------------------------
 ggplot() +
   tidyterra::geom_spatraster(
-    data = human_footprint,
+    data = hfp_wgs84,
     maxcell = 1e6
   ) +
   geom_sf(
