@@ -62,7 +62,7 @@ The global 100 meter resolution terrestrial human footprint data (HFP-100) is a 
 
 The relevant ESA WorldCover 2021 data at 10m resolution was downloaded via the Microsoft Planetary Computer [STAC API](https://planetarycomputer.microsoft.com/docs/quickstarts/reading-stac/) for simple programmatic access in R in the following linked document: [ESA download](https://elkeelke.github.io/MovebankProject/preprocessing_ESA_world_cover.html). @fig-esa shows a plot of the extracted data.
 
-![Relevant ESA WorldCover data with animal tracks shown in black](img/esa_landcover.png){#fig-esa}
+![Relevant ESA WorldCover data with animal tracks shown in black](img/esa_landcover_study_area.png){#fig-esa}
 
 ## Data exploration and analysis
 

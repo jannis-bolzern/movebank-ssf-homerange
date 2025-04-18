@@ -79,7 +79,7 @@ land_cover <- as.factor(land_cover)
 # Save the final cropped/merged land cover
 writeRaster(
   land_cover,
-  "data/output_ESA_land_cover_washington.tif",  # Output filename
+  "data/ESA_study_area.tif",  # Output filename
   overwrite = TRUE,            # Overwrite if exists
   datatype = "INT1U",          # Optimize for categorical data
   gdal = c("COMPRESS=LZW")     # Reduce file size
@@ -128,5 +128,5 @@ ggplot() +
     fill = "Land cover class"
   ) +
   theme_minimal()
-ggsave("img/esa_landcover.png")
+ggsave("img/esa_landcover_study_area.png")
 ```

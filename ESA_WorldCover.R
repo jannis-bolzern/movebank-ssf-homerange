@@ -5,7 +5,8 @@ pacman::p_load(
   terra,
   tidyverse,
   tidyterra,
-  rnaturalearth
+  rnaturalearth,
+  ggplot2
 )
 # 2. LOAD WASHINGTON STATE BOUNDARY --------------------------------------------
 # Load Washington boundary in WGS84
@@ -17,7 +18,7 @@ wa_boundary <- ne_states(
 
 # 3. DOWNLOAD ESA WORLDCOVER DATA ----------------------------------------------
 # Create 'data/esa-worldcover' folder
-output_dir <- "data/ESA-WorldCover"
+output_dir <- "data/esa-worldcover"
 if (!dir.exists(output_dir)) {
   dir.create(output_dir, recursive = TRUE)
 }
@@ -62,7 +63,7 @@ land_cover <- esa_tiles %>%
 # Save the final cropped/merged land cover
 writeRaster(
   land_cover,
-  "data/ESA_washington.tif",# Save inside 'data'
+  "data/ESA_washington.tif",   # Save inside 'data'
   overwrite = TRUE,            # Overwrite if exists
   datatype = "INT1U",          # Optimize for categorical data
   gdal = c("COMPRESS=LZW")     # Reduce file size
@@ -104,14 +105,9 @@ ggplot() +
     labels = class_labels,
     na.value = NA
   ) +
-  geom_sf(
-    data = animal_sf,
-    color = "black",
-    size = 1,
-    alpha = 0.7
-  ) +
   labs(
-    title = "Animal tracks over land cover",
+    title = "Washington, NA",
     fill = "Land cover class"
   ) +
   theme_minimal()
+ggsave("img/esa_landcover_washington.png")
