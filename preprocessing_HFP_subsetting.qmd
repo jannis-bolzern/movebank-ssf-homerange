@@ -71,7 +71,7 @@ hfp_wgs84 <- project(
 # Save the final cropped HFP raster
 writeRaster(
   hfp_wgs84,
-  "data/output_HFP_washington_mollweide.tif",
+  "data/output_HFP_study_area.tif",
   overwrite = TRUE,
   datatype = "FLT4S",          # Maintain decimal precision for HFP values
   gdal = c("COMPRESS=LZW")     # Reduce file size
