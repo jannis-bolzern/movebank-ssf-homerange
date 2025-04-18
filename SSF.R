@@ -72,10 +72,10 @@ trackSummary <- track %>% mutate(sr = lapply(trk, summarize_sampling_rate, time_
 
 print(trackSummary, n = 70)
 
-png("img/bobbat_coyote_sampling_rates.png", width = 800, height = 600)
-boxplot(median ~ species, data = trackSummary, 
+png("img/bobcat_coyote_mean_sampling_rates.png", width = 800, height = 600)
+boxplot(mean ~ species, data = trackSummary, 
         xlab = "", 
-        ylab = "Median sampling interval in hours")
+        ylab = "Mean sampling interval in hours")
 dev.off()
 
 # separate by species
