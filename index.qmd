@@ -82,13 +82,15 @@ Amount of data per year and month
 
 ### Bobcat and coyote data
 
-The bobcat and coyote data from @prugh2023fear contains data for 29 coyotes and 30 bobcats collected between June 2018 and June 2022. They reside in two separated geographical areas and have species-interspersed home ranges. @fig-esa shows a plot of the bobcat and coyote locations in the context of the extracted land cover data. @fig-hfp reveals the human footprint in the area, which is generally low except for some settlements and country roads.
+The bobcat and coyote data from @prugh2023fear contains data for 29 coyotes and 30 bobcats collected between June 2018 and June 2022. They reside in two separated geographical areas and have species-interspersed home ranges. TBD some animal were filered out, describe why.
+
+@fig-esa shows a plot of the bobcat and coyote locations in the context of the extracted land cover data. @fig-hfp reveals the human footprint in the area, which is generally low except for some settlements and country roads.
 
 ![Bobcat and coyote locations in the context of the land cover data](img/esa_landcover_study_area_with_animals.png){#fig-esa width="75%"}
 
 ![HFP-100 data with bobcat and coyote tracks shown in black and relevant area in red](img/hfp.png){#fig-hfp width="75%"}
 
-The data sampling intervals are intended to be 4 hours. In practice the interval are irregular because of many outliers and they differ for the two species, as shown in @fig-bobcat-coyote-sampling.
+The data sampling intervals are intended to be 4 hours. In practice, the intervals are irregular with many outliers and they differ for the two species with the coyote data being cleaner after removing outliers, as shown in @fig-bobcat-coyote-sampling.
 
 ![Boxplot of sampling rates for bobcat and coyote data, with outliers removed](img/bobcat_coyote_sampling_rates.png){#fig-bobcat-coyote-sampling}
 
@@ -112,9 +114,11 @@ Finally, an analysis of monthly home ranges is conducted on all three data sets 
 
 ### Trajectory Analysis and Habitat Selection
 
-Movement paths are analyzed to identify patterns in speed, direction, and habitat use. Step lengths and turning angles help infer behavioral states. Step-selection functions (SSFs) as described by @fortin2005wolves are employed as a statistical model for habitat preferences relative to movement patterns, allowing to quantify how animals respond to environmental covariates such as human footprint and land cover. Selection patterns across species and regions are compared to assess how habitat preferences vary with human influence.
+Movement paths are analyzed to identify patterns in speed, direction, and habitat use. Step lengths and turning angles help infer behavioral states. Step-selection functions (SSFs) as described by @fortin2005wolves are employed to detect habitat preferences relative to movement patterns. This allows to quantify how animals respond to environmental covariates, such as human footprint and land cover. 
 
-Since SSFs requires a regular sampling rate, the animals tracks were re-sampled using the amt library's track_resample() function, which only keeps relocations that are approximately 4 hours apart with a specified tolerance window of 10 minutes. These tracks are translated into animals steps with certain step lengths and turning angles. The control group is comprised of randomly generated steps. Each animal location within its is joined with the relevant covariates, which are the accompanying land cover category, and the human footprint index value.
+TBD Selection patterns across species and regions are compared to assess how habitat preferences vary with human influence.
+
+Since SSFs requires a regular sampling rate which the original data does not provide (see @fig-bobcat-coyote-sampling), the animals tracks were re-sampled to a four hour window for coyotes and an eight hour window for bobcats. The amt library's track_resample() function by @signer2019animal was used, with a specified tolerance window of 30 minutes. The re-sampled tracks are translated into animal steps with certain step lengths and turning angles as the main input to the SSF. The control group for the statistical analysis is comprised of randomly generated steps. To compare land cover choices, which translate into habitat characteristics, a conditional logistic regression is performed using the amt library’s fit_clogit function comparing between observed and random steps. 
 
 # Results
 
@@ -179,13 +183,56 @@ axis(2, at = c(0.05, 0.5, 5, 50, 500), labels = c("0.05", "0.5", "5", "50", "500
 box()
 ```
 
+
+For habitat selection, there are 11 categories: tree cover, shrubland, grassland, cropland, built-up, bare/sparse vegetation, snow and ice, permanent water bodies, herbaceous wetland, mangroves, moss and lichen.
+
+TBD Open question: Where is tree cover in the results? The line is completely missing?
+
+TBD Open question: What are the NA numbers in the coyote results about?
+
+TBD Open question: How are we going to present the results? Table? Chart?
+
+For bobcats, there was no statistically significant overall impact of human footprint on animal behavior found. Their habitat choices for shrubland, snow and ice, herbaceous wetland, and mangroves were also completely unaffected by human footprint. 
+
+For grassland, cropland, built-up, and permanent water bodies strong statistically significant effects (p < 0.001) can be observed. The odds ratio for bobcats using these as habitats are generally significantly lower compared to the control group, with or without human influence. For bare/sparse vegetation there is no statistically significant influence from human footprint, but it is generally not preferred as a habitat.
+
+For example: The odds ratio for habitating grassland is 67.8 % lower. When human footprint is taken into account, the odds ratio for grassland is 83.4 % lower.
+
+Need to expain: Why do they like moss and lichen, and even more with humans present?
+
+```{r}
+#| eval: false
+#| include: false
+#human_footprint                                   -0.0927934692695459167888     0.9113817091901329492387     0.2595776977215661918130    -0.35748               0.720734    
+#land_useShrubland                                  0.0000000000000000000000     1.0000000000000000000000     0.0000000000000000000000         NaN                    NaN    
+#land_useGrassland                                 -1.1343788010138180499808     0.3216218504596430327602     0.0313001356818177270402   -36.24198 < 0.000000000000000222 ***
+#land_useCropland                                  -2.6955932992397100278481     0.0675023208157129045448     0.4151745357833080407595    -6.49267   0.000000000084325515 ***
+#land_useBuilt-up                                  -9.3068582406613700186426     0.0000907993672801700994     1.0163126044938173286880    -9.15748 < 0.000000000000000222 ***
+#land_useBare/sparse vegetation                    -0.9896770013548591427011     0.3716967291748484725211     0.1560035497221849698501    -6.34394   0.000000000223963554 ***
+#land_useSnow and ice                               0.0000000000000000000000     1.0000000000000000000000     0.0000000000000000000000         NaN                    NaN    
+#land_usePermanent water bodies                 -4088.0113792708016262622550     0.0000000000000000000000     1.2276406412183498151336 -3329.97397 < 0.000000000000000222 ***
+#land_useHerbaceous wetland                         0.0000000000000000000000     1.0000000000000000000000     0.0000000000000000000000         NaN                    NaN    
+#land_useMangroves                                  0.0000000000000000000000     1.0000000000000000000000     0.0000000000000000000000         NaN                    NaN    
+#land_useMoss and lichen                            1.3645151147404965819021     3.9138248358502174539808     0.1042798555154512002430    13.08513 < 0.000000000000000222 ***
+#human_footprint:land_useShrubland                  0.0000000000000000000000     1.0000000000000000000000     0.0000000000000000000000         NaN                    NaN    
+#human_footprint:land_useGrassland                 -1.7990737280473276804571     0.1654520708790014060785     0.0776170970004177868118   -23.17883 < 0.000000000000000222 ***
+#human_footprint:land_useCropland                  -3.9062198171585351680335     0.0201164011877258130934     1.6261773191233279689527    -2.40209               0.016302 *  
+#human_footprint:land_useBuilt-up                 -23.5086809789049340224665     0.0000000000617034680146     3.0648141867883307298825    -7.67051   0.000000000000017132 ***
+#human_footprint:land_useBare/sparse vegetation     0.2475950127030740188783     1.2809410622749177743884     0.3288371761102296120249     0.75294               0.451485    
+#human_footprint:land_useSnow and ice               0.0000000000000000000000     1.0000000000000000000000     0.0000000000000000000000         NaN                    NaN    
+#human_footprint:land_usePermanent water bodies -8335.7938215816575393546373     0.0000000000000000000000     2.5025300504979064442068 -3330.94654 < 0.000000000000000222 ***
+#human_footprint:land_useHerbaceous wetland         0.0000000000000000000000     1.0000000000000000000000     0.0000000000000000000000         NaN                    NaN    
+#human_footprint:land_useMangroves                  0.0000000000000000000000     1.0000000000000000000000     0.0000000000000000000000         NaN                    NaN    
+#human_footprint:land_useMoss and lichen            3.8211372448783156308139    45.6561009749259554268974     0.2196364665097263746407    17.39755 < 0.000000000000000222 ***
+```
+
 # Discussion
 
 The fox home range results differ enormously between rural and remote areas. We conclude that human presence impacts fox movement behavior significantly, with availability of anthropogenic food sources likely being relevant. The influence of technical aspects, like sampling intervals, on home range calculation results is significant. Wiltshire fox home ranges are overestimated in comparison to Bylot fox home ranges, because of the higher amount of data points available. It also demonstrates that the influence of sampling intervals is definitely present. However, it plays a secondary role in comparison to the difference in fox behavior, which enables the chosen approach of comparing data from heterogeneous sources.
 
 It is interesting to see that the fox home ranges for Bylot and Herschel are similar, even if the islands are different in size with Bylot being a hundred times larger. Note that there is one fox with an extraordinarily large home range in @fig-home-ranges-wiltshire. @kobryn2023foxes report similar patterns with a small number of foxes covering much larger areas than others. They conclude that potential for extensive movement patterns in urban foxes exists, and that in some studies such outlier data is either removed or not trackable to begin with because of hardware setup restrictions, therefore underestimating home ranges. In this case there are no such issues, however for most of the foxes a small home range can be observed.
 
-Habitat selection TBD
+TBD Note that the habitat selection results are not in line with what the original paper by @prugh2023fear found. Their insight was that in intact ecosystems, large carnivores have a regulating influence on smaller predators such as bobcats and coyotes, but in ecosystems with humans presence, smaller predators animals prefer developed areas to avoid larger predators. In our case, large carnivore data was not included in the analysis.
 
 ## Model validation
 
