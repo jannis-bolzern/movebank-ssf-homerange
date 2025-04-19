@@ -70,13 +70,15 @@ The Wiltshire data (see @fig-wiltshire-map) was collected between 2016 to 2019 d
 Maps of Bylot and Herschel island, with high level view of animal GPS tracks (unfiltered).
 :::
 
-The Bylot (see @fig-bylot-map) and Herschel (see @fig-herschel-map) Canadian data was collected all year round, at a much lower sampling rate of once per day, at random afternoon times of the day. The collection period was June 2009 to Feb 2010 for Herschel and from 2011 to 2015 for Bylot, for two foxes per island. @fig-datapoints-year provides an overview of the amount of data points available per year. There is much more data from Wiltshire because of the higher number of foxes and the higher sampling rate.
+The Bylot (see @fig-bylot-map) and Herschel (see @fig-herschel-map) Canadian data was collected all year round, at a much lower sampling rate of once per day, at random afternoon times of the day. The collection period was June 2009 to Feb 2010 for Herschel and from 2011 to 2015 for Bylot, for two foxes per island. @fig-datapoints-year provides an overview of the amount of data points available per year. There is much more data from Wiltshire because of the higher number of foxes and the higher sampling rate. Looking at the breakdowns by month as shown in @fig-datapoints-month reveals seasonal differences in the amount of data available.
 
-![Data points per year](img/year_count.png){#fig-datapoints-year}
+::: {#fig-data-points layout-ncol="2"}
+![Per year](img/year_count.png){#fig-datapoints-year}
 
-Looking at the breakdowns by month as shown in @fig-datapoints-month reveals seasonal differences in the amount of data available.
+![Per month](img/month_count.png){#fig-datapoints-month}
 
-![Data points per month](img/month_count.png){#fig-datapoints-month}
+Amount of data per year and month
+:::
 
 ### Bobcat and coyote data
 
