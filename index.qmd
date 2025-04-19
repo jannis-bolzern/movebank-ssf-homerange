@@ -58,7 +58,7 @@ The relevant European Space Agency (ESA) WorldCover 2021 data at 10 m resolution
 
 ### Red fox data {#sec-redfoxdata}
 
-The Wiltshire data (see @fig-wiltshire-map) was collected between 2016 to 2019 during the UK wader nesting season, which was defined to be March 15th to June 15th, for 35 foxes in total. It was sampled at 10 or 60 minute rates. The research team could set the sampling rate remotely to save battery at times the data was considered less interesting.
+The Wiltshire data (see @fig-wiltshire-map) was collected between 2016 to 2019 during the UK wader nesting season, which was defined to be March 15th to June 15th, for 35 foxes in total. It was sampled at 10 or 60 minute rates. The research team controlled the sampling rate remotely to save battery at times the data was considered less interesting.
 
 ![hHigh level view of animal GPS tracks in Wiltshire](img/wiltshire_map.png){#fig-wiltshire-map}
 
@@ -99,7 +99,6 @@ The red fox data is used for home range assessment present for a rural and a rem
 As discussed in @sec-redfoxdata, the data for the two locations have different temporal scale. @laube2011 have found that the choice of temporal scale has considerable effects on movement parameter calculations, in turn affecting home range results.
 
 How to make this data comparable? Problem #1 is that the sampling intervals are different. Problem #2 is that the data coverage varies by time of the year. Problem #3 is that there are highly different amounts of data. Selecting the means and parameters for the comparison involves complex choices that will influence the results.
-
 
 For #1, a possible approach to achieve similar sampling intervals would be to sample a random afternoon data point for each 24 hour window. However, this would include the implicit assumption that foxes will follow similar daily patterns in the different environments. For #2, a possible approach would be to compare the data for the same time of the year. But since the geographical locations are different, the seasonal weather conditions will differ for the same day of the year, likely leading to different animal behavior. For #3, aggregated comparisons can solve the issue, assuming there is enough data for the smaller data source.
 
@@ -182,7 +181,7 @@ box()
 
 The fox home range results differ enormously between rural and remote areas. We conclude that human presence impacts fox movement behavior significantly, with availability of anthropogenic food sources likely being relevant. The influence of technical aspects, like sampling intervals, on home range calculation results is significant. Wiltshire fox home ranges are overestimated in comparison to Bylot fox home ranges, because of the higher amount of data points available. It also demonstrates that the influence of sampling intervals is definitely present. However, it plays a secondary role in comparison to the difference in fox behavior, which enables the chosen approach of comparing data from heterogeneous sources.
 
-It is interesting to see that the fox home ranges for Bylot and Herschel are similar, even if the islands are different in size with Bylot being a hundred times larger. Note that there is one fox with an extraordinarily large home range in @fig-home-ranges-wiltshire. @kobryn2023foxes report similar patterns with a small number of foxes covering much larger areas than others. They conclude that potential for extensive movement patterns in urban foxes exists, and that in some studies such outlier data is either removed or not trackable, therefore underestimating home ranges.
+It is interesting to see that the fox home ranges for Bylot and Herschel are similar, even if the islands are different in size with Bylot being a hundred times larger. Note that there is one fox with an extraordinarily large home range in @fig-home-ranges-wiltshire. @kobryn2023foxes report similar patterns with a small number of foxes covering much larger areas than others. They conclude that potential for extensive movement patterns in urban foxes exists, and that in some studies such outlier data is either removed or not trackable to begin with because of hardware setup restrictions, therefore underestimating home ranges. In this case there are no such issues, however for most of the foxes a small home range can be observed.
 
 Habitat selection TBD
 
