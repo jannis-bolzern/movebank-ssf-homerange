@@ -60,7 +60,7 @@ The relevant European Space Agency (ESA) WorldCover 2021 data at 10 m resolution
 
 The Wiltshire data (see @fig-wiltshire-map) was collected between 2016 to 2019 during the UK wader nesting season, which was defined to be March 15th to June 15th, for 35 foxes in total. It was sampled at 10 or 60 minute rates. The research team controlled the sampling rate remotely to save battery at times the data was considered less interesting.
 
-![hHigh level view of animal GPS tracks in Wiltshire](img/wiltshire_map.png){#fig-wiltshire-map}
+![High level view of animal GPS tracks in Wiltshire](img/wiltshire_map.png){#fig-wiltshire-map}
 
 ::: {#fig-tracks layout-ncol="2"}
 ![Bylot island (11.067 km<sup>2</sup>)](img/bylot_map.png){#fig-bylot-map}
@@ -70,7 +70,7 @@ The Wiltshire data (see @fig-wiltshire-map) was collected between 2016 to 2019 d
 Maps of Bylot and Herschel island, with high level view of animal GPS tracks (unfiltered).
 :::
 
-The Bylot (see @fig-bylot-map) and Herschel (see @fig-herschel-map) Canadian data was collected all year round, at a much lower sampling rate of once per day, at random afternoon times of the day. The collection period was June 2009 to Feb 2010 for Herschel and from 2011 to 2015 for Bylot, for two foxes per island. @fig-datapoints-year provides an overview of the amount of data points available per year. There is much more data from Wiltshire because of the higher number of foxes and the higher sampling rate. Looking at the breakdowns by month as shown in @fig-datapoints-month reveals seasonal differences in the amount of data available.
+The Bylot (see @fig-bylot-map) and Herschel (see @fig-herschel-map) data was collected all year round, at a much lower sampling rate of once per day, at random afternoon times of the day. The collection period was June 2009 to Feb 2010 for Herschel and from 2011 to 2015 for Bylot, for two foxes per island. @fig-datapoints-year provides an overview of the amount of data points available per year. There is much more data from Wiltshire because of the higher number of foxes and the higher sampling rate. Looking at the breakdowns by month as shown in @fig-datapoints-month reveals seasonal differences in the amount of data available.
 
 ::: {#fig-data-points layout-ncol="2"}
 ![Per year](img/year_count.png){#fig-datapoints-year}
@@ -84,13 +84,13 @@ Amount of data per year and month
 
 The bobcat and coyote data from @prugh2023fear contains data for 29 coyotes and 30 bobcats collected between June 2018 and June 2022. They reside in two separated geographical areas and have species-interspersed home ranges. @fig-esa shows a plot of the bobcat and coyote locations in the context of the extracted land cover data. @fig-hfp reveals the human footprint in the area, which is generally low except for some settlements and country roads.
 
-![Bobcat and coyote locations in the context of the land cover data](img/esa_landcover_study_area_with_animals.png){#fig-esa}
+![Bobcat and coyote locations in the context of the land cover data](img/esa_landcover_study_area_with_animals.png){#fig-esa width="75%"}
 
-![HFP-100 data with bobcat and coyote tracks shown in black and relevant area in red](img/hfp.png){#fig-hfp}
+![HFP-100 data with bobcat and coyote tracks shown in black and relevant area in red](img/hfp.png){#fig-hfp width="75%"}
 
-The mean (TBD?) data sampling intervals differ for the two species, as shown in @fig-bobcat-coyote-mean-sampling.
+The data sampling intervals are intended to be 4 hours. In practice the interval are irregular because of many outliers and they differ for the two species, as shown in @fig-bobcat-coyote-sampling.
 
-![Mean sampling rates for bobcat and coyote data](img/bobcat_coyote_mean_sampling_rates.png){#fig-bobcat-coyote-mean-sampling}
+![Boxplot of sampling rates for bobcat and coyote data, with outliers removed](img/bobcat_coyote_sampling_rates.png){#fig-bobcat-coyote-sampling}
 
 ## Methodology {#sec-methodology}
 

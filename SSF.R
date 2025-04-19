@@ -70,13 +70,18 @@ trackSummary <- track %>% mutate(sr = lapply(trk, summarize_sampling_rate, time_
   dplyr::select(animal_id, sr) %>% unnest %>% 
   left_join(distinct(data.frame(track)[,c("animal_id", "species")])) %>%
   arrange(species, median)
-
 print(trackSummary, n = 70)
 
-png("img/bobcat_coyote_mean_sampling_rates.png", width = 800, height = 600)
-boxplot(mean ~ species, data = trackSummary, 
+# Get the individual sampling rates instead of the summary, for plotting.
+trackSummarySamples <- track |>
+  mutate(sr = lapply(trk, summarize_sampling_rate, time_unit = "hour", summarize = FALSE)) |>
+  dplyr::select(animal_id, sr) |>
+  unnest(cols = c(sr)) |>
+  mutate(species = ifelse(grepl("BOB", animal_id), "Bobcat", "Coyote"))
+png("img/bobcat_coyote_sampling_rates.png", width = 800, height = 600)
+boxplot(sr ~ species, outline = FALSE, data = trackSummarySamples, 
         xlab = "", 
-        ylab = "Mean sampling interval in hours")
+        ylab = "Sampling interval in hours, with outliers removed")
 dev.off()
 
 # separate by species
