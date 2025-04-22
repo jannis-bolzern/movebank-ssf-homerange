@@ -4,11 +4,12 @@
 .Ruserdata
 *.tif
 *.tif.aux.xml
+*.rds
 data/hfp-100m-2020/
 data/esa-worldcover/
 /data/items.json
 /data/bobcat_coyotes_wa_gps.csv
-/data/bobcat_extracted.csv
-/data/coyote_extracted.csv
+/data/bobcat_resampled.csv
+/data/coyote_resampled.csv
 /data/coyote_ssf_data.csv
 /data/bobcat_ssf_data.csv
