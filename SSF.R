@@ -45,9 +45,11 @@ trackSummarySamples <- track |>
   unnest(cols = sr) |>
   mutate(species = ifelse(grepl("BOB", id), "Bobcat", "Coyote"))
 
+png("img/bobcat_coyote_sampling_rates.png")
 boxplot(sr ~ species, outline = FALSE, data = trackSummarySamples, 
         xlab = "", 
-        ylab = "Sampling interval in hours, with outliers removed")
+        ylab = "Sampling interval in hours")
+dev.off()
 
 # Split into species ----------------------------------------------------------
 coyote <- filter(track, grepl("COY", id))
