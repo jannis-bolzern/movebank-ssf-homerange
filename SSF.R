@@ -10,8 +10,8 @@ pacman::p_load(
   emmeans
 )
 
-options(scipen = 999)
-options(digits = 15)
+options(scipen = 999) # turn off scientific notation
+options(digits = 15) # set digits to 15 to ensure GPS coordinates aren't truncated
 
 # Load and prepare tracking data ---------------------------------------------
 tracking_data <- read_delim("data/bobcat_coyotes_wa_gps.csv") |> 
@@ -149,12 +149,17 @@ bobcat_final <- prepare_ssf_data(bobcat_cov)
 write_csv(coyote_final, "data/coyote_ssf_data.csv")
 write_csv(bobcat_final, "data/bobcat_ssf_data.csv")
 
+
+# Settings for modeling ---------------------------------------------------
+
+nt <- parallel::detectCores() - 2
+options(scipen = 0)
+options(digits = 7)
+
 # Fit SSF: Coyote -------------------------------------------------------------
 # Read SSF ready data
 coyote_ssf_data <- read_delim("data/coyote_ssf_data.csv") |> 
   filter(n > 100) # select animals with more than 100 fixes
-
-nt <- parallel::detectCores() - 2
 
 ssf_coyote_struc <- glmmTMB(
   case_binary_ ~ -1 + 
@@ -202,8 +207,6 @@ table(bobcat_ssf_data$land_use_grouped)
 # (virtually no variation in case status)
 bobcat_ssf_filtered <- bobcat_ssf_data |> 
   filter(!(land_use_grouped %in% c("BuiltUp", "Snow and ice", "Water", "Cropland")))
-
-nt <- parallel::detectCores() - 2
 
 ssf_bobcat_struc <- glmmTMB(
   case_binary_ ~ -1 + 
