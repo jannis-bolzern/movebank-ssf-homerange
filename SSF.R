@@ -23,13 +23,7 @@ tracking_data <- read_delim("data/bobcat_coyotes_wa_gps.csv") |>
     species = `individual-taxon-canonical-name`) |> 
   dplyr::arrange(id, timestamp) |> 
   dplyr::select(id, species, timestamp, lat, long) |> 
-  dplyr::filter(
-    !id %in% c(
-      "MVBOB87M", "NECOY12F", "MVCOY65M", "MVBOB88M", 
-      "NEBOB8M", "MVBOB77M", "MVBOB91M", "NEBOB11M", 
-      "NECOY42F", "MVCOY72F", "NECOY14M"),
-    !(id == "MVBOB71M" & timestamp > as.POSIXct("2019-09-24 00:00:00"))
-  )
+  dplyr::filter(!(id == "MVBOB71M" & timestamp > as.POSIXct("2019-09-24 00:00:00")))
 
 # Create and inspect tracks ---------------------------------------------------
 track <- tracking_data |>
@@ -60,7 +54,7 @@ coyote <- filter(track, grepl("COY", id))
 bobcat <- filter(track, grepl("BOB", id))
 
 # Step generation for SSF -----------------------------------------------------
-coyote1 <- coyote |> 
+coyote1 <- coyote[-c(8, 19), ] |> # omitting coyote in row 8 and 19; too few consecutive data points - causing function to fail
   mutate(stp = map(trk, function(df)
     df |> 
       track_resample(rate = hours(4), tolerance = minutes(10)) |> 
@@ -71,7 +65,7 @@ coyote1 <- coyote |>
   unnest(cols = stp) |> 
   mutate(case_binary_ = ifelse(case_ == TRUE, 1, 0))
 
-bobcat1 <- bobcat |> 
+bobcat1 <- bobcat[-c(15, 18), ] |> # omitting bobcat in row 15 and 18; too few consecutive data points - causing function to fail
   mutate(stp = map(trk, function(df)
     df |> 
       track_resample(rate = hours(8), tolerance = minutes(10)) |> 
@@ -157,7 +151,8 @@ write_csv(bobcat_final, "data/bobcat_ssf_data.csv")
 
 # Fit SSF: Coyote -------------------------------------------------------------
 # Read SSF ready data
-coyote_ssf_data <- read_delim("data/coyote_ssf_data.csv")
+coyote_ssf_data <- read_delim("data/coyote_ssf_data.csv") |> 
+  filter(n > 100) # select animals with more than 100 fixes
 
 nt <- parallel::detectCores() - 2
 
@@ -200,12 +195,13 @@ ggplot(trends_coyote, aes(x = land_use_grouped, y = human_footprint.trend)) +
 
 # Fit SSF: Bobcat -------------------------------------------------------------
 # Read SSF ready data
-bobcat_ssf_data <- read_delim("data/bobcat_ssf_data.csv")
-
+bobcat_ssf_data <- read_delim("data/bobcat_ssf_data.csv") |> 
+  filter(n > 100) # select animals with more than 100 fixes
+table(bobcat_ssf_data$land_use_grouped)
 # Dropping land use groups with too few used steps
 # (virtually no variation in case status)
 bobcat_ssf_filtered <- bobcat_ssf_data |> 
-  filter(!(land_use_grouped %in% c("BuiltUp", "Water", "Cropland")))
+  filter(!(land_use_grouped %in% c("BuiltUp", "Snow and ice", "Water", "Cropland")))
 
 nt <- parallel::detectCores() - 2
 
