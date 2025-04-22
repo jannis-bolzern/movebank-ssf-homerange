@@ -161,6 +161,68 @@ options(digits = 7)
 coyote_ssf_data <- read_delim("data/coyote_ssf_data.csv") |> 
   filter(n > 100) # select animals with more than 100 fixes
 
+# Bivariate density hex plot (continuous y-variable vs human footprint)
+hex_plot_fun <- function(data, yvar, ylab, title_) {
+  ggplot(data, aes(x = human_footprint, y = .data[[yvar]])) +
+    geom_bin2d(aes(fill = after_stat(log(density)))) +
+    scale_fill_viridis_c(limits = c(-14, -1), option = "D") +
+    stat_density_2d(
+      aes(x = human_footprint, y = .data[[yvar]]),
+      colour = "red", breaks = c(0.05), n = 15, size = 1
+    ) +
+    geom_vline(xintercept = 0, colour = "gray70", size = 1) +
+    geom_hline(yintercept = 0, colour = "gray70", size = 1) +
+    labs(
+      x = "Human Footprint",
+      y = ylab,
+      title = title_
+    ) +
+    theme_bw() +
+    theme(plot.title = element_text(hjust = 0.5))
+}
+
+
+hex_plot_fun(coyote_ssf_data, yvar = "log_sl_", ylab = "Log Step Length", title_ = "Coyote")
+hex_plot_fun(coyote_ssf_data, yvar = "cos_ta_", ylab = "Cosine Turning Angle", title_ = "Coyote")
+
+ggplot(coyote_ssf_data, aes(x = land_use_grouped, y = human_footprint)) +
+  geom_boxplot(outlier.alpha = 0.1) +
+  geom_jitter(width = 0.2, alpha = 0.05) +  # optional: show raw points
+  theme_minimal() +
+  xlab("Land Use Type") +
+  ylab("Human Footprint") +
+  ggtitle("Human Footprint across Land Use Types") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+ggplot(coyote_ssf_data, aes(x = land_use_grouped, y = human_footprint)) +
+  geom_violin(fill = "skyblue", alpha = 0.5) +
+  geom_boxplot(width = 0.1, outlier.size = 0.5) +
+  theme_minimal() +
+  xlab("Land Use Type") +
+  ylab("Human Footprint") +
+  ggtitle("Distribution of HFP by Land Use")
+
+library(ggridges)
+
+ggplot(coyote_ssf_data, aes(x = human_footprint, y = land_use_grouped)) +
+  geom_density_ridges(scale = 1.2, fill = "lightgreen", alpha = 0.7) +
+  theme_minimal() +
+  xlab("Human Footprint") +
+  ylab("Land Use") +
+  ggtitle("Distribution of Human Footprint across Land Use")
+
+
+ggplot(coyote_ssf_data, aes(x = land_use_grouped, y = human_footprint, fill = factor(case_binary_))) +
+  geom_boxplot(position = position_dodge(0.8)) +
+  scale_fill_manual(values = c("0" = "grey80", "1" = "dodgerblue"), name = "Used?") +
+  theme_minimal() +
+  xlab("Land Use Type") +
+  ylab("Human Footprint") +
+  ggtitle("HFP by Land Use (Used vs. Available)") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+# fit SSF with glmmTMB following Muff et al (2019)
 ssf_coyote_struc <- glmmTMB(
   case_binary_ ~ -1 + 
     land_use_grouped * human_footprint + 
@@ -197,6 +259,19 @@ ggplot(trends_coyote, aes(x = land_use_grouped, y = human_footprint.trend)) +
   ylab("Effect of Human Footprint") +
   xlab("Land Cover Type") +
   theme_minimal()
+
+# Create prediction dataset: only available steps, 5 per stratum
+coyote_pred_data <- coyote_ssf_data |>
+  group_by(step_id_) |>
+  mutate(samp = sample(n())) |>
+  filter(case_binary_ == 0, samp <= 5) |>
+  ungroup()
+
+# Predict fixed effect response (log-RSS), store SEs too
+coyote_pred <- predict(ssf_coyote, newdata = coyote_pred_data, re.form = NA, se.fit = TRUE)
+
+coyote_pred_data <- coyote_pred_data |>
+  mutate(fit = coyote_pred$fit, se = coyote_pred$se)
 
 # Fit SSF: Bobcat -------------------------------------------------------------
 # Read SSF ready data
