@@ -181,7 +181,20 @@ write_csv(bobcat_final, "data/bobcat_ssf_data.csv")
 
 # Coyote Step Selection Function ---------------------------------------------
 
-coyote_final <- read_delim("data/coyote_ssf_data.csv")
+coyote_final <- read_delim("data/coyote_ssf_data.csv") 
+
+table(coyote_final$land_use)
+
+coyote_final <- coyote_final |> 
+  mutate(land_use_grouped = fct_collapse(
+    land_use,
+    "Forest" = "Tree cover",
+    "Open_Natural" = c("Grassland", "Shrubland"),
+    "Cropland" = "Cropland",
+    "Built_up" = "Built-up",
+    "Sparse" = c("Bare/sparse vegetation", "Moss and lichen"),
+    "Wet" = c("Permanent water bodies", "Herbaceous wetland")
+  ))
 
 # Define number of CPU cores
 nt <- parallel::detectCores() - 2
