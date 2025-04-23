@@ -163,6 +163,95 @@ options(digits = 7)
 coyote_ssf_data <- read_delim("data/coyote_ssf_data.csv") |> 
   filter(n > 100) # select animals with more than 100 fixes
 
+# fit SSF with glmmTMB following Muff et al (2019)
+ssf_coyote <- glmmTMB(
+  case_binary_ ~ -1 + 
+    land_use_grouped * (human_footprint + I(human_footprint^2)) + 
+    log_sl_ + 
+    (0 + land_use_grouped + human_footprint + I(human_footprint^2) + log_sl_|| id) +
+    (1 | step_id_),
+  family = poisson,
+  doFit = TRUE,
+  data = coyote_ssf_data,
+  map = list(theta = factor(c(1:8, NA))),
+  # Set the value of the standard deviation of the strata (the last ranef) to large constant value. See Muff et al (2020) JAE
+  start = list(theta = c(rep(0, times = 8),log(1e3))),
+  control = glmmTMBControl(parallel = nt)
+)
+
+# Check theta values (to build map/start correctly)
+length(ssf_coyote_struc$parameters$theta)
+
+ssf_coyote_struc$parameters$theta[1] <- log(1e3)
+ssf_coyote_struc$mapArg <- list(theta = factor(c(NA, 1:8)))
+ssf_coyote <- glmmTMB:::fitTMB(ssf_coyote_struc)
+
+#saveRDS(ssf_coyote, file = "models/ssf_coyote_model.rds")
+#ssf_coyote <- readRDS("models/ssf_coyote_model.rds")
+
+summary(ssf_coyote)
+
+coyote_ssf_data1 <- coyote_ssf_data %>%
+  group_by(step_id_) %>%
+  mutate(samp = sample(n())) %>%
+  filter(samp <= 5, case_binary_ == 0) %>% mutate(id = NA) 
+
+coy_pred <- predict(ssf_coyote, coyote_ssf_data1, re.form = NA, se.fit = TRUE)
+coyote_ssf_data1$fit <- coy_pred$fit
+coyote_ssf_data1$se <- coy_pred$se
+coyote_ssf_data1 <- coyote_ssf_data1 %>% ungroup()
+
+
+
+
+
+# Marginal effects of HFP by land cover
+trends_coyote <- emtrends(ssf_coyote, ~ land_use_grouped, var = "human_footprint") |>
+  summary(infer = c(TRUE, TRUE))
+
+
+emtrends(ssf_coyote, specs = ~ land_use_grouped, var = "human_footprint", 
+         at = list(human_footprint = -0.1)) |>
+  summary(infer = c(TRUE, TRUE))
+
+
+ggplot(trends_coyote, aes(x = land_use_grouped, y = human_footprint.trend)) +
+  geom_point() +
+  geom_errorbar(aes(ymin = asymp.LCL, ymax = asymp.UCL), width = 0.2) +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  ylab("Effect of Human Footprint") +
+  xlab("Land Cover Type") +
+  theme_minimal()
+
+# Create prediction dataset: only available steps, 5 per stratum
+coyote_pred_data <- coyote_ssf_data |>
+  group_by(step_id_) |>
+  mutate(samp = sample(n())) |>
+  filter(case_binary_ == 0, samp <= 5) |>
+  ungroup()
+
+# Predict fixed effect response (log-RSS), store SEs too
+coyote_pred <- predict(ssf_coyote, newdata = coyote_pred_data, re.form = NA, se.fit = TRUE)
+
+coyote_pred_data <- coyote_pred_data |>
+  mutate(fit = coyote_pred$fit, se = coyote_pred$se)
+
+
+
+
+
+ggplot(trends_coyote, aes(x = land_use_grouped, y = human_footprint.trend)) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "grey60") +
+  geom_point(size = 3, color = "black") +
+  geom_errorbar(aes(ymin = asymp.LCL, ymax = asymp.UCL), width = 0.2, linewidth = 0.8) +
+  labs(
+    title = "Coyote Selection Response to Human Footprint",
+    x = "Land Cover Type",
+    y = "Effect of Human Footprint"
+  ) +
+  theme_minimal(base_size = 13)
+
+
 # Bivariate density hex plot (continuous y-variable vs human footprint)
 hex_plot_fun <- function(data, yvar, ylab, title_) {
   ggplot(data, aes(x = human_footprint, y = .data[[yvar]])) +
@@ -189,7 +278,7 @@ hex_plot_fun(coyote_ssf_data, yvar = "cos_ta_", ylab = "Cosine Turning Angle", t
 
 ggplot(coyote_ssf_data, aes(x = land_use_grouped, y = human_footprint)) +
   geom_boxplot(outlier.alpha = 0.1) +
-  geom_jitter(width = 0.2, alpha = 0.05) +  # optional: show raw points
+  geom_jitter(width = 0.2, alpha = 0.05) +
   theme_minimal() +
   xlab("Land Use Type") +
   ylab("Human Footprint") +
@@ -223,57 +312,6 @@ ggplot(coyote_ssf_data, aes(x = land_use_grouped, y = human_footprint, fill = fa
   ggtitle("HFP by Land Use (Used vs. Available)") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
-
-# fit SSF with glmmTMB following Muff et al (2019)
-ssf_coyote_struc <- glmmTMB(
-  case_binary_ ~ -1 + 
-    land_use_grouped * human_footprint + 
-    offset(log_sl_) + 
-    (1 | step_id_) + 
-    (0 + land_use_grouped + human_footprint || id),
-  family = poisson,
-  data = coyote_ssf_data,
-  control = glmmTMBControl(parallel = nt),
-  doFit = FALSE
-)
-
-# Check theta values (to build map/start correctly)
-length(ssf_coyote_struc$parameters$theta)
-
-ssf_coyote_struc$parameters$theta[1] <- log(1e3)
-ssf_coyote_struc$mapArg <- list(theta = factor(c(NA, 1:6)))
-ssf_coyote <- glmmTMB:::fitTMB(ssf_coyote_struc)
-
-#saveRDS(ssf_coyote, file = "models/ssf_coyote_model.rds")
-#ssf_coyote <- readRDS("models/ssf_coyote_model.rds")
-
-summary(ssf_coyote)
-confint(ssf_coyote)
-
-# Marginal effects of HFP by land cover
-trends_coyote <- emtrends(ssf_coyote, ~ land_use_grouped, var = "human_footprint") |>
-  summary(infer = c(TRUE, TRUE))
-
-ggplot(trends_coyote, aes(x = land_use_grouped, y = human_footprint.trend)) +
-  geom_point() +
-  geom_errorbar(aes(ymin = asymp.LCL, ymax = asymp.UCL), width = 0.2) +
-  geom_hline(yintercept = 0, linetype = "dashed") +
-  ylab("Effect of Human Footprint") +
-  xlab("Land Cover Type") +
-  theme_minimal()
-
-# Create prediction dataset: only available steps, 5 per stratum
-coyote_pred_data <- coyote_ssf_data |>
-  group_by(step_id_) |>
-  mutate(samp = sample(n())) |>
-  filter(case_binary_ == 0, samp <= 5) |>
-  ungroup()
-
-# Predict fixed effect response (log-RSS), store SEs too
-coyote_pred <- predict(ssf_coyote, newdata = coyote_pred_data, re.form = NA, se.fit = TRUE)
-
-coyote_pred_data <- coyote_pred_data |>
-  mutate(fit = coyote_pred$fit, se = coyote_pred$se)
 
 # Fit SSF: Bobcat -------------------------------------------------------------
 # Read SSF ready data
