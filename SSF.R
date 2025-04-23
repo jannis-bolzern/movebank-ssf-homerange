@@ -179,27 +179,37 @@ ssf_coyote <- glmmTMB(
   control = glmmTMBControl(parallel = nt)
 )
 
-# Check theta values (to build map/start correctly)
-length(ssf_coyote_struc$parameters$theta)
-
-ssf_coyote_struc$parameters$theta[1] <- log(1e3)
-ssf_coyote_struc$mapArg <- list(theta = factor(c(NA, 1:8)))
-ssf_coyote <- glmmTMB:::fitTMB(ssf_coyote_struc)
-
-#saveRDS(ssf_coyote, file = "models/ssf_coyote_model.rds")
+saveRDS(ssf_coyote, file = "models/ssf_coyote_model.rds")
 #ssf_coyote <- readRDS("models/ssf_coyote_model.rds")
 
 summary(ssf_coyote)
 
-coyote_ssf_data1 <- coyote_ssf_data %>%
-  group_by(step_id_) %>%
-  mutate(samp = sample(n())) %>%
-  filter(samp <= 5, case_binary_ == 0) %>% mutate(id = NA) 
+coyote_ssf_data1 <- coyote_ssf_data |> 
+  group_by(step_id_) |> 
+  mutate(samp = sample(n())) |> 
+  filter(samp <= 5, case_binary_ == 0) |> mutate(id = NA) 
 
 coy_pred <- predict(ssf_coyote, coyote_ssf_data1, re.form = NA, se.fit = TRUE)
 coyote_ssf_data1$fit <- coy_pred$fit
 coyote_ssf_data1$se <- coy_pred$se
-coyote_ssf_data1 <- coyote_ssf_data1 %>% ungroup()
+coyote_ssf_data1 <- coyote_ssf_data1 |> ungroup()
+
+#saveRDS(coyote_ssf_data1, "data/coyote_ssf_pred.rds")
+#coyote_ssf_pred <- readRDS("data/coyote_ssf_pred.rds")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
