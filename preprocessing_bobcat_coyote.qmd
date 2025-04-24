@@ -1,0 +1,92 @@
+---
+title: "Preprocessing for SSF"
+format: html
+editor: visual
+---
+
+```{r}
+# Load necessary packages -----------------------------------------------------
+pacman::p_load(
+  tidyverse,
+  amt
+)
+
+options(scipen = 999) # turn off scientific notation
+options(digits = 15) # set digits to 15 to ensure GPS coordinates aren't truncated
+
+# Load and prepare tracking data ---------------------------------------------
+tracking_data <- read_delim("data/bobcat_coyotes_wa_gps.csv") |> 
+  dplyr::rename(
+    long = `location-long`, 
+    lat = `location-lat`,
+    id = `individual-local-identifier`,
+    timestamp = `timestamp`,
+    species = `individual-taxon-canonical-name`) |> 
+  dplyr::arrange(id, timestamp) |> 
+  dplyr::select(id, species, timestamp, lat, long) |> 
+  dplyr::filter(!(id == "MVBOB71M" & timestamp > as.POSIXct("2019-09-24 00:00:00")))
+
+# Create and inspect tracks ---------------------------------------------------
+track <- tracking_data |>
+  nest(data = c(-id, -species)) |>
+  mutate(trk = map(data, ~ make_track(.x, long, lat, timestamp, crs = 4326)))
+
+# Summarize sampling rate
+trackSummary <- track |> 
+  mutate(sr = lapply(trk, summarize_sampling_rate, time_unit = "hour")) |> 
+  dplyr::select(id, sr) |> 
+  unnest(cols = sr) |>
+  left_join(distinct(dplyr::select(tracking_data, id, species))) |>
+  arrange(species, median)
+
+# Get the individual sampling rates instead of the summary, for plotting.
+trackSummarySamples <- track |>
+  mutate(sr = lapply(trk, summarize_sampling_rate, time_unit = "hour", summarize = FALSE)) |>
+  dplyr::select(id, sr) |>
+  unnest(cols = sr) |>
+  mutate(species = ifelse(grepl("BOB", id), "Bobcat", "Coyote"))
+
+png("img/bobcat_coyote_sampling_rates.png")
+boxplot(sr ~ species, outline = FALSE, data = trackSummarySamples, 
+        xlab = "", 
+        ylab = "Sampling interval in hours")
+dev.off()
+
+png("img/bobcat_coyote_sampling_rates_outliers.png")
+boxplot(sr ~ species, outline = TRUE, data = trackSummarySamples, 
+        xlab = "", 
+        ylab = "Sampling interval in hours")
+dev.off()
+
+# Split into species ----------------------------------------------------------
+coyote <- filter(track, grepl("COY", id))
+bobcat <- filter(track, grepl("BOB", id))
+
+# Step generation for SSF -----------------------------------------------------
+coyote1 <- coyote[-c(8, 19), ] |> # omitting coyote in row 8 and 19; too few consecutive data points - causing function to fail
+  mutate(stp = map(trk, function(df)
+    df |> 
+      track_resample(rate = hours(4), tolerance = minutes(10)) |> 
+      steps_by_burst() |> 
+      random_steps(n_control = 10) %>% 
+      mutate(log_sl_ = log(sl_ + 1), cos_ta_ = cos(ta_)))) |> 
+  dplyr::select(-data, -trk) |> 
+  unnest(cols = stp) |> 
+  mutate(case_binary_ = ifelse(case_ == TRUE, 1, 0))
+
+bobcat1 <- bobcat[-c(15, 18), ] |> # omitting bobcat in row 15 and 18; too few consecutive data points - causing function to fail
+  mutate(stp = map(trk, function(df)
+    df |> 
+      track_resample(rate = hours(8), tolerance = minutes(10)) |> 
+      steps_by_burst() |>  
+      random_steps(n_control = 10) |> 
+      mutate(log_sl_ = log(sl_ + 1), cos_ta_ = cos(ta_)))) |> 
+  dplyr::select(-data, -trk) |> 
+  unnest(cols = stp) |> 
+  mutate(case_binary_ = ifelse(case_ == TRUE, 1, 0))
+
+# Export resampled step data
+write_csv(coyote1, "data/coyote_resampled.csv")
+write_csv(bobcat1, "data/bobcat_resampled.csv")
+```
+

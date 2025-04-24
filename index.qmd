@@ -44,7 +44,7 @@ This section describes data preparation and processing for all the datasets empl
 
 All Movebank data sets have the same schema. This simplifies data handling, enables code re-use, and requires the data contributors do perform preprocessing and data cleaning on their side to provide the data in an appropriate format. Libraries for data processing and trajectory handling in R are provided by @kranstauber2024move2 and @signer2019animal.
 
-The R code for data download, preprocessing, and serialization of relevant data and charts can be found in: [Red fox: UK wader nesting season home ranges](https://elkeelke.github.io/MovebankProject/preprocessing_uk_wader_nesting_season_home_range.html), [Red fox: montly home ranges](https://elkeelke.github.io/MovebankProject/preprocessing_monthly_home_ranges.html), TBD Bobcat/coyote.
+The R code for data download, preprocessing, and serialization of relevant data and charts can be found in: [Red fox: UK wader nesting season home ranges](https://elkeelke.github.io/MovebankProject/preprocessing_uk_wader_nesting_season_home_range.html), [Red fox: montly home ranges](https://elkeelke.github.io/MovebankProject/preprocessing_monthly_home_ranges.html), [Bobcat/coyote: data preparation](https://elkeelke.github.io/MovebankProject/preprocessing_bobcat_coyote.html). The R code for statistical modelling can be found in [Bobcat/coyote: modelling](https://elkeelke.github.io/MovebankProject/preprocessing_ssf.html).
 
 ### Human footprint data
 
@@ -84,13 +84,15 @@ Amount of data per year and month
 
 ### Bobcat and coyote data
 
-@prugh2023fear provide data for 29 coyotes and 30 bobcats collected between June 2018 and June 2022. The species reside in two separated geographical areas and have interspersed home ranges as shown in @fig-esa, which features a plot of the bobcat and coyote locations in the context of the extracted land cover data. @fig-hfp reveals the human footprint in the area, which is generally low except for some settlements and country roads.
+@prugh2023fear provide data for 29 coyotes and 30 bobcats collected between June 2018 and June 2022. Two animals from each dataset were completely excluded from the analysis because of data sparsity issues. There was partly faulty data for one bobcat, which was also excluded. The majority of the data was usable. 
+
+@fig-esa shows that the two species reside in two separated geographical areas and have interspersed home ranges. It also features a plot of the animal locations in the context of the extracted land cover data. @fig-hfp reveals the human footprint in the area, which is generally low except for some settlements and country roads.
 
 ![Bobcat and coyote locations in the context of the land cover data](img/esa_landcover_study_area_with_animals.png){#fig-esa width="85%"}
 
 ![HFP-100 data with bobcat and coyote tracks shown in black and relevant area in red](img/hfp.png){#fig-hfp width="85%"}
 
-The data sampling intervals are intended to be four hours, however they are irregular with many outliers (see @fig-bobcat-coyote-sampling-outliers). In addition, the bobcat intervals are less dense and less regular in comparison. @fig-bobcat-coyote-sampling shows a box plot for the sampling intervals with outliers removed for readability.
+The data sampling intervals are intended to be four hours, however they are irregular with many outliers (see @fig-sampling-rates). In addition, the bobcat intervals are less dense and less regular in comparison.
 
 ::: {#fig-sampling-rates layout-ncol="2"}
 ![With outliers](img/bobcat_coyote_sampling_rates_outliers.png){#fig-bobcat-coyote-sampling-outliers}
@@ -181,7 +183,8 @@ axis(2, at = c(0.05, 0.5, 5, 50, 500), labels = c("0.05", "0.5", "5", "50", "500
 box()
 ```
 
-TBD For habitat selection, the results are as follows ...
+For habitat selection, deriving statistically significant results from the bobcat data was not possible. The results for the coyote data are shown in 
+
 
 # Model validation
 
@@ -199,7 +202,7 @@ Note that there is one fox with an extraordinarily large home range in @fig-home
 
 While technical aspects such as sampling intervals and home range estimator have significant influence on the calculation results, they play a secondary role in comparison to the difference in fox behavior, which enables the chosen approach of comparing data from heterogeneous sources.
 
-TBD For the habitat selection, ...
+Another instance of data aspects having large effects on the results was observed for the statistical modelling. While we could fit a model for coyote data, this was not possible for the bobcat data. We suspect that the required re-sampling because of the initially irregular sampling rates as shown in @fig-sampling-rates played a role.
 
 # Conclusion
 
