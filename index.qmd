@@ -90,7 +90,7 @@ The bobcat and coyote data from @prugh2023fear contains data for 29 coyotes and 
 
 ![HFP-100 data with bobcat and coyote tracks shown in black and relevant area in red](img/hfp.png){#fig-hfp width="85%"}
 
-The data sampling intervals are intended to be four hours. In practice, they are irregular with many outliers (see @fig-bobcat-coyote-sampling-outliers), and differ between the two species. The bobcat intervals are less dense and less regular in comparison. @fig-bobcat-coyote-sampling shows a boxplot for the sampling intervals with outliers removed for readability.
+The data sampling intervals are intended to be four hours. In practice, they are irregular with many outliers (see @fig-bobcat-coyote-sampling-outliers), and differ between the two species. The bobcat intervals are less dense and less regular in comparison. @fig-bobcat-coyote-sampling shows a box plot for the sampling intervals with outliers removed for readability.
 
 
 
@@ -99,7 +99,7 @@ The data sampling intervals are intended to be four hours. In practice, they are
 
 ![With outliers removed](img/bobcat_coyote_sampling_rates.png){#fig-bobcat-coyote-sampling}
 
-Boxplots of sampling rates for bobcat and coyote data
+Box plots of sampling rates for bobcat and coyote data
 :::
 
 ## Methodology {#sec-methodology}
@@ -132,7 +132,7 @@ To compare land cover choices, which translate into habitat characteristics, sev
 
 The resulting home ranges for the UK wader nesting season time frame are shown in @fig-home-ranges-bylot and @fig-home-ranges-wiltshire. The median home range size for the foxes in Bylot (75.3 km<sup>2</sup>) is more than 65 times bigger compared to the foxes in Wiltshire (1.1 km<sup>2</sup>). The home ranges for the sub-sampled Wiltshire data are shown in @fig-home-ranges-wiltshire-sampled24h. The median home range size is 0.56 km<sup>2</sup> for the sampled data, which is roughly half as much as for the full data.
 
-![Home ranges for Bylot foxes (March 15th to June 15th, 2012)](img/home_range_bylot_wader.png){#fig-home-ranges-bylot}
+![Home ranges for Bylot foxes (March 15th to June 15th, 2012)](img/home_range_bylot_wader.png){#fig-home-ranges-bylot width="75%"}
 
 ::: {#fig-sampling layout-ncol="2"}
 ![10/60 minute sampling interval](img/home_range_wiltshire_wader.png){#fig-home-ranges-wiltshire}
@@ -142,7 +142,7 @@ The resulting home ranges for the UK wader nesting season time frame are shown i
 Home ranges for Wiltshire foxes (March 15th to June 15th, 2019)
 :::
 
-Similar differences in order of magnitude between remote and rural fox home ranges can also be observed for the monthly home range results shown as a boxplot in @fig-home-ranges-boxplot. Note that outliers are removed, in particular the irregular data for Herschel (as seen in @fig-herschel-map). The accompanying monthly home range plots can be found in the Appendix in @fig-monthly-home-ranges-wiltshire, @fig-monthly-home-ranges-bylot, and @fig-monthly-home-ranges-herschel.
+Similar differences in order of magnitude between remote and rural fox home ranges can also be observed for the monthly home range results shown as a box plot in @fig-home-ranges-boxplot. Note that outliers are removed, in particular the irregular data for Herschel (as seen in @fig-herschel-map). The accompanying monthly home range plots can be found in the Appendix in @fig-monthly-home-ranges-wiltshire, @fig-monthly-home-ranges-bylot, and @fig-monthly-home-ranges-herschel.
 
 ```{r}
 #| label: red-fox-data-read-monthly-results
@@ -191,17 +191,24 @@ axis(2, at = c(0.05, 0.5, 5, 50, 500), labels = c("0.05", "0.5", "5", "50", "500
 box()
 ```
 
-For habitat selection, there are 11 categories: tree cover, shrubland, grassland, cropland, built-up, bare/sparse vegetation, snow and ice, permanent water bodies, herbaceous wetland, mangroves, moss and lichen.
+TBD For habitat selection, there are 11 categories: tree cover, shrubland, grassland, cropland, built-up, bare/sparse vegetation, snow and ice, permanent water bodies, herbaceous wetland, mangroves, moss and lichen.
 
 # Discussion
 
-The fox home range results differ enormously between rural and remote areas. We conclude that human presence impacts fox movement behavior significantly, with availability of anthropogenic food sources likely being relevant. The influence of technical aspects, like sampling intervals, on home range calculation results is significant. Wiltshire fox home ranges are overestimated in comparison to Bylot fox home ranges, because of the higher amount of data points available. It also demonstrates that the influence of sampling intervals is definitely present. However, it plays a secondary role in comparison to the difference in fox behavior, which enables the chosen approach of comparing data from heterogeneous sources.
+The fox home range size results differ enormously between rural and remote areas. We conclude that human presence impacts fox movement behavior significantly, with availability of anthropogenic food sources likely being relevant. The red foxes in the wild 
 
-It is interesting to see that the fox home ranges for Bylot and Herschel are similar, even if the islands are different in size with Bylot being a hundred times larger. Note that there is one fox with an extraordinarily large home range in @fig-home-ranges-wiltshire. @kobryn2023foxes report similar patterns with a small number of foxes covering much larger areas than others. They conclude that potential for extensive movement patterns in urban foxes exists, and that in some studies such outlier data is either removed or not trackable to begin with because of hardware setup restrictions, therefore underestimating home ranges. In this case there are no such issues, however for most of the foxes a small home range can be observed.
+Technical aspects like sampling intervals, also have significant influence on home range calculation results. 
 
-TBD Note that the habitat selection results are not in line with what the original paper by @prugh2023fear found. Their insight was that in intact ecosystems, large carnivores have a regulating influence on smaller predators such as coyotes, but in ecosystems with humans presence, smaller predators animals prefer developed areas to avoid larger predators. In our case, large carnivore data was not included in the analysis.
+Wiltshire fox home ranges are overestimated in comparison to Bylot fox home ranges, because of the higher amount of data points available. 
 
-## Model validation
+It also demonstrates that the influence of sampling intervals is definitely present. However, it plays a secondary role in comparison to the difference in fox behavior, which enables the chosen approach of comparing data from heterogeneous sources.
+
+It is interesting to see that the fox home ranges for Bylot and Herschel are similar, even if the islands are different in size with Bylot being a hundred times larger. 
+
+Note that there is one fox with an extraordinarily large home range in @fig-home-ranges-wiltshire. @kobryn2023foxes report similar patterns with a small number of foxes covering much larger areas than others. They conclude that potential for extensive movement patterns in urban foxes exists, and that in some studies such outlier data is either removed or not trackable to begin with because of hardware setup restrictions, therefore underestimating home ranges. In this case there are no such issues, however for most of the foxes a small home range can be observed.
+
+
+# Model validation
 
 According to @rykiel1996testing, model validation means demonstrating that a model is acceptable for its intended use. The purpose, criteria, and context of the model must be specified.
 
@@ -209,7 +216,7 @@ For the purpose of home range comparison, two models were defined comprised of d
 
 Since the geographic location context was diverse, to exclude distortions in the coordinate system as a potential unwanted influence, the results for Bylot island were spot checked for three applicable coordinate systems: WGS84 geographic coordinate system (EPSG:4326), NAD 83 / Statistics Canada Lambert projection (EPSG:3347), and Universal Transverse Mercator (UTM) zone 17N (EPSG:2958). These were identified using the [CRS Explorer](https://crs-explorer.proj.org/). The differences in the median home rage size results (UK wader season) for the foxes in Bylot were minor: 75.3 km<sup>2</sup> for WGS84, 73.3 km<sup>2</sup> for EPSG:3347, and 75.8 km<sup>2</sup> for EPSG:2958.
 
-For the habitat selection TBD
+For the habitat selection, statistical model validation was performed.
 
 # Conclusion
 
