@@ -47,15 +47,15 @@ saveRDS(ssf_coyote, file = "models/ssf_coyote_model.rds")
 
 summary(ssf_coyote)
 
-coyote_ssf_data1 <- coyote_ssf_data |> 
-  group_by(step_id_) |> 
-  mutate(samp = sample(n())) |> 
-  filter(samp <= 5, case_binary_ == 0) |> mutate(id = NA) 
+#coyote_ssf_data1 <- coyote_ssf_data |> 
+#  group_by(step_id_) |> 
+#  mutate(samp = sample(n())) |> 
+#  filter(samp <= 5, case_binary_ == 0) |> mutate(id = NA) 
 
-coy_pred <- predict(ssf_coyote, coyote_ssf_data1, re.form = NA, se.fit = TRUE)
-coyote_ssf_data1$fit <- coy_pred$fit
-coyote_ssf_data1$se <- coy_pred$se
-coyote_ssf_data1 <- coyote_ssf_data1 |> ungroup()
+#coy_pred <- predict(ssf_coyote, coyote_ssf_data1, re.form = NA, se.fit = TRUE)
+#coyote_ssf_data1$fit <- coy_pred$fit
+#coyote_ssf_data1$se <- coy_pred$se
+#coyote_ssf_data1 <- coyote_ssf_data1 |> ungroup()
 
 # Marginal effects of HFP by land cover
 trends_coyote <- emtrends(ssf_coyote, ~ land_use_grouped, var = "human_footprint") |>
@@ -74,17 +74,17 @@ ggplot(trends_coyote, aes(x = land_use_grouped, y = human_footprint.trend)) +
   theme_minimal()
 
 # Create prediction dataset: only available steps, 5 per stratum
-coyote_pred_data <- coyote_ssf_data |>
-  group_by(step_id_) |>
-  mutate(samp = sample(n())) |>
-  filter(case_binary_ == 0, samp <= 5) |>
-  ungroup()
+#coyote_pred_data <- coyote_ssf_data |>
+#  group_by(step_id_) |>
+#  mutate(samp = sample(n())) |>
+#  filter(case_binary_ == 0, samp <= 5) |>
+#  ungroup()
 
 # Predict fixed effect response (log-RSS), store SEs too
-coyote_pred <- predict(ssf_coyote, newdata = coyote_pred_data, re.form = NA, se.fit = TRUE)
+#coyote_pred <- predict(ssf_coyote, newdata = coyote_pred_data, re.form = NA, se.fit = TRUE)
 
-coyote_pred_data <- coyote_pred_data |>
-  mutate(fit = coyote_pred$fit, se = coyote_pred$se)
+#coyote_pred_data <- coyote_pred_data |>
+#  mutate(fit = coyote_pred$fit, se = coyote_pred$se)
 
 ggplot(trends_coyote, aes(x = land_use_grouped, y = human_footprint.trend)) +
   geom_hline(yintercept = 0, linetype = "dashed", color = "grey60") +
