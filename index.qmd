@@ -17,14 +17,14 @@ keep-tex: true
 
 # Abstract
 
-We investigate how human activity influences the movement patterns of wild animals. Using tracking data from red foxes, bobcats, and coyotes across rural and remote areas in England, Canada, and the US, we analyze home range sizes and habitat selection in relation to human footprint and land cover data.
+We investigate how human activity influences the movement patterns of wild animals. Using tracking data from red foxes, bobcats, and coyotes across rural and remote areas in England, Canada, and the US, we analyze home range sizes and habitat selection in relation to human footprint and land cover.
 
 # Introduction
 
 Disturbance by humans has widespread impacts on the movements of animals, as confirmed by a large-scale meta study by @doherty2021human. In this paper, two related research questions are addressed:
 
-1.  Home range size implications: Do animals exhibit smaller home ranges in high human impact areas? This is examined by comparing red fox (vulpes vulpes) home ranges in low and high human impact areas.
-2.  Habitat selection in human-influenced landscapes: How do animals select habitats under varying levels of human presence? This is analysed based on bobcat (lynx rufus) and coyote (canis latrans) data from a national park area.
+1.  Home range size implications: Do animals exhibit smaller home ranges in high human impact areas? This is examined by comparing red fox (*vulpes vulpes*) home ranges in low and high human impact areas.
+2.  Habitat selection in human-influenced landscapes: How do animals select habitats under varying levels of human presence? This is analysed based on bobcat (*lynx rufus*) and coyote (*canis latrans*) data from a national park area.
 
 Different data sets are used for each research question. Relying on Movebank data, as described in @sec-movebank, presents additional challenges because data is used for purposes it was not originally collected for, and compared between different studies.
 
@@ -34,7 +34,7 @@ This section describes the data sets, the steps taken to prepare and process the
 
 ## Data sets
 
-The Movebank database by @kays2022movebank provides means for researchers to publish animal tracking data for public use, e.g. under Creative Commons licenses. The following data is selected: Red fox data from @porteus2024movement for the outskirt areas of villages in Wiltshire, UK and from @lai2022red for the remote uninhabited islands Bylot and Herschel in Canada, and bobcat and coyote data from @prugh2023fear for remote areas with some rural structures in northern Washington, US. For the human footprint data, the global terrestrial human footprint data by @gassert2023operational is chosen. For land cover, satellite data described in @zanaga2022esa is employed.
+The Movebank database by @kays2022movebank enables researchers to publish animal tracking data for public use. The following data is selected: Red fox data from @porteus2024movement for the outskirt areas of villages in Wiltshire, UK and from @lai2022red for the remote uninhabited islands Bylot and Herschel in Canada, and bobcat and coyote data from @prugh2023fear for remote areas with some rural structures in northern Washington, US. For the human footprint data, the global terrestrial human footprint data by @gassert2023operational is chosen. For land cover, satellite data described in @zanaga2022esa is employed.
 
 ## Data preparation and processing
 
@@ -48,7 +48,7 @@ The R code for data download, preprocessing, and serialization of relevant data 
 
 ### Human footprint data
 
-The global 100 meter resolution terrestrial human footprint data (HFP-100) is a raster data set using Mollweide projection as described by @lapaine2011mollweide. The 2020 version of the data was used. Only the relevant areas were downloaded using a 200 km buffer around the tracking points, and projected to the WGS84 coordinate system: [HFP-100 download](https://elkeelke.github.io/MovebankProject/preprocessing_HFP_subsetting.html).
+The global 100 meter resolution terrestrial human footprint data (HFP-100) is a raster data set using Mollweide projection as described by @lapaine2011mollweide. The 2020 version of the data was used. The relevant areas were downloaded using a 125 km buffer around the tracking points, and projected to the WGS84 coordinate system: [HFP-100 download](https://elkeelke.github.io/MovebankProject/preprocessing_HFP_subsetting.html).
 
 ### Land cover data
 
@@ -56,9 +56,11 @@ The relevant European Space Agency (ESA) WorldCover 2021 data at 10 m resolution
 
 ## Data exploration and analysis
 
+This section describes the data exploration steps taken for read fox data, and for bobcat/coyote data.
+
 ### Red fox data {#sec-redfoxdata}
 
-Wiltshire data (see @fig-wiltshire-map) was collected between 2016 to 2019 during the UK wader nesting season, which was defined to be March 15th to June 15th, for 35 foxes in total. It was sampled at 10 and 60 minute rates. The research team controlled the sampling rate remotely to save battery at times the data was considered less interesting.
+Data from Wiltshire (see @fig-wiltshire-map) was collected between 2016 to 2019 during the UK wader nesting season, which was defined to be March 15th to June 15th, for 35 foxes in total. It was sampled at 10 and 60 minute rates. The research team controlled the sampling rate remotely to save battery at times the data was considered less interesting.
 
 ![High level view of animal GPS tracks in Wiltshire](img/wiltshire_map.png){#fig-wiltshire-map}
 
@@ -70,7 +72,7 @@ Wiltshire data (see @fig-wiltshire-map) was collected between 2016 to 2019 durin
 Maps of Bylot and Herschel island, with high level view of animal GPS tracks (unfiltered).
 :::
 
-Bylot (see @fig-bylot-map) and Herschel (see @fig-herschel-map) data was collected all year round, at a much lower sampling rate of once per day, at random afternoon times of the day. The collection period was June 2009 to Feb 2010 for Herschel and from 2011 to 2015 for Bylot, for two foxes per island. @fig-datapoints-year provides an overview of the amount of data points available per year. There is much more data from Wiltshire because of the higher number of foxes and the higher sampling rate. Looking at the breakdowns by month as shown in @fig-datapoints-month reveals seasonal differences in the amount of data available.
+Data from Bylot (see @fig-bylot-map) and Herschel (see @fig-herschel-map) was collected all year round, at a much lower sampling rate of once per day at random afternoon times of the day. The collection period was June 2009 to Feb 2010 for Herschel and from 2011 to 2015 for Bylot, for two foxes each per island. @fig-datapoints-year provides an overview of the amount of data points available per year. There is much more data from Wiltshire because of the higher number of foxes and the higher sampling rate. Looking at the breakdowns by month as shown in @fig-datapoints-month reveals seasonal differences in the amount of data available.
 
 ::: {#fig-data-points layout-ncol="2"}
 ![Per year](img/year_count.png){#fig-datapoints-year}
@@ -82,17 +84,23 @@ Amount of data per year and month
 
 ### Bobcat and coyote data
 
-The bobcat and coyote data from @prugh2023fear contains data for 29 coyotes and 30 bobcats collected between June 2018 and June 2022. They reside in two separated geographical areas and have species-interspersed home ranges. TBD some animal were filtered out, describe why.
+The bobcat and coyote data from @prugh2023fear contains data for 29 coyotes and 30 bobcats collected between June 2018 and June 2022. They reside in two separated geographical areas and have species-interspersed home ranges as shown in @fig-esa, which features a plot of the bobcat and coyote locations in the context of the extracted land cover data. @fig-hfp reveals the human footprint in the area, which is generally low except for some settlements and country roads.
 
-@fig-esa shows a plot of the bobcat and coyote locations in the context of the extracted land cover data. @fig-hfp reveals the human footprint in the area, which is generally low except for some settlements and country roads.
+![Bobcat and coyote locations in the context of the land cover data](img/esa_landcover_study_area_with_animals.png){#fig-esa width="85%"}
 
-![Bobcat and coyote locations in the context of the land cover data](img/esa_landcover_study_area_with_animals.png){#fig-esa width="75%"}
+![HFP-100 data with bobcat and coyote tracks shown in black and relevant area in red](img/hfp.png){#fig-hfp width="85%"}
 
-![HFP-100 data with bobcat and coyote tracks shown in black and relevant area in red](img/hfp.png){#fig-hfp width="75%"}
+The data sampling intervals are intended to be four hours. In practice, they are irregular with many outliers (see @fig-bobcat-coyote-sampling-outliers), and differ between the two species. The bobcat intervals are less dense and less regular in comparison. @fig-bobcat-coyote-sampling shows a boxplot for the sampling intervals with outliers removed for readability.
 
-The data sampling intervals are intended to be four hours. In practice, they are irregular with many outliers, and differ between the two species. The bobcat intervals are less dense and less regular in comparison. @fig-bobcat-coyote-sampling shows a boxplot for the sampling intervals. Outliers are removed for readability. 
 
-![Boxplot of sampling rates for bobcat and coyote data, with outliers removed](img/bobcat_coyote_sampling_rates.png){#fig-bobcat-coyote-sampling}
+
+::: {#fig-sampling-rates layout-ncol="2"}
+![With outliers](img/bobcat_coyote_sampling_rates_outliers.png){#fig-bobcat-coyote-sampling-outliers}
+
+![With outliers removed](img/bobcat_coyote_sampling_rates.png){#fig-bobcat-coyote-sampling}
+
+Boxplots of sampling rates for bobcat and coyote data
+:::
 
 ## Methodology {#sec-methodology}
 
@@ -116,7 +124,7 @@ Finally, an analysis of monthly home ranges is conducted on all three data sets 
 
 Movement paths are analyzed to identify patterns in speed, direction, and habitat use. Step lengths and turning angles help infer behavioral states. Step-selection functions (SSFs) as described by @fortin2005wolves are employed to detect habitat preferences relative to movement patterns. This allows to quantify how animals respond to environmental covariates, such as human footprint and land cover. Selection patterns across species and regions are then compared to assess how habitat preferences vary with human influence.
 
-Since SSFs require a regular sampling rate which the original data does not provide (see @fig-bobcat-coyote-sampling), the animals tracks were re-sampled to a four hour window for coyotes and an eight hour window for bobcats. The amt library's track_resample() function by @signer2019animal was used, with a specified tolerance window of 10 minutes. The re-sampled tracks are translated into animal steps with certain step lengths and turning angles as the main input to the SSF. The control group for statistical analysis is comprised of randomly generated steps. 
+Since SSFs require a regular sampling rate which the original data does not provide (see @fig-bobcat-coyote-sampling), the animals tracks were re-sampled to a four hour window for coyotes and an eight hour window for bobcats. The amt library's track_resample() function by @signer2019animal was used, with a specified tolerance window of 10 minutes. The re-sampled tracks are translated into animal steps with certain step lengths and turning angles as the main input to the SSF. The control group for statistical analysis is comprised of randomly generated steps.
 
 To compare land cover choices, which translate into habitat characteristics, several statistical approaches are possible. The classical approach is to use conditional logistic regression to compare between observed and random steps (clogit, see @manly2007resource). However, for datasets containing several animals, a Poisson-based approach with stratum-specific fixed intercepts as introduced by @muff2020accounting is likelihood-equivalent and often returns better results. Interpreting the intercepts as random effects allows implementation as a generalized linear mixed model (GLMM, see @bolker2009generalized), which in turn enables introducing random slopes per individual animal.
 
@@ -183,7 +191,6 @@ axis(2, at = c(0.05, 0.5, 5, 50, 500), labels = c("0.05", "0.5", "5", "50", "500
 box()
 ```
 
-
 For habitat selection, there are 11 categories: tree cover, shrubland, grassland, cropland, built-up, bare/sparse vegetation, snow and ice, permanent water bodies, herbaceous wetland, mangroves, moss and lichen.
 
 # Discussion
@@ -203,6 +210,10 @@ For the purpose of home range comparison, two models were defined comprised of d
 Since the geographic location context was diverse, to exclude distortions in the coordinate system as a potential unwanted influence, the results for Bylot island were spot checked for three applicable coordinate systems: WGS84 geographic coordinate system (EPSG:4326), NAD 83 / Statistics Canada Lambert projection (EPSG:3347), and Universal Transverse Mercator (UTM) zone 17N (EPSG:2958). These were identified using the [CRS Explorer](https://crs-explorer.proj.org/). The differences in the median home rage size results (UK wader season) for the foxes in Bylot were minor: 75.3 km<sup>2</sup> for WGS84, 73.3 km<sup>2</sup> for EPSG:3347, and 75.8 km<sup>2</sup> for EPSG:2958.
 
 For the habitat selection TBD
+
+# Conclusion
+
+Human activity influences home range sizes and habitat selection significantly.
 
 # Appendix
 

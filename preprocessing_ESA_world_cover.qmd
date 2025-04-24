@@ -115,7 +115,8 @@ ggplot() +
       "95" = "#00CF75", "100" = "#FAE6A0"
     ),
     labels = class_labels,
-    na.value = NA
+    na.translate = FALSE,
+    name = "Land cover class"
   ) +
   geom_sf(
     data = animal_sf,
