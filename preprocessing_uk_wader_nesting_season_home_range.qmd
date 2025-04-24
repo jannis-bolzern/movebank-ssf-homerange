@@ -30,7 +30,7 @@ foxes_herschel <- movebank_download_study(
 )
 ```
 
-### Check if the data is looks correct (i.e., positioned on the correct island)
+### Check if the data looks correct (i.e., positioned on the correct island)
 
 ```{r}
 library("sf")
@@ -70,7 +70,7 @@ tmap_save(map, filename = "img/wiltshire_map.html")
 webshot("img/wiltshire_map.html", file = "img/wiltshire_map.png", vwidth = 800, vheight = 600)
 ```
 
-## Counts
+## Produce the counts for data per month and per year breakdowns
 
 ```{r}
 library("lubridate")
@@ -107,7 +107,7 @@ library("ggplot2")
 ggplot(year_count, aes(x = factor(year), y = count, color = source, fill = source)) +
   geom_bar(stat = "identity", width = 0.5) +
   facet_wrap(~ ifelse(source %in% c("Bylot", "Herschel"), "Bylot/Herschel", "Wiltshire"), scales = "free_y") +
-  labs(x = "Year", y = "Number of data points") +
+  labs(x = "Year", y = "Number of data points", fill = "Source", color = "Source") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 90)) +
   theme(axis.text.x = element_text(size = 6)) +
@@ -122,7 +122,7 @@ ggplot(month_count, aes(x = as.factor(month_name), y = count, color = source)) +
   geom_point() +
   scale_x_discrete() +
   facet_wrap(~ ifelse(source %in% c("Bylot", "Herschel"), "Bylot/Herschel", "Wiltshire"), scales = "free_y") +
-  labs(x = "Month", y = "Number of data points") +
+  labs(x = "Month", y = "Number of data points", fill = "Source", color = "Source") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 90)) +
   theme(axis.text.x = element_text(size = 6)) +
@@ -131,7 +131,7 @@ ggplot(month_count, aes(x = as.factor(month_name), y = count, color = source)) +
 ggsave("img/month_count.png")
 ```
 
-## Filtered data (UK wader nesting season)
+## Download filtered data for the UK wader nesting season
 
 ```{r}
 foxes_wiltshire_filtered <- movebank_download_study(
@@ -149,16 +149,18 @@ foxes_bylot_filtered <- movebank_download_study(
 )  
 ```
 
+## Produce home range plots and medians
+
 ```{r}
 #| label: fig-home-ranges-bylot
 #| echo: false
 #| warning: false
 #| fig-cap: "Home ranges for Bylot foxes (March 15th to June 15th, 2012)"
 library("ggplot2")
-c1_tracks <- mt_track_lines(foxes_bylot_filtered)
-c1_mcp <- st_convex_hull(c1_tracks)
+bylot_tracks <- mt_track_lines(foxes_bylot_filtered)
+bylot_mcp <- st_convex_hull(bylot_tracks)
 
-ggplot(c1_mcp, aes(fill = as.factor(individual_id))) +
+ggplot(bylot_mcp, aes(fill = as.factor(individual_id))) +
   geom_sf(alpha = 0.4) +
   labs(x = "Longitude", y = "Latitude", fill = "Fox id")
 ggsave("img/home_range_bylot_wader.png")
@@ -170,9 +172,9 @@ ggsave("img/home_range_bylot_wader.png")
 #| echo: false
 #| warning: false
 
-w_tracks <- mt_track_lines(foxes_wiltshire_filtered)
-w_mcp <- st_convex_hull(w_tracks)
-ggplot(w_mcp, aes(fill = as.factor(individual_id))) +
+wiltshire_tracks <- mt_track_lines(foxes_wiltshire_filtered)
+wiltshire_mcp <- st_convex_hull(wiltshire_tracks)
+ggplot(wiltshire_mcp, aes(fill = as.factor(individual_id))) +
   geom_sf(alpha = 0.4) +
   labs(x = "Longitude", y = "Latitude", fill = "Fox id")
 ggsave("img/home_range_wiltshire_wader.png")
@@ -181,38 +183,38 @@ ggsave("img/home_range_wiltshire_wader.png")
 ```{r}
 #| label: red-fox-data-filtered-medians
 #| include: false
-c1_area <- st_area(c1_mcp)
-c1_median <- median(c1_area)
-print(c1_median)
-w_area <- st_area(w_mcp)
-w_median <- median(w_area)
-print(w_median)
+bylot_area <- st_area(bylot_mcp)
+bylot_median <- median(bylot_area)
+print(bylot_median)
+wiltshire_area <- st_area(wiltshire_mcp)
+wiltshire_median <- median(wiltshire_area)
+print(wiltshire_median)
 ```
 
-### Check if there is distortion in the coordinate system (Bylot is high up North)
+## Check if there is coordinate system related distortion in the results for Bylot islands, which is high up north
 
 ```{r}
-# EPSG:3154 NAD83(CSRS) / UTM zone 7N Herschel Island, also known as Qikiqtaruk,  69°35'23" N, 139°05'57" W
-
-# c1 is Bylot island, which is 11.067 km^2 and split over two UTM zones:
-# EPSG:2958	NAD83(CSRS) / UTM zone 17N
-# EPSG:2959 NAD83(CSRS) / UTM zone 18N
-# This coordinate system covers them both: EPSG:3347 NAD83 / Statistics Canada Lambert
 convert_m2_to_km2 <- function(area) {
   return(area * 0.000001)
 }
 
-c1_mcp_3347 <- st_transform(c1_mcp, 3347)
-print(convert_m2_to_km2(median(st_area(c1_mcp_3347))))
+# EPSG:3154 NAD83(CSRS) / UTM zone 7N Herschel Island, also known as Qikiqtaruk,  69°35'23" N, 139°05'57" W
 
+# This coordinate system covers them both: EPSG:3347 NAD83 / Statistics Canada Lambert
+bylot_mcp_3347 <- st_transform(bylot_mcp, 3347)
+print(convert_m2_to_km2(median(st_area(bylot_mcp_3347))))
+
+# Bylot island is 11.067 km^2 large and split over two UTM zones:
+# EPSG:2958	NAD83(CSRS) / UTM zone 17N
+# EPSG:2959 NAD83(CSRS) / UTM zone 18N
 # See what happens if we use the partial coordinate systems
-c1_mcp_2958 <- st_transform(c1_mcp, 2958)
-print(convert_m2_to_km2(median(st_area(c1_mcp_2958))))
-c1_mcp_2959 <- st_transform(c1_mcp, 2959)
-print(convert_m2_to_km2(median(st_area(c1_mcp_2959))))
+bylot_mcp_2958 <- st_transform(bylot_mcp, 2958)
+print(convert_m2_to_km2(median(st_area(bylot_mcp_2958))))
+bylot_mcp_2959 <- st_transform(bylot_mcp, 2959)
+print(convert_m2_to_km2(median(st_area(bylot_mcp_2959))))
 ```
 
-## Sampled filtered data for UK wader nesting season 
+## Download sampled filtered data for UK wader nesting season 
 
 ```{r}
 #| label: red-fox-data-filtered-sampled
@@ -221,15 +223,17 @@ foxes_wiltshire_filtered_sampled_24h <- foxes_wiltshire_filtered |>
   mt_filter_per_interval(unit = "24 hours")
 ```
 
+## Produce home range plots and medians
+
 ```{r}
 #| label: fig-home-ranges-wiltshire-sampled24h
 #| fig-cap: "Home ranges for Wiltshire foxes (March 15th to June 15th, 2019, 24 hour sampling interval)"
 #| echo: false
 #| warning: false
 
-w_tracks <- mt_track_lines(foxes_wiltshire_filtered_sampled_24h)
-w_mcp <- st_convex_hull(w_tracks)
-ggplot(w_mcp, aes(fill = as.factor(individual_id))) +
+wiltshire_tracks <- mt_track_lines(foxes_wiltshire_filtered_sampled_24h)
+wiltshire_mcp <- st_convex_hull(wiltshire_tracks)
+ggplot(wiltshire_mcp, aes(fill = as.factor(individual_id))) +
   geom_sf(alpha = 0.4) +
   labs(x = "Longitude", y = "Latitude", fill = "Fox id")
 ggsave("img/home_range_wiltshire_wader_sampled.png")
@@ -238,8 +242,8 @@ ggsave("img/home_range_wiltshire_wader_sampled.png")
 ```{r}
 #| label: red-fox-data-filtered-sampled-median
 #| include: false
-w_area <- st_area(w_mcp)
-w_median <- median(w_area)
-print(w_median)
+wiltshire_area <- st_area(wiltshire_mcp)
+wiltshire_median <- median(wiltshire_area)
+print(wiltshire_median)
 ```
 

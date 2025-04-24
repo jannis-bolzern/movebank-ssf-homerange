@@ -52,6 +52,12 @@ boxplot(sr ~ species, outline = FALSE, data = trackSummarySamples,
         ylab = "Sampling interval in hours")
 dev.off()
 
+png("img/bobcat_coyote_sampling_rates_outliers.png")
+boxplot(sr ~ species, outline = TRUE, data = trackSummarySamples, 
+        xlab = "", 
+        ylab = "Sampling interval in hours")
+dev.off()
+
 # Split into species ----------------------------------------------------------
 coyote <- filter(track, grepl("COY", id))
 bobcat <- filter(track, grepl("BOB", id))
