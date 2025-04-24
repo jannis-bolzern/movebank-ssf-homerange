@@ -27,11 +27,11 @@ animal_sf <- tracking_data |>
   st_transform("ESRI:54009")  # Mollweide projection
 
 # 3. CREATE STUDY AREA BUFFER --------------------------------------------------
-# Generate 200km buffer around tracking points
+# Generate 125km buffer around tracking points
 tracking_buffer <- animal_sf |>
   st_union() |>
   st_convex_hull() |>     # Create minimum convex polygon
-  st_buffer(200000)       # 200km buffer in meters (Mollweide uses meters)
+  st_buffer(125000)       # 125km buffer in meters (Mollweide uses meters)
 
 # 4. IDENTIFY RELEVANT HFP TILES -----------------------------------------------
 # Function to check tile overlap with study area
@@ -83,21 +83,19 @@ ggplot() +
     data = hfp_wgs84,
     maxcell = 1e6
   ) +
+  scale_fill_gradient(low = "grey", high = "#FF6F61", na.value = "white", name = "Human footprint index") +
   geom_sf(
     data = animal_sf,
-    color = "black",
-    size = 1,
+    aes(color = `individual-taxon-canonical-name`),
+    size = 0.1,
     alpha = 0.7
   ) +
-  geom_sf(
-    data = tracking_buffer,
-    color = "red",
-    size = 1,
-    alpha = 0
-  ) +  
-  labs(
-    title = "Animal tracks (in black) over human footprint",
-    fill = "Human footprint"
+  scale_color_manual(values = c("Canis latrans" = "black", "Lynx rufus" = "white"), 
+                     name = "Species") +
+  coord_sf(
+    xlim = c(-122, -116),
+    ylim = c(47, 49),
+    expand = TRUE
   ) +
   theme_minimal()
 ggsave("img/hfp.png")
