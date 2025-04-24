@@ -11,8 +11,16 @@ library("rnaturalearth")
 library("lubridate")
 library("sf")
 library("readr")
-library("ggplot2") # Keep ggplot related parts even if inaccessible.
+library("ggplot2")
 
+#' Flatten the array
+#'
+#' This function creates one big array out of an array of arrays.
+#'
+#' @param areas The arrays to flatten
+#'
+#' @return The flattened arrays
+#' @export
 flatten_array <- function(areas) {
   all_areas <- c()
   for (area in areas) {
@@ -21,6 +29,17 @@ flatten_array <- function(areas) {
   return(all_areas)
 }
 
+#' Calculate monthly home ranges
+#'
+#' This function downloads montly data from Movebank and performs home range calculation and plotting.
+#'
+#' @param ts_start The timestamp to start from
+#' @param num_months The number of months to calculate for
+#' @param study_id The Movebank study id
+#' @param license_string_with_quotes The MD5 license string for Movebank download, with quotes included
+#'
+#' @return A list with a ggplot object and an array of home range sizes
+#' @export
 calculate_monthly_home_ranges <- function(ts_start, num_months, study_id, license_string_with_quotes) {
   areas <- list()
   gg <- ggplot()
@@ -53,6 +72,8 @@ calculate_monthly_home_ranges <- function(ts_start, num_months, study_id, licens
 }
 ```
 
+## Bylot
+
 ```{r}
 results_bylot <- calculate_monthly_home_ranges(as.POSIXct("2011-07-01 00:00:00"), 44, 1371322147, '9559cb1b1cca51e9f3fd69812e5e22dc')
 write_csv(data.frame(areas = results_bylot$areas), "data/output_bylot.csv")
@@ -60,12 +81,16 @@ results_bylot$gg + labs(x = "Longitude", y = "Latitude", fill = "Fox id")
 ggsave("img/bylot_monthly.png")
 ```
 
+## Herschel
+
 ```{r}
 results_herschel = calculate_monthly_home_ranges(as.POSIXct("2009-07-01 00:00:00"), 9, 1371529289, '436e8205d0c2973115e2024b146a6ad5')
 write_csv(data.frame(areas = results_herschel$areas), "data/output_herschel.csv")
 results_herschel$gg + labs(x = "Longitude", y = "Latitude", fill = "Fox id")
 ggsave("img/herschel_monthly.png")
 ```
+
+## Wiltshire
 
 ```{r}
 results_wiltshire = calculate_monthly_home_ranges(as.POSIXct("2016-01-01 00:00:00"), 43, 3179890710, 'ffa36f79defe10eac9fe70f6502a17e0')

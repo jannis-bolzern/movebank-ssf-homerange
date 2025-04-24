@@ -30,7 +30,7 @@ foxes_herschel <- movebank_download_study(
 )
 ```
 
-### Check if the data is looks correct (i.e., positioned on the correct island)
+### Check if the data looks correct (i.e., positioned on the correct island)
 
 ```{r}
 library("sf")
@@ -70,7 +70,7 @@ tmap_save(map, filename = "img/wiltshire_map.html")
 webshot("img/wiltshire_map.html", file = "img/wiltshire_map.png", vwidth = 800, vheight = 600)
 ```
 
-## Counts
+## Produce the counts for data per month and per year breakdowns
 
 ```{r}
 library("lubridate")
@@ -131,7 +131,7 @@ ggplot(month_count, aes(x = as.factor(month_name), y = count, color = source)) +
 ggsave("img/month_count.png")
 ```
 
-## Filtered data (UK wader nesting season)
+## Download filtered data for the UK wader nesting season
 
 ```{r}
 foxes_wiltshire_filtered <- movebank_download_study(
@@ -148,6 +148,8 @@ foxes_bylot_filtered <- movebank_download_study(
   timestamp_end = as.POSIXct("2012-06-15 23:59:00")
 )  
 ```
+
+## Produce home range plots and medians
 
 ```{r}
 #| label: fig-home-ranges-bylot
@@ -189,7 +191,7 @@ w_median <- median(w_area)
 print(w_median)
 ```
 
-### Check if there is distortion in the coordinate system (Bylot is high up North)
+## Check if there is distortion in the coordinate system (Bylot is high up North)
 
 ```{r}
 # EPSG:3154 NAD83(CSRS) / UTM zone 7N Herschel Island, also known as Qikiqtaruk,  69°35'23" N, 139°05'57" W
@@ -212,7 +214,7 @@ c1_mcp_2959 <- st_transform(c1_mcp, 2959)
 print(convert_m2_to_km2(median(st_area(c1_mcp_2959))))
 ```
 
-## Sampled filtered data for UK wader nesting season 
+## Download sampled filtered data for UK wader nesting season 
 
 ```{r}
 #| label: red-fox-data-filtered-sampled
@@ -220,6 +222,8 @@ print(convert_m2_to_km2(median(st_area(c1_mcp_2959))))
 foxes_wiltshire_filtered_sampled_24h <- foxes_wiltshire_filtered |>
   mt_filter_per_interval(unit = "24 hours")
 ```
+
+## Produce home range plots and medians
 
 ```{r}
 #| label: fig-home-ranges-wiltshire-sampled24h
