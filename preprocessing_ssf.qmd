@@ -18,7 +18,6 @@ pacman::p_load(
 )
 
 # Settings for modeling ---------------------------------------------------
-
 nt <- parallel::detectCores() - 2
 options(scipen = 0)
 options(digits = 7)
@@ -28,7 +27,7 @@ options(digits = 7)
 coyote_ssf_data <- read_delim("data/coyote_ssf_data.csv") |> 
   filter(n > 100) # select animals with more than 100 fixes
 
-# fit SSF with glmmTMB following Muff et al (2019)
+# Fit SSF with glmmTMB following Muff et al (first published 2019)
 ssf_coyote <- glmmTMB(
   case_binary_ ~ -1 + 
     land_use_grouped * (human_footprint + I(human_footprint^2)) + 
@@ -40,12 +39,11 @@ ssf_coyote <- glmmTMB(
   data = coyote_ssf_data,
   map = list(theta = factor(c(1:8, NA))),
   # Set the value of the standard deviation of the strata (the last ranef) to large constant value. See Muff et al (2020) JAE
-  start = list(theta = c(rep(0, times = 8),log(1e3))),
+  start = list(theta = c(rep(0, times = 8), log(1e3))),
   control = glmmTMBControl(parallel = nt)
 )
 
 saveRDS(ssf_coyote, file = "models/ssf_coyote_model.rds")
-#ssf_coyote <- readRDS("models/ssf_coyote_model.rds")
 
 summary(ssf_coyote)
 
@@ -59,36 +57,13 @@ coyote_ssf_data1$fit <- coy_pred$fit
 coyote_ssf_data1$se <- coy_pred$se
 coyote_ssf_data1 <- coyote_ssf_data1 |> ungroup()
 
-#saveRDS(coyote_ssf_data1, "data/coyote_ssf_pred.rds")
-#coyote_ssf_pred <- readRDS("data/coyote_ssf_pred.rds")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # Marginal effects of HFP by land cover
 trends_coyote <- emtrends(ssf_coyote, ~ land_use_grouped, var = "human_footprint") |>
   summary(infer = c(TRUE, TRUE))
 
-
 emtrends(ssf_coyote, specs = ~ land_use_grouped, var = "human_footprint", 
          at = list(human_footprint = -0.1)) |>
   summary(infer = c(TRUE, TRUE))
-
 
 ggplot(trends_coyote, aes(x = land_use_grouped, y = human_footprint.trend)) +
   geom_point() +
@@ -111,10 +86,6 @@ coyote_pred <- predict(ssf_coyote, newdata = coyote_pred_data, re.form = NA, se.
 coyote_pred_data <- coyote_pred_data |>
   mutate(fit = coyote_pred$fit, se = coyote_pred$se)
 
-
-
-
-
 ggplot(trends_coyote, aes(x = land_use_grouped, y = human_footprint.trend)) +
   geom_hline(yintercept = 0, linetype = "dashed", color = "grey60") +
   geom_point(size = 3, color = "black") +
@@ -125,7 +96,6 @@ ggplot(trends_coyote, aes(x = land_use_grouped, y = human_footprint.trend)) +
     y = "Effect of Human Footprint"
   ) +
   theme_minimal(base_size = 13)
-
 
 # Bivariate density hex plot (continuous y-variable vs human footprint)
 hex_plot_fun <- function(data, yvar, ylab, title_) {
@@ -146,7 +116,6 @@ hex_plot_fun <- function(data, yvar, ylab, title_) {
     theme_bw() +
     theme(plot.title = element_text(hjust = 0.5))
 }
-
 
 hex_plot_fun(coyote_ssf_data, yvar = "log_sl_", ylab = "Log Step Length", title_ = "Coyote")
 hex_plot_fun(coyote_ssf_data, yvar = "cos_ta_", ylab = "Cosine Turning Angle", title_ = "Coyote")
@@ -215,14 +184,10 @@ ssf_bobcat_struc$parameters$theta[1] <- log(1e3)
 ssf_bobcat_struc$mapArg <- list(theta = factor(c(NA, 1:3)))
 ssf_bobcat <- glmmTMB:::fitTMB(ssf_bobcat_struc)
 
-#saveRDS(ssf_bobcat, file = "models/ssf_bobcat_model.rds")
-#ssf_bobcat <- readRDS("models/ssf_coyote_model.rds")
-
 summary(ssf_bobcat)
 confint(ssf_bobcat)
 
 # Marginal trends for bobcats
 trends_bobcat <- emtrends(ssf_bobcat, ~ land_use_grouped, var = "human_footprint") |> 
   summary(infer = c(TRUE, TRUE))
-
 ```
