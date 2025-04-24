@@ -118,11 +118,7 @@ Movement paths are analyzed to identify patterns in speed, direction, and habita
 
 Since SSFs requires a regular sampling rate which the original data does not provide (see @fig-bobcat-coyote-sampling), the animals tracks were re-sampled to a four hour window for coyotes and an eight hour window for bobcats. The amt library's track_resample() function by @signer2019animal was used, with a specified tolerance window of 10 minutes. The re-sampled tracks are translated into animal steps with certain step lengths and turning angles as the main input to the SSF. The control group for statistical analysis is comprised of randomly generated steps. 
 
-To compare land cover choices, which translate into habitat characteristics, several statistical approaches are possible. The classical approach is to use conditional logistic regression to compare between observed and randim steps (clogit, see @manly2007resource). However, for data with several animals the approach by @muff2020accounting is better suited.
-
-Ich habe mich ausserdem intensiv mit der Methode von Muff et al. auseinandergesetzt: Die Idee ist, dass die conditional logistic regression (wie sie bei survival::clogit verwendet wird) likelihood-äquivalent zu einem Poisson-Modell mit stratum-spezifischen Fixinterzepten ist. 
-
-Wenn man diese Interzepte dann als Random Effects mit einer sehr grossen festen Varianz interpretiert, kann man die ganze SSF als GLMM formulieren – und das ermöglicht uns auch, Random Slopes pro Individuum einzubauen.
+To compare land cover choices, which translate into habitat characteristics, several statistical approaches are possible. The classical approach is to use conditional logistic regression to compare between observed and random steps (clogit, see @manly2007resource). However, for datasets containing several animals, a poisson-based approach with stratum-specific fixed intercepts as introduced by @muff2020accounting is likelyhood equivalent and returns better results. Interpreting the intercepts as random effects allows implementation in a generalized linear mixed model (GLMM, see @bolker2009generalized), which in turn enables introducing random slopes per individual animal.
 
 # Results
 
