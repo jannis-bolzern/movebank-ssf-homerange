@@ -125,7 +125,12 @@ ggplot() +
   ) +
   scale_color_manual(values = c("Canis latrans" = "black", "Lynx rufus" = "white"), 
                      name = "Species") +
-  theme_minimal()
+  theme(
+    legend.background = element_rect(fill = "gray90", color = "black"),
+  ) +
+  guides(
+    color = guide_legend(override.aes = list(size = 4)),
+  )
 ggsave("img/esa_landcover_study_area_with_animals.png")
 
 # Create plot

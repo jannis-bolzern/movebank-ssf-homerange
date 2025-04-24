@@ -216,6 +216,6 @@ For the habitat selection TBD
 
 ## Use of Large Language Models and Generative AI
 
-Elke used @notebooklm for querying the papers cited in the references.
+Elke used @notebooklm for querying the papers cited in the references and @openai2025chatgpt for ggplot related queries.
 
 # References
