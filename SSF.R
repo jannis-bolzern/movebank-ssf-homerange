@@ -7,7 +7,8 @@ pacman::p_load(
   terra,
   glmmTMB,
   DHARMa,
-  emmeans
+  emmeans,
+  gratia
 )
 
 options(scipen = 999) # turn off scientific notation
@@ -161,7 +162,8 @@ options(digits = 7)
 # Fit SSF: Coyote -------------------------------------------------------------
 # Read SSF ready data
 coyote_ssf_data <- read_delim("data/coyote_ssf_data.csv") |> 
-  filter(n > 100) # select animals with more than 100 fixes
+  filter(n > 100) |>  # select animals with more than 100 fixes
+  mutate(land_use_grouped = as.factor(land_use_grouped))
 
 # fit SSF with glmmTMB following Muff et al (2019)
 ssf_coyote <- glmmTMB(
@@ -174,12 +176,11 @@ ssf_coyote <- glmmTMB(
   doFit = TRUE,
   data = coyote_ssf_data,
   map = list(theta = factor(c(1:8, NA))),
-  # Set the value of the standard deviation of the strata (the last ranef) to large constant value. See Muff et al (2020) JAE
   start = list(theta = c(rep(0, times = 8),log(1e3))),
   control = glmmTMBControl(parallel = nt)
 )
 
-saveRDS(ssf_coyote, file = "models/ssf_coyote_model.rds")
+#saveRDS(ssf_coyote, file = "models/ssf_coyote_model.rds")
 #ssf_coyote <- readRDS("models/ssf_coyote_model.rds")
 
 summary(ssf_coyote)
@@ -199,67 +200,194 @@ coyote_ssf_data1 <- coyote_ssf_data1 |> ungroup()
 
 
 
+# average effect plot function --------------------------------------------
+
+avg_eff_plot_hfp_landuse <- function(fittedResponse, nsim = 100, k = 10, showPeakValue = TRUE) {
+  
+  set.seed(123)
+  # Monte Carlo sampling of predictions based on fit ± se
+  fit_sample <- sapply(rep(1, nsim), function(i) {
+    rnorm(n = nrow(fittedResponse), mean = fittedResponse$fit, sd = fittedResponse$se)
+  })
+  
+  fit_sample_matrix <- matrix(fit_sample, nrow = nrow(fittedResponse), ncol = nsim)
+  
+  smooth_list <- list()
+  
+  for (j in 1:nsim) {
+    message("GAM smoothing sample ", j)
+    smooth_list[[j]] <- mgcv::bam(
+      fit_sample_matrix[, j] ~ s(human_footprint, by = land_use_grouped, bs = "ts", k = k) + land_use_grouped,
+      data = fittedResponse,
+      select = TRUE, discrete = TRUE, nthreads = nt
+    ) |>
+      gratia::smooth_estimates(unconditional = FALSE, overall_uncertainty = TRUE) |>
+      gratia::add_confint() |>
+      dplyr::rename(hfp = human_footprint)
+  }
+  
+  avg_smooth <- dplyr::bind_rows(smooth_list) |>
+    dplyr::group_by(.smooth, .by, land_use_grouped, hfp) |>
+    dplyr::summarise(
+      est = mean(.estimate),
+      upper_ci = mean(.upper_ci),
+      lower_ci = mean(.lower_ci),
+      .groups = "drop"
+    )
+  
+  # Faceted plot instead of overlaid lines
+  p <- ggplot(avg_smooth, aes(x = hfp, y = est)) +
+    geom_ribbon(aes(ymin = lower_ci, ymax = upper_ci), alpha = 0.25, fill = "steelblue", colour = NA) +
+    geom_line(color = "steelblue", size = 0.9) +
+    facet_wrap(~land_use_grouped, scales = "free_y") +
+    theme_minimal() +
+    labs(x = "Human Footprint", y = "Relative Use (log scale)") +
+    geom_hline(yintercept = 0, linetype = "dashed", color = "gray50")
+  
+  if (showPeakValue) {
+    peak_vals <- avg_smooth |>
+      group_by(land_use_grouped) |>
+      filter(est == max(est)) |>
+      slice(rep(1:n(), each = 2)) |>
+      mutate(est = ifelse(row_number() %% 2 == 1, est, -Inf))
+    
+    p <- p + geom_line(data = peak_vals, aes(x = hfp, y = est, group = land_use_grouped), 
+                       linetype = "dashed", size = 0.6, alpha = 0.3, color = "black")
+  }
+  
+  print(p)
+  return(list(plot = p))
+}
+
+
+coyote_ssf_pred<- coyote_ssf_pred |> 
+  mutate(land_use_grouped = as.factor(land_use_grouped))
+
+
+avg_eff_output <- avg_eff_plot_hfp_landuse(coyote_ssf_pred, nsim = 100, showPeakValue = TRUE)
+
+avg_eff_output[["plot"]][["plot_env"]][["peak_vals"]]
 
 
 
+# RSS ---------------------------------------------------------------------
+# No CI
 
+calc_rss_hfp_landcover <- function(model, data, land_use_col = "land_use_grouped", hfp_col = "human_footprint", n_points = 100) {
+  
+  levels <- unique(data[[land_use_col]])
+  all_rss <- purrr::map_dfr(levels, function(lc) {
+    
+    # Subset data for this land use class
+    dat_lc <- data |> filter(!!sym(land_use_col) == lc)
+    
+    # Range of human footprint within this class
+    hfp_range <- range(dat_lc[[hfp_col]], na.rm = TRUE)
+    hfp_seq <- seq(from = hfp_range[1], to = hfp_range[2], length.out = n_points)
+    
+    # Build newdata for prediction
+    newdata <- expand.grid(
+      human_footprint = hfp_seq,
+      land_use_grouped = lc
+    ) |> 
+      mutate(
+        `I(human_footprint^2)` = human_footprint^2,
+        log_sl_ = mean(data$log_sl_, na.rm = TRUE),
+        step_id_ = NA,
+        id = NA
+      )
+    
+    # Create a baseline: same data with lowest hfp
+    baseline <- newdata |> filter(human_footprint == min(human_footprint))
+    
+    # Predict
+    x1_pred <- predict(model, newdata = newdata, re.form = NA)
+    x2_pred <- predict(model, newdata = baseline[rep(1, nrow(newdata)), ], re.form = NA)
+    
+    # Calculate logRSS
+    rss_df <- newdata |>
+      mutate(
+        logRSS = x1_pred - x2_pred,
+        RSS = exp(logRSS),
+        land_use_grouped = lc
+      )
+    return(rss_df)
+  })
+  
+  return(all_rss)
+}
 
+rss_data <- calc_rss_hfp_landcover(model = ssf_coyote, data = coyote_ssf_data)
 
-
-
-
-
-
-
-
-
-
-
-# Marginal effects of HFP by land cover
-trends_coyote <- emtrends(ssf_coyote, ~ land_use_grouped, var = "human_footprint") |>
-  summary(infer = c(TRUE, TRUE))
-
-
-emtrends(ssf_coyote, specs = ~ land_use_grouped, var = "human_footprint", 
-         at = list(human_footprint = -0.1)) |>
-  summary(infer = c(TRUE, TRUE))
-
-
-ggplot(trends_coyote, aes(x = land_use_grouped, y = human_footprint.trend)) +
-  geom_point() +
-  geom_errorbar(aes(ymin = asymp.LCL, ymax = asymp.UCL), width = 0.2) +
-  geom_hline(yintercept = 0, linetype = "dashed") +
-  ylab("Effect of Human Footprint") +
-  xlab("Land Cover Type") +
+ggplot(rss_data, aes(x = human_footprint, y = RSS, color = land_use_grouped)) +
+  geom_line(size = 1.2) +
+  geom_hline(yintercept = 1, linetype = "dashed", color = "gray40") +
+  labs(x = "Human Footprint", y = "Relative Selection Strength (RSS)", color = "Land Cover") +
   theme_minimal()
 
-# Create prediction dataset: only available steps, 5 per stratum
-coyote_pred_data <- coyote_ssf_data |>
-  group_by(step_id_) |>
-  mutate(samp = sample(n())) |>
-  filter(case_binary_ == 0, samp <= 5) |>
-  ungroup()
 
-# Predict fixed effect response (log-RSS), store SEs too
-coyote_pred <- predict(ssf_coyote, newdata = coyote_pred_data, re.form = NA, se.fit = TRUE)
+# RSS with CI (not working)
 
-coyote_pred_data <- coyote_pred_data |>
-  mutate(fit = coyote_pred$fit, se = coyote_pred$se)
+calc_rss_hfp_landcover <- function(model, data, land_use_col = "land_use_grouped", 
+                                   hfp_col = "human_footprint", n_points = 100) {
+  
+  # Get factor levels from the original data
+  land_use_levels <- levels(factor(data[[land_use_col]]))
+  
+  purrr::map_dfr(land_use_levels, function(lc) {
+    # Create sequence of human footprint values
+    hfp_seq <- seq(min(data[[hfp_col]], na.rm = TRUE), 
+                   max(data[[hfp_col]], na.rm = TRUE), 
+                   length.out = n_points)
+    
+    # Create prediction data frame
+    newdata <- data.frame(
+      human_footprint = hfp_seq,
+      land_use_grouped = factor(lc, levels = land_use_levels),
+      log_sl_ = mean(data$log_sl_, na.rm = TRUE),
+      step_id_ = NA_character_,
+      id = NA_character_
+    )
+    newdata$I.human_footprint.2. <- newdata$human_footprint^2
+    
+    # Create baseline data (minimum HFP)
+    baseline <- newdata[1, ]
+    baseline$human_footprint <- min(data[[hfp_col]], na.rm = TRUE)
+    baseline$I.human_footprint.2. <- baseline$human_footprint^2
+    
+    # Get predictions using predict()
+    pred <- predict(model, newdata = newdata, re.form = NA, se.fit = TRUE)
+    pred_base <- predict(model, newdata = baseline, re.form = NA, se.fit = TRUE)
+    
+    # Calculate log-RSS and CIs
+    logRSS <- pred$fit - pred_base$fit
+    logRSS_se <- sqrt(pred$se.fit^2 + pred_base$se.fit^2)
+    
+    # Return results
+    data.frame(
+      human_footprint = hfp_seq,
+      land_use_grouped = lc,
+      RSS = exp(logRSS),
+      RSS_lower = exp(logRSS - 1.96 * logRSS_se),
+      RSS_upper = exp(logRSS + 1.96 * logRSS_se)
+    )
+  })
+}
 
+# Run the function
+rss_data <- calc_rss_hfp_landcover(model = ssf_coyote, data = coyote_ssf_data)
 
+# Plot results
+ggplot(rss_data, aes(x = human_footprint, y = RSS, 
+                     color = land_use_grouped, fill = land_use_grouped)) +
+  geom_ribbon(aes(ymin = RSS_lower, ymax = RSS_upper), alpha = 0.2, color = NA) +
+  geom_line(size = 1.2) +
+  geom_hline(yintercept = 1, linetype = "dashed", color = "gray40") +
+  labs(x = "Human Footprint", y = "Relative Selection Strength (RSS)", 
+       color = "Land Cover", fill = "Land Cover") +
+  theme_minimal()
 
-
-
-ggplot(trends_coyote, aes(x = land_use_grouped, y = human_footprint.trend)) +
-  geom_hline(yintercept = 0, linetype = "dashed", color = "grey60") +
-  geom_point(size = 3, color = "black") +
-  geom_errorbar(aes(ymin = asymp.LCL, ymax = asymp.UCL), width = 0.2, linewidth = 0.8) +
-  labs(
-    title = "Coyote Selection Response to Human Footprint",
-    x = "Land Cover Type",
-    y = "Effect of Human Footprint"
-  ) +
-  theme_minimal(base_size = 13)
+# Some plot exploration ---------------------------------------------------
 
 
 # Bivariate density hex plot (continuous y-variable vs human footprint)
@@ -281,7 +409,6 @@ hex_plot_fun <- function(data, yvar, ylab, title_) {
     theme_bw() +
     theme(plot.title = element_text(hjust = 0.5))
 }
-
 
 hex_plot_fun(coyote_ssf_data, yvar = "log_sl_", ylab = "Log Step Length", title_ = "Coyote")
 hex_plot_fun(coyote_ssf_data, yvar = "cos_ta_", ylab = "Cosine Turning Angle", title_ = "Coyote")
