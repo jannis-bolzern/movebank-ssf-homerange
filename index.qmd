@@ -104,19 +104,11 @@ Box plots of sampling rates for bobcat and coyote data
 
 ### Home range size assessment
 
-The red fox data is used for home range size assessment for rural and remote locations. Home range sizes are calculated using minimum convex polygons. This provides estimates of the area used by each individual animal that are easy to compare to each other.
+The red fox data is used for home range size assessment for rural and remote locations. Home range sizes are calculated using minimum convex polygons, which provides easily comparable estimates of the area used by each individual animal. As discussed in @sec-redfoxdata, the data for the two locations have different temporal scale. @laube2011 have found that the choice of temporal scale has considerable effects on movement parameter calculations, in turn affecting home range results.
 
-As discussed in @sec-redfoxdata, the data for the two locations have different temporal scale. @laube2011 have found that the choice of temporal scale has considerable effects on movement parameter calculations, in turn affecting home range results.
+How to make this data comparable? Problem #1 is that the sampling intervals are different. Problem #2 is that the data coverage varies by time of the year. Problem #3 is that there are highly different amounts of data. Selecting the means and parameters for the comparison involves complex choices that will influence the results. For #1, a possible approach to achieve similar sampling intervals would be to sample a random afternoon data point for each 24 hour window. However, this would include the implicit assumption that foxes will follow similar daily patterns in the different environments. For #2, a possible approach would be to compare the data for the same time of the year. But since the geographical locations are different, the seasonal weather conditions will differ for the same day of the year, likely leading to different animal behavior. For #3, aggregated comparisons can solve the issue, assuming there is enough data for the smaller data source.
 
-How to make this data comparable? Problem #1 is that the sampling intervals are different. Problem #2 is that the data coverage varies by time of the year. Problem #3 is that there are highly different amounts of data. Selecting the means and parameters for the comparison involves complex choices that will influence the results.
-
-For #1, a possible approach to achieve similar sampling intervals would be to sample a random afternoon data point for each 24 hour window. However, this would include the implicit assumption that foxes will follow similar daily patterns in the different environments. For #2, a possible approach would be to compare the data for the same time of the year. But since the geographical locations are different, the seasonal weather conditions will differ for the same day of the year, likely leading to different animal behavior. For #3, aggregated comparisons can solve the issue, assuming there is enough data for the smaller data source.
-
-For data exploration the simplest possible imperfect approach is employed, which is to ignore the different sampling intervals for problem #1, to compare the data for the same time of the year for problem #2 even if animal behavior might be different, and to use exploratory data analysis to find out if a representative answer can be found given the amount of data present for problem #3. Note that this approach has obvious limits. Among them is that the Herschel data is not applicable, since it has minimal overlaps with the Wiltshire data (see @fig-datapoints-month).
-
-To explore the impact of sampling intervals for problem #1, the home ranges for the Wiltshire data are additionally calculated on downsampled data, where a random data point from every 24 hour period is selected.
-
-Finally, an analysis of monthly home ranges is conducted on all three data sets as an alternative solution to address problem #2.
+For data exploration the simplest possible imperfect approach is employed, which is to ignore the different sampling intervals for problem #1, to compare the data for the same time of the year for problem #2 even if animal behavior might be different, and to use exploratory data analysis to find out if a representative answer can be found given the amount of data present for problem #3. Note that this approach has obvious limits. Among them is that the Herschel data is not applicable, since it has minimal overlaps with the Wiltshire data (see @fig-datapoints-month). To explore the impact of sampling intervals for problem #1, the home ranges for the Wiltshire data are additionally calculated on downsampled data, where a random data point from every 24 hour period is selected. Finally, an analysis of monthly home ranges is conducted on all three data sets as an alternative solution to address problem #2.
 
 ### Trajectory analysis and habitat selection
 
@@ -124,13 +116,13 @@ Movement paths are analyzed to identify patterns in speed, direction, and habita
 
 Since SSFs require a regular sampling rate which the original data does not provide (see @fig-bobcat-coyote-sampling), the animals tracks were re-sampled to a four hour window for coyotes and an eight hour window for bobcats. The amt library's track_resample() function by @signer2019animal was used, with a specified tolerance window of 10 minutes. The re-sampled tracks are translated into animal steps with certain step lengths and turning angles as the main input to the SSF. The control group for statistical analysis is comprised of randomly generated steps.
 
-To compare land cover choices, which translate into habitat characteristics, several statistical approaches are possible. The classical approach is to use conditional logistic regression to compare between observed and random steps (clogit, see @manly2007resource). However, for datasets containing several animals, a Poisson-based approach with stratum-specific fixed intercepts as introduced by @muff2020accounting is likelihood-equivalent and often returns better results. Interpreting the intercepts as random effects allows implementation as a generalized linear mixed model (GLMM, see @bolker2009generalized), which in turn enables introducing random slopes per individual animal.
+To compare land cover choices, which translate into habitat characteristics, several statistical approaches are possible. The classical approach is to use conditional logistic regression to compare between observed and random steps (clogit, see @manly2007resource). However, for datasets containing several animals such as the given data, a Poisson-based approach with stratum-specific fixed intercepts as introduced by @muff2020accounting is likelihood-equivalent and in this case returns better results. Interpreting the intercepts as random effects allows implementation as a generalized linear mixed model (GLMM, see @bolker2009generalized), which in turn enables introducing random slopes per individual animal.
 
 # Results
 
 The resulting home ranges for the UK wader nesting season time frame are shown in @fig-home-ranges-bylot and @fig-home-ranges-wiltshire. The median home range size for the remote foxes in Bylot (75.3 km<sup>2</sup>) is more than 65 times larger compared to the rural foxes in Wiltshire (1.1 km<sup>2</sup>). The home ranges for the sub-sampled Wiltshire data are shown in @fig-home-ranges-wiltshire-sampled24h. The median home range size is 0.56 km<sup>2</sup> for the sampled data, which is roughly half as much as for the full data.
 
-![Home ranges for Bylot foxes (March 15th to June 15th, 2012)](img/home_range_bylot_wader.png){#fig-home-ranges-bylot width="75%"}
+![Home ranges for Bylot foxes (March 15th to June 15th, 2012)](img/home_range_bylot_wader.png){#fig-home-ranges-bylot width="60%"}
 
 ::: {#fig-sampling layout-ncol="2"}
 ![10/60 minute sampling interval](img/home_range_wiltshire_wader.png){#fig-home-ranges-wiltshire}
@@ -197,13 +189,13 @@ According to @rykiel1996testing, model validation means demonstrating that a mod
 
 For home range size comparison, two models were defined comprised of data, home range calculation based on minimum convex polygons, and median selection. The validation criteria required the amount of difference between the results to be significantly larger (i.e., by a factor of more than 10 times) than the effects on the results introduced by data properties. For that order of magnitude, @nilsen2008can found that the choice of home range estimator has a secondary impact compared to range size differences. Since the geographic location context was diverse, to exclude distortions in the coordinate system as a potential unwanted influence, the results for Bylot island were spot checked for three applicable coordinate systems: WGS84 geographic coordinate system (EPSG:4326), NAD 83 / Statistics Canada Lambert projection (EPSG:3347), and Universal Transverse Mercator (UTM) zone 17N (EPSG:2958). These were identified using the [CRS Explorer](https://crs-explorer.proj.org/). The differences in the median home rage size results (UK wader season) for the foxes in Bylot were minor: 75.3 km<sup>2</sup> for WGS84, 73.3 km<sup>2</sup> for EPSG:3347, and 75.8 km<sup>2</sup> for EPSG:2958.
 
-For the habitat selection, statistical modelling was employed to learn about the likelihood of the given results happening by chance, and statistical model validation was performed to ensure a good fit. TBD add a plot.
+For the habitat selection, statistical modelling was employed to assess the likelihood of the given results happening by chance, and statistical model validation was performed to ensure a good fit. TBD add a plot.
 
 # Discussion
 
-The fox home range size results show enormous differences between rural and remote areas. We conclude that human presence changes fox movement behavior patterns fundamentally. Opportunity to move undisturbed and availability of anthropogenic food sources are likely relevant factors. It is interesting to see that the fox home ranges for Bylot and Herschel are similar, even if the islands are different in size with Bylot being a hundred times larger. 
+The fox home range size results show enormous differences between rural and remote areas. We conclude that human presence changes fox movement behavior patterns fundamentally. The opportunity to move undisturbed, and the availability of anthropogenic food sources are likely the most relevant factors but more data would be needed to have proof for the underlying reasons. One thing that is interesting to see is that the fox home range sizes for Bylot and Herschel foxes are similar, even if the island sizes differ by a factor of 100. 
 
-Note that there is one fox with an extraordinarily large home range in @fig-home-ranges-wiltshire. @kobryn2023foxes report similar patterns with a small number of foxes covering much larger areas than others. They conclude that potential for extensive movement patterns in urban foxes exists, and that in some studies such outlier data is either removed or not trackable to begin with because of hardware setup restrictions, therefore underestimating home ranges. In this case there are no such issues, however for most of the foxes a small home range can be observed.
+Note that there is one fox with an extraordinarily large home range in @fig-home-ranges-wiltshire, and the additional charts in @sec-additional-charts show several instances of large fox movements within a single month. @kobryn2023foxes report similar patterns with a small number of foxes covering much larger areas than others. They conclude that the data is genuine and demonstrates potential for extensive movement patterns in urban foxes, and state that in some studies such outliers are either removed or cannot be tracked because of hardware setup restrictions, therefore underestimating home ranges. 
 
 While technical aspects such as sampling intervals and home range estimator have significant influence on the calculation results, they play a secondary role in comparison to the difference in fox behavior, which enables the chosen approach of comparing data from heterogeneous sources.
 
@@ -211,17 +203,17 @@ TBD For the habitat selection, ...
 
 # Conclusion
 
-We have presented two examples demonstrating that human activity influences home range sizes and habitat selection significantly. These insights have been created based on externally contributed publicly available data. 
+We have presented two examples demonstrating that human activity influences animal home range sizes and habitat selection significantly. These insights have been created based on externally contributed publicly available data. 
 
 # Appendix
 
-## Additional charts
+## Additional charts {#sec-additional-charts} 
 
-![Monthly home ranges for Wiltshire foxes](img/wiltshire_monthly.png){#fig-monthly-home-ranges-wiltshire}
+![Monthly home ranges for Wiltshire foxes](img/wiltshire_monthly.png){#fig-monthly-home-ranges-wiltshire width="60%"}
 
-![Monthly home ranges for Bylot foxes](img/bylot_monthly.png){#fig-monthly-home-ranges-bylot}
+![Monthly home ranges for Bylot foxes](img/bylot_monthly.png){#fig-monthly-home-ranges-bylot width="60%"}
 
-![Monthly home ranges for Herschel foxes](img/herschel_monthly.png){#fig-monthly-home-ranges-herschel}
+![Monthly home ranges for Herschel foxes](img/herschel_monthly.png){#fig-monthly-home-ranges-herschel width="60%"}
 
 ## Use of Large Language Models and Generative AI
 
