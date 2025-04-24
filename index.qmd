@@ -21,10 +21,10 @@ We investigate how human activity influences the movement patterns of wild anima
 
 # Introduction
 
-Disturbance by humans has widespread impacts on the movements of animals, as confirmed by a large-scale meta study by @doherty2021human. In this paper, two related research questions will be addressed:
+Disturbance by humans has widespread impacts on the movements of animals, as confirmed by a large-scale meta study by @doherty2021human. In this paper, two related research questions are addressed:
 
-1.  Home Range Implications: Do animals exhibit smaller home ranges in high human impact areas? This will be analysed by comparing red fox (vulpes vulpes) home ranges in low and high human impact areas.
-2.  Habitat Selection in Human-Dominated Landscapes: How do animals select habitats under varying levels of human influence? This will be analysed based on bobcat (lynx rufus) and coyote (canis latrans) data from a national park area.
+1.  Home Range Implications: Do animals exhibit smaller home ranges in high human impact areas? This is examined by comparing red fox (vulpes vulpes) home ranges in low and high human impact areas.
+2.  Habitat Selection in Human-Dominated Landscapes: How do animals select habitats under varying levels of human influence? This is analysed based on bobcat (lynx rufus) and coyote (canis latrans) data from a national park area.
 
 Different data sets are used for each research question. Relying on Movebank data, as described in @sec-movebank, presents additional challenges stemming from the facts that data is used for purposes it was not originally collected for, and that data from different studies is compared.
 
@@ -90,7 +90,7 @@ The bobcat and coyote data from @prugh2023fear contains data for 29 coyotes and 
 
 ![HFP-100 data with bobcat and coyote tracks shown in black and relevant area in red](img/hfp.png){#fig-hfp width="75%"}
 
-The data sampling intervals are intended to be four hours. In practice, the intervals are irregular with many outliers and they differ for the two species. @fig-bobcat-coyote-sampling shows a boxplot for the sampling intervals, with outliers removed since the chart would be unreadable otherwise. Since the coyote sampling interval is more regular compared to the bobcat data, the analysis was performed on coyote data only. 
+The data sampling intervals are intended to be four hours. In practice, the intervals are irregular with many outliers. They differ for the two species with the bobcat intervals being less dense and regular in comparisong. @fig-bobcat-coyote-sampling shows a boxplot for the sampling intervals. Outliers are removed for readability. 
 
 ![Boxplot of sampling rates for bobcat and coyote data, with outliers removed](img/bobcat_coyote_sampling_rates.png){#fig-bobcat-coyote-sampling}
 
