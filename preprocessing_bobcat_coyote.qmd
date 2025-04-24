@@ -8,7 +8,10 @@ editor: visual
 # Load necessary packages -----------------------------------------------------
 pacman::p_load(
   tidyverse,
-  amt
+  amt,
+  geosphere,
+  sf,
+  terra
 )
 
 options(scipen = 999) # turn off scientific notation

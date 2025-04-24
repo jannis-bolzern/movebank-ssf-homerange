@@ -8,9 +8,6 @@ editor: visual
 # Load necessary packages -----------------------------------------------------
 pacman::p_load(
   tidyverse,
-  sf,
-  geosphere,
-  terra,
   glmmTMB,
   DHARMa,
   emmeans,
