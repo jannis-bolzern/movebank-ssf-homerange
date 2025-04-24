@@ -183,7 +183,7 @@ axis(2, at = c(0.05, 0.5, 5, 50, 500), labels = c("0.05", "0.5", "5", "50", "500
 box()
 ```
 
-For habitat selection, deriving statistically significant results from the bobcat data was not possible. The results for the coyote data are shown in 
+TBD For habitat selection, deriving statistically significant results from the bobcat data was not possible. The results for the coyote data are shown in 
 
 
 # Model validation
@@ -203,6 +203,8 @@ Note that there is one fox with an extraordinarily large home range in @fig-home
 While technical aspects such as sampling intervals and home range estimator have significant influence on the calculation results, they play a secondary role in comparison to the difference in fox behavior, which enables the chosen approach of comparing data from heterogeneous sources.
 
 Another instance of data aspects having large effects on the results was observed for the statistical modelling. While we could fit a model for coyote data, this was not possible for the bobcat data. We suspect that the required re-sampling because of the initially irregular sampling rates as shown in @fig-sampling-rates played a role.
+
+TBD habitats
 
 # Conclusion
 
