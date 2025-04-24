@@ -84,15 +84,13 @@ Amount of data per year and month
 
 ### Bobcat and coyote data
 
-The bobcat and coyote data from @prugh2023fear contains data for 29 coyotes and 30 bobcats collected between June 2018 and June 2022. They reside in two separated geographical areas and have species-interspersed home ranges as shown in @fig-esa, which features a plot of the bobcat and coyote locations in the context of the extracted land cover data. @fig-hfp reveals the human footprint in the area, which is generally low except for some settlements and country roads.
+@prugh2023fear provide data for 29 coyotes and 30 bobcats collected between June 2018 and June 2022. The species reside in two separated geographical areas and have interspersed home ranges as shown in @fig-esa, which features a plot of the bobcat and coyote locations in the context of the extracted land cover data. @fig-hfp reveals the human footprint in the area, which is generally low except for some settlements and country roads.
 
 ![Bobcat and coyote locations in the context of the land cover data](img/esa_landcover_study_area_with_animals.png){#fig-esa width="85%"}
 
 ![HFP-100 data with bobcat and coyote tracks shown in black and relevant area in red](img/hfp.png){#fig-hfp width="85%"}
 
-The data sampling intervals are intended to be four hours. In practice, they are irregular with many outliers (see @fig-bobcat-coyote-sampling-outliers), and differ between the two species. The bobcat intervals are less dense and less regular in comparison. @fig-bobcat-coyote-sampling shows a box plot for the sampling intervals with outliers removed for readability.
-
-
+The data sampling intervals are intended to be four hours, however they are irregular with many outliers (see @fig-bobcat-coyote-sampling-outliers). In addition, the bobcat intervals are less dense and less regular in comparison. @fig-bobcat-coyote-sampling shows a box plot for the sampling intervals with outliers removed for readability.
 
 ::: {#fig-sampling-rates layout-ncol="2"}
 ![With outliers](img/bobcat_coyote_sampling_rates_outliers.png){#fig-bobcat-coyote-sampling-outliers}
@@ -130,7 +128,7 @@ To compare land cover choices, which translate into habitat characteristics, sev
 
 # Results
 
-The resulting home ranges for the UK wader nesting season time frame are shown in @fig-home-ranges-bylot and @fig-home-ranges-wiltshire. The median home range size for the foxes in Bylot (75.3 km<sup>2</sup>) is more than 65 times bigger compared to the foxes in Wiltshire (1.1 km<sup>2</sup>). The home ranges for the sub-sampled Wiltshire data are shown in @fig-home-ranges-wiltshire-sampled24h. The median home range size is 0.56 km<sup>2</sup> for the sampled data, which is roughly half as much as for the full data.
+The resulting home ranges for the UK wader nesting season time frame are shown in @fig-home-ranges-bylot and @fig-home-ranges-wiltshire. The median home range size for the remote foxes in Bylot (75.3 km<sup>2</sup>) is more than 65 times larger compared to the rural foxes in Wiltshire (1.1 km<sup>2</sup>). The home ranges for the sub-sampled Wiltshire data are shown in @fig-home-ranges-wiltshire-sampled24h. The median home range size is 0.56 km<sup>2</sup> for the sampled data, which is roughly half as much as for the full data.
 
 ![Home ranges for Bylot foxes (March 15th to June 15th, 2012)](img/home_range_bylot_wader.png){#fig-home-ranges-bylot width="75%"}
 
@@ -191,36 +189,29 @@ axis(2, at = c(0.05, 0.5, 5, 50, 500), labels = c("0.05", "0.5", "5", "50", "500
 box()
 ```
 
-TBD For habitat selection, there are 11 categories: tree cover, shrubland, grassland, cropland, built-up, bare/sparse vegetation, snow and ice, permanent water bodies, herbaceous wetland, mangroves, moss and lichen.
-
-# Discussion
-
-The fox home range size results differ enormously between rural and remote areas. We conclude that human presence impacts fox movement behavior significantly, with availability of anthropogenic food sources likely being relevant. The red foxes in the wild 
-
-Technical aspects like sampling intervals, also have significant influence on home range calculation results. 
-
-Wiltshire fox home ranges are overestimated in comparison to Bylot fox home ranges, because of the higher amount of data points available. 
-
-It also demonstrates that the influence of sampling intervals is definitely present. However, it plays a secondary role in comparison to the difference in fox behavior, which enables the chosen approach of comparing data from heterogeneous sources.
-
-It is interesting to see that the fox home ranges for Bylot and Herschel are similar, even if the islands are different in size with Bylot being a hundred times larger. 
-
-Note that there is one fox with an extraordinarily large home range in @fig-home-ranges-wiltshire. @kobryn2023foxes report similar patterns with a small number of foxes covering much larger areas than others. They conclude that potential for extensive movement patterns in urban foxes exists, and that in some studies such outlier data is either removed or not trackable to begin with because of hardware setup restrictions, therefore underestimating home ranges. In this case there are no such issues, however for most of the foxes a small home range can be observed.
-
+TBD For habitat selection, the results are as follows ...
 
 # Model validation
 
 According to @rykiel1996testing, model validation means demonstrating that a model is acceptable for its intended use. The purpose, criteria, and context of the model must be specified.
 
-For the purpose of home range comparison, two models were defined comprised of data, home range calculation based on minimum convex polygons, and median selection. The validation criteria required the amount of difference between the results to be significantly larger (i.e., by a factor of more than 10 times) than the effects on the results introduced by data properties. For that order of magnitude, @nilsen2008can found that the choice of home range estimator has a secondary impact compared to range size differences.
+For home range size comparison, two models were defined comprised of data, home range calculation based on minimum convex polygons, and median selection. The validation criteria required the amount of difference between the results to be significantly larger (i.e., by a factor of more than 10 times) than the effects on the results introduced by data properties. For that order of magnitude, @nilsen2008can found that the choice of home range estimator has a secondary impact compared to range size differences. Since the geographic location context was diverse, to exclude distortions in the coordinate system as a potential unwanted influence, the results for Bylot island were spot checked for three applicable coordinate systems: WGS84 geographic coordinate system (EPSG:4326), NAD 83 / Statistics Canada Lambert projection (EPSG:3347), and Universal Transverse Mercator (UTM) zone 17N (EPSG:2958). These were identified using the [CRS Explorer](https://crs-explorer.proj.org/). The differences in the median home rage size results (UK wader season) for the foxes in Bylot were minor: 75.3 km<sup>2</sup> for WGS84, 73.3 km<sup>2</sup> for EPSG:3347, and 75.8 km<sup>2</sup> for EPSG:2958.
 
-Since the geographic location context was diverse, to exclude distortions in the coordinate system as a potential unwanted influence, the results for Bylot island were spot checked for three applicable coordinate systems: WGS84 geographic coordinate system (EPSG:4326), NAD 83 / Statistics Canada Lambert projection (EPSG:3347), and Universal Transverse Mercator (UTM) zone 17N (EPSG:2958). These were identified using the [CRS Explorer](https://crs-explorer.proj.org/). The differences in the median home rage size results (UK wader season) for the foxes in Bylot were minor: 75.3 km<sup>2</sup> for WGS84, 73.3 km<sup>2</sup> for EPSG:3347, and 75.8 km<sup>2</sup> for EPSG:2958.
+For the habitat selection, statistical modelling was employed to learn about the likelihood of the given results happening by chance, and statistical model validation was performed to ensure a good fit. TBD add a plot.
 
-For the habitat selection, statistical model validation was performed.
+# Discussion
+
+The fox home range size results show enormous differences between rural and remote areas. We conclude that human presence changes fox movement behavior patterns fundamentally. Opportunity to move undisturbed and availability of anthropogenic food sources are likely relevant factors. It is interesting to see that the fox home ranges for Bylot and Herschel are similar, even if the islands are different in size with Bylot being a hundred times larger. 
+
+Note that there is one fox with an extraordinarily large home range in @fig-home-ranges-wiltshire. @kobryn2023foxes report similar patterns with a small number of foxes covering much larger areas than others. They conclude that potential for extensive movement patterns in urban foxes exists, and that in some studies such outlier data is either removed or not trackable to begin with because of hardware setup restrictions, therefore underestimating home ranges. In this case there are no such issues, however for most of the foxes a small home range can be observed.
+
+While technical aspects such as sampling intervals and home range estimator have significant influence on the calculation results, they play a secondary role in comparison to the difference in fox behavior, which enables the chosen approach of comparing data from heterogeneous sources.
+
+TBD For the habitat selection, ...
 
 # Conclusion
 
-Human activity influences home range sizes and habitat selection significantly.
+We have presented two examples demonstrating that human activity influences home range sizes and habitat selection significantly. These insights have been created based on externally contributed publicly available data. 
 
 # Appendix
 
