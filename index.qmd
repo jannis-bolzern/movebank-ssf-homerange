@@ -23,10 +23,10 @@ We investigate how human activity influences the movement patterns of wild anima
 
 Disturbance by humans has widespread impacts on the movements of animals, as confirmed by a large-scale meta study by @doherty2021human. In this paper, two related research questions are addressed:
 
-1.  Home Range Implications: Do animals exhibit smaller home ranges in high human impact areas? This is examined by comparing red fox (vulpes vulpes) home ranges in low and high human impact areas.
-2.  Habitat Selection in Human-Dominated Landscapes: How do animals select habitats under varying levels of human influence? This is analysed based on bobcat (lynx rufus) and coyote (canis latrans) data from a national park area.
+1.  Home range size implications: Do animals exhibit smaller home ranges in high human impact areas? This is examined by comparing red fox (vulpes vulpes) home ranges in low and high human impact areas.
+2.  Habitat selection in human-influenced landscapes: How do animals select habitats under varying levels of human presence? This is analysed based on bobcat (lynx rufus) and coyote (canis latrans) data from a national park area.
 
-Different data sets are used for each research question. Relying on Movebank data, as described in @sec-movebank, presents additional challenges stemming from the facts that data is used for purposes it was not originally collected for, and that data from different studies is compared.
+Different data sets are used for each research question. Relying on Movebank data, as described in @sec-movebank, presents additional challenges because data is used for purposes it was not originally collected for, and compared between different studies.
 
 # Material and Methods
 
@@ -42,9 +42,9 @@ This section describes data preparation and processing for all the datasets empl
 
 ### Movebank data {#sec-movebank}
 
-All Movebank data sets have the same schema. This simplifies data handling, enables code re-use, and requires the data contributors do perform preprocessing and data cleaning on their side to provide the data in an appropriate format. A library for data processing and trajectory handling in R is provided by @kranstauber2024move2.
+All Movebank data sets have the same schema. This simplifies data handling, enables code re-use, and requires the data contributors do perform preprocessing and data cleaning on their side to provide the data in an appropriate format. Libraries for data processing and trajectory handling in R are provided by @kranstauber2024move2 and @signer2019animal.
 
-The R code for data download, preprocessing, and serialization of relevant data and charts can be found in: [Red fox: UK wader nesting season home range](https://elkeelke.github.io/MovebankProject/preprocessing_uk_wader_nesting_season_home_range.html), [Red fox: montly home ranges](https://elkeelke.github.io/MovebankProject/preprocessing_monthly_home_ranges.html), TBD Bobcat/coyote.
+The R code for data download, preprocessing, and serialization of relevant data and charts can be found in: [Red fox: UK wader nesting season home ranges](https://elkeelke.github.io/MovebankProject/preprocessing_uk_wader_nesting_season_home_range.html), [Red fox: montly home ranges](https://elkeelke.github.io/MovebankProject/preprocessing_monthly_home_ranges.html), TBD Bobcat/coyote.
 
 ### Human footprint data
 
@@ -58,7 +58,7 @@ The relevant European Space Agency (ESA) WorldCover 2021 data at 10 m resolution
 
 ### Red fox data {#sec-redfoxdata}
 
-The Wiltshire data (see @fig-wiltshire-map) was collected between 2016 to 2019 during the UK wader nesting season, which was defined to be March 15th to June 15th, for 35 foxes in total. It was sampled at 10 or 60 minute rates. The research team controlled the sampling rate remotely to save battery at times the data was considered less interesting.
+Wiltshire data (see @fig-wiltshire-map) was collected between 2016 to 2019 during the UK wader nesting season, which was defined to be March 15th to June 15th, for 35 foxes in total. It was sampled at 10 and 60 minute rates. The research team controlled the sampling rate remotely to save battery at times the data was considered less interesting.
 
 ![High level view of animal GPS tracks in Wiltshire](img/wiltshire_map.png){#fig-wiltshire-map}
 
@@ -70,7 +70,7 @@ The Wiltshire data (see @fig-wiltshire-map) was collected between 2016 to 2019 d
 Maps of Bylot and Herschel island, with high level view of animal GPS tracks (unfiltered).
 :::
 
-The Bylot (see @fig-bylot-map) and Herschel (see @fig-herschel-map) data was collected all year round, at a much lower sampling rate of once per day, at random afternoon times of the day. The collection period was June 2009 to Feb 2010 for Herschel and from 2011 to 2015 for Bylot, for two foxes per island. @fig-datapoints-year provides an overview of the amount of data points available per year. There is much more data from Wiltshire because of the higher number of foxes and the higher sampling rate. Looking at the breakdowns by month as shown in @fig-datapoints-month reveals seasonal differences in the amount of data available.
+Bylot (see @fig-bylot-map) and Herschel (see @fig-herschel-map) data was collected all year round, at a much lower sampling rate of once per day, at random afternoon times of the day. The collection period was June 2009 to Feb 2010 for Herschel and from 2011 to 2015 for Bylot, for two foxes per island. @fig-datapoints-year provides an overview of the amount of data points available per year. There is much more data from Wiltshire because of the higher number of foxes and the higher sampling rate. Looking at the breakdowns by month as shown in @fig-datapoints-month reveals seasonal differences in the amount of data available.
 
 ::: {#fig-data-points layout-ncol="2"}
 ![Per year](img/year_count.png){#fig-datapoints-year}
@@ -90,7 +90,7 @@ The bobcat and coyote data from @prugh2023fear contains data for 29 coyotes and 
 
 ![HFP-100 data with bobcat and coyote tracks shown in black and relevant area in red](img/hfp.png){#fig-hfp width="75%"}
 
-The data sampling intervals are intended to be four hours. In practice, the intervals are irregular with many outliers. They differ for the two species with the bobcat intervals being less dense and regular in comparisong. @fig-bobcat-coyote-sampling shows a boxplot for the sampling intervals. Outliers are removed for readability. 
+The data sampling intervals are intended to be four hours. In practice, they are irregular with many outliers, and differ between the two species. The bobcat intervals are less dense and less regular in comparison. @fig-bobcat-coyote-sampling shows a boxplot for the sampling intervals. Outliers are removed for readability. 
 
 ![Boxplot of sampling rates for bobcat and coyote data, with outliers removed](img/bobcat_coyote_sampling_rates.png){#fig-bobcat-coyote-sampling}
 
@@ -98,7 +98,7 @@ The data sampling intervals are intended to be four hours. In practice, the inte
 
 ### Home Range Assessment
 
-The red fox data is used for home range assessment present for a rural and a remote location. Home range sizes are calculated using minimum convex polygons. This provides estimates of the area used by each individual animal that are easy to compare to each other.
+The red fox data is used for home range assessment for rural and remote locations. Home range sizes are calculated using minimum convex polygons. This provides estimates of the area used by each individual animal that are easy to compare to each other.
 
 As discussed in @sec-redfoxdata, the data for the two locations have different temporal scale. @laube2011 have found that the choice of temporal scale has considerable effects on movement parameter calculations, in turn affecting home range results.
 
@@ -114,11 +114,15 @@ Finally, an analysis of monthly home ranges is conducted on all three data sets 
 
 ### Trajectory Analysis and Habitat Selection
 
-Movement paths are analyzed to identify patterns in speed, direction, and habitat use. Step lengths and turning angles help infer behavioral states. Step-selection functions (SSFs) as described by @fortin2005wolves are employed to detect habitat preferences relative to movement patterns. This allows to quantify how animals respond to environmental covariates, such as human footprint and land cover. 
+Movement paths are analyzed to identify patterns in speed, direction, and habitat use. Step lengths and turning angles help infer behavioral states. Step-selection functions (SSFs) as described by @fortin2005wolves are employed to detect habitat preferences relative to movement patterns. This allows to quantify how animals respond to environmental covariates, such as human footprint and land cover. Selection patterns across species and regions are then compared to assess how habitat preferences vary with human influence.
 
-TBD Selection patterns across species and regions are compared to assess how habitat preferences vary with human influence.
+Since SSFs requires a regular sampling rate which the original data does not provide (see @fig-bobcat-coyote-sampling), the animals tracks were re-sampled to a four hour window for coyotes and an eight hour window for bobcats. The amt library's track_resample() function by @signer2019animal was used, with a specified tolerance window of 10 minutes. The re-sampled tracks are translated into animal steps with certain step lengths and turning angles as the main input to the SSF. The control group for statistical analysis is comprised of randomly generated steps. 
 
-Since SSFs requires a regular sampling rate which the original data does not provide (see @fig-bobcat-coyote-sampling), the animals tracks were re-sampled to a four hour window. The amt library's track_resample() function by @signer2019animal was used, with a specified tolerance window of 10 minutes. The re-sampled tracks are translated into animal steps with certain step lengths and turning angles as the main input to the SSF. The control group for the statistical analysis is comprised of randomly generated steps. To compare land cover choices, which translate into habitat characteristics, a conditional logistic regression is performed using the amt library’s fit_clogit function comparing between observed and random steps. 
+To compare land cover choices, which translate into habitat characteristics, several statistical approaches are possible. The classical approach is to use conditional logistic regression to compare between observed and randim steps (clogit, see @manly2007resource). However, for data with several animals the approach by @muff2020accounting is better suited.
+
+Ich habe mich ausserdem intensiv mit der Methode von Muff et al. auseinandergesetzt: Die Idee ist, dass die conditional logistic regression (wie sie bei survival::clogit verwendet wird) likelihood-äquivalent zu einem Poisson-Modell mit stratum-spezifischen Fixinterzepten ist. 
+
+Wenn man diese Interzepte dann als Random Effects mit einer sehr grossen festen Varianz interpretiert, kann man die ganze SSF als GLMM formulieren – und das ermöglicht uns auch, Random Slopes pro Individuum einzubauen.
 
 # Results
 
