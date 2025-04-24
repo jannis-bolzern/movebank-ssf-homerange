@@ -107,7 +107,7 @@ library("ggplot2")
 ggplot(year_count, aes(x = factor(year), y = count, color = source, fill = source)) +
   geom_bar(stat = "identity", width = 0.5) +
   facet_wrap(~ ifelse(source %in% c("Bylot", "Herschel"), "Bylot/Herschel", "Wiltshire"), scales = "free_y") +
-  labs(x = "Year", y = "Number of data points") +
+  labs(x = "Year", y = "Number of data points", fill = "Source", color = "Source") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 90)) +
   theme(axis.text.x = element_text(size = 6)) +
@@ -122,7 +122,7 @@ ggplot(month_count, aes(x = as.factor(month_name), y = count, color = source)) +
   geom_point() +
   scale_x_discrete() +
   facet_wrap(~ ifelse(source %in% c("Bylot", "Herschel"), "Bylot/Herschel", "Wiltshire"), scales = "free_y") +
-  labs(x = "Month", y = "Number of data points") +
+  labs(x = "Month", y = "Number of data points", fill = "Source", color = "Source") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 90)) +
   theme(axis.text.x = element_text(size = 6)) +
