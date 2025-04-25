@@ -4,37 +4,35 @@ format: html
 freeze: true
 ---
 
+# Load libraries
 ```{r}
-
-# 1. LOAD LIBRARIES ------------------------------------------------------------
 pacman::p_load(
   sf,
   terra,
-  tidyverse
+  tidyverse,
+  rnaturalearth
 )
+```
 
-# 2. PREPARE TRACKING DATA -----------------------------------------------------
-# Read and prepare tracking data
-# From https://www.movebank.org/cms/webapp?gwt_fragment=page%3Dstudies%2Cpath%3Dstudy2636372210
-tracking_data <- read_delim("data/bobcat_coyotes_wa_gps.csv")
+# Load WA state boundary
+```{r}
+# Load Washington boundary in Mollweide
+wa_boundary <- ne_states(
+  country = "United States of America",
+  returnclass = "sf") %>%
+  filter(name == "Washington") %>%
+  st_transform("ESRI:54009")  # Convert to Mollweide
+```
 
-# Convert to SF object and project to Mollweide
-animal_sf <- tracking_data |>
-  st_as_sf(
-    coords = c("location-long", "location-lat"),
-    crs = 4326  # WGS84
-  ) |>
-  st_transform("ESRI:54009")  # Mollweide projection
+# Get list of all human footprint data tiles (ca. 20 GB of data)
+```{r}
+# Download as a tgz from https://datadryad.org/downloads/file_stream/2679334 
+# and extract to the given directory
+tif_files <- list.files("data/hfp-100m-2020/", pattern = "\\.tif$", full.names = TRUE)
+```
 
-# 3. CREATE STUDY AREA BUFFER --------------------------------------------------
-# Generate 125km buffer around tracking points
-tracking_buffer <- animal_sf |>
-  st_union() |>
-  st_convex_hull() |>     # Create minimum convex polygon
-  st_buffer(125000)       # 125km buffer in meters (Mollweide uses meters)
-
-# 4. IDENTIFY RELEVANT HFP TILES -----------------------------------------------
-# Function to check tile overlap with study area
+# Identify relevant tiles and process them
+```{r}
 check_overlap <- function(tif_file, boundary) {
   r <- rast(tif_file)
   r_extent <- ext(r)
@@ -43,21 +41,18 @@ check_overlap <- function(tif_file, boundary) {
   return(st_intersects(r_poly, boundary, sparse = FALSE)[1,1])
 }
 
-# Get list of all HFP tiles (ca. 20 GB of data)
-# Download as a tgz from https://datadryad.org/downloads/file_stream/2679334 
-# and extract to the given directory
-tif_files <- list.files("data/hfp-100m-2020/", pattern = "\\.tif$", full.names = TRUE)
+overlap_results <- sapply(tif_files, check_overlap, boundary = wa_boundary)
+relevant_files <- tif_files[overlap_results]
 
-# Find tiles intersecting our buffer
-overlap_results <- sapply(tif_files, check_overlap, boundary = tracking_buffer)
-rasters_list <- lapply(tif_files[overlap_results], rast)
-
-# 5. PROCESS HFP DATA ----------------------------------------------------------
-# Merge and crop relevant tiles
-merged_relevant_files <- do.call(merge, rasters_list)
-hfp_combined <- crop(merged_relevant_files, tracking_buffer)
+hfp_combined <- relevant_files |>
+  map(rast) |>
+  (\(x) do.call(merge, x))() |>
+  crop(vect(wa_boundary)) |>
+  mask(vect(wa_boundary))
+```
 
 # Project to WGS 84
+```{r}
 # Length of 1 degree longitude at latitude φ ≈ 111,320 × cos(φ) meters
 # cos(48°) ≈ 0.6691
 # So 1° longitude ≈ 111,320 × 0.6691 ≈ 74,500 meters
@@ -67,17 +62,22 @@ hfp_wgs84 <- project(
   hfp_combined, "EPSG:4326",
   method = "near", # Using nearest neighbor method for data integrity
   res = c(0.00134, 0.0009)) # (x, y) = (long, lat)
+plot(hfp_wgs84)
+```
 
 # Save the final cropped HFP raster
+```{r}
 writeRaster(
   hfp_wgs84,
-  "data/output_HFP_study_area.tif",
+  "data/HFP_washington.tif",
   overwrite = TRUE,
   datatype = "FLT4S",          # Maintain decimal precision for HFP values
   gdal = c("COMPRESS=LZW")     # Reduce file size
 )
+```
 
-# 6. VISUAL CHECK --------------------------------------------------------------
+# Create a zoomed in chart for the paper
+```{r}
 ggplot() +
   tidyterra::geom_spatraster(
     data = hfp_wgs84,
@@ -93,9 +93,9 @@ ggplot() +
   scale_color_manual(values = c("Canis latrans" = "black", "Lynx rufus" = "white"), 
                      name = "Species") +
   coord_sf(
-    xlim = c(-122, -116),
+    xlim = c(-120.7, -117.1),
     ylim = c(47, 49),
-    expand = TRUE
+    expand = FALSE
   ) +
   theme(
     legend.background = element_rect(fill = "gray90", color = "black"),
