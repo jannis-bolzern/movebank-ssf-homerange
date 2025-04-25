@@ -1,12 +1,11 @@
 ---
 title: "Preprocessing for SSF"
 format: html
-editor: visual
 freeze: true
 ---
 
+# Setup
 ```{r}
-# Load necessary packages -----------------------------------------------------
 pacman::p_load(
   tidyverse,
   amt,
@@ -17,8 +16,11 @@ pacman::p_load(
 
 options(scipen = 999) # turn off scientific notation
 options(digits = 15) # set digits to 15 to ensure GPS coordinates aren't truncated
+```
 
-# Load and prepare tracking data ---------------------------------------------
+# Load, inspect, and prepare tracking data
+```{r}
+# From https://www.movebank.org/cms/webapp?gwt_fragment=page%3Dstudies%2Cpath%3Dstudy2636372210
 tracking_data <- read_delim("data/bobcat_coyotes_wa_gps.csv") |> 
   dplyr::rename(
     long = `location-long`, 
@@ -65,8 +67,10 @@ dev.off()
 # Split into species ----------------------------------------------------------
 coyote <- filter(track, grepl("COY", id))
 bobcat <- filter(track, grepl("BOB", id))
+```
 
-# Step generation for SSF -----------------------------------------------------
+# Step generation for SSF
+```{r}
 coyote1 <- coyote[-c(8, 19), ] |> # omitting coyote in row 8 and 19; too few consecutive data points - causing function to fail
   mutate(stp = map(trk, function(df)
     df |> 
@@ -92,8 +96,10 @@ bobcat1 <- bobcat[-c(15, 18), ] |> # omitting bobcat in row 15 and 18; too few c
 # Export resampled step data
 write_csv(coyote1, "data/coyote_resampled.csv")
 write_csv(bobcat1, "data/bobcat_resampled.csv")
+```
 
-# Read and recalculate step length (in meters) --------------------------------
+# Read and recalculate step length (in meters)
+```{r}
 recalc_steps <- function(file) {
   read_delim(file) |>
     dplyr::select(-log_sl_, -sl_) |>
@@ -105,8 +111,10 @@ recalc_steps <- function(file) {
 
 coyote_resampled <- recalc_steps("data/coyote_resampled.csv")
 bobcat_resampled <- recalc_steps("data/bobcat_resampled.csv")
+```
 
-# Load and prepare rasters ----------------------------------------------------
+# Load and prepare raster data
+```{r}
 hfp <- rast("data/HFP_washington.tif")
 NAflag(hfp) <- 64536  # Set no-data value
 hfp_capped <- classify(hfp, matrix(c(50000, Inf, 50000), ncol = 3, byrow = TRUE)) # Cap at 50k
@@ -134,8 +142,10 @@ extract_covariates <- function(df) {
 
 coyote_cov <- extract_covariates(coyote_resampled)
 bobcat_cov <- extract_covariates(bobcat_resampled)
+```
 
-# Final formatting for SSF ----------------------------------------------------
+# Prepare data for SSF
+```{r}
 prepare_ssf_data <- function(df) {
   df |>
     mutate(
@@ -162,4 +172,3 @@ bobcat_final <- prepare_ssf_data(bobcat_cov)
 write_csv(coyote_final, "data/coyote_ssf_data.csv")
 write_csv(bobcat_final, "data/bobcat_ssf_data.csv")
 ```
-
