@@ -14,18 +14,19 @@ pacman::p_load(
   emmeans,
   ggridges
 )
-
 nt <- parallel::detectCores() - 2
 options(scipen = 0)
 options(digits = 7)
 ```
 
 # Coyotes
+
 ## Read SSF ready data
 ```{r}
 coyote_ssf_data <- read_delim("data/coyote_ssf_data.csv") |> 
   filter(n > 100) |>  # select animals with more than 100 fixes
   mutate(land_use_grouped = as.factor(land_use_grouped))
+coyote_ssf_data$hfp_std <- scale(coyote_ssf_data$human_footprint)[, 1]
 ```
 
 ## Fit SSF
@@ -33,8 +34,6 @@ coyote_ssf_data <- read_delim("data/coyote_ssf_data.csv") |>
 ssf_model_filename = "models/ssf_coyote_model.rds"
 ssf_model_data = file.path(getwd(), ssf_model_filename)
 if(!file.exists(ssf_model_data)) {
-  coyote_ssf_data$hfp_std <- scale(coyote_ssf_data$human_footprint)[, 1]
-  
   # Fit SSF with glmmTMB following Muff et al (2019)
   ssf_coyote <- glmmTMB(
     case_binary_ ~ -1 + 
@@ -49,17 +48,14 @@ if(!file.exists(ssf_model_data)) {
     start = list(theta = c(rep(0, times = 8),log(1e3))),
     control = glmmTMBControl(parallel = nt)
   )
-  
   saveRDS(ssf_coyote, file = ssf_model_filename)
 }
 ssf_coyote <- readRDS(ssf_model_filename)
 summary(ssf_coyote)
 ```
 
-## Average effect plots (turned off by default in the chunk settings)
+## Average effect plots
 ```{r}
-#| eval: false
-#| include: false
 pred_data = file.path(getwd(), "models/coyote_ssf_pred.rds")
 if(!file.exists(pred_data)) {
   coyote_ssf_pred <- coyote_ssf_data |> 
