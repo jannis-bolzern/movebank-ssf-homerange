@@ -76,8 +76,15 @@ writeRaster(
 )
 ```
 
-# Create a zoomed in chart for the paper
+# Create a zoomed in chart for the paper with animal tracks overlay
 ```{r}
+# From https://www.movebank.org/cms/webapp?gwt_fragment=page%3Dstudies%2Cpath%3Dstudy2636372210
+tracking_data <- read_delim("data/bobcat_coyotes_wa_gps.csv")
+animal_sf <- tracking_data |>
+  st_as_sf(
+    coords = c("location-long", "location-lat"),
+    crs = 4326  # WGS84
+  )
 ggplot() +
   tidyterra::geom_spatraster(
     data = hfp_wgs84,
