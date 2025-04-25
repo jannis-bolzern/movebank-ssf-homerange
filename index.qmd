@@ -1,6 +1,6 @@
 ---
 title: How does human activity affect the movement patterns of wild animals?
-subtitle: An analysis of selected data sets from the Movebank animal tracking database
+subtitle: An analysis of selected datasets from the Movebank animal tracking database
 author: Jannis Bolzern and Elke Michlmayr
 format:
   html:
@@ -26,13 +26,13 @@ Disturbance by humans has widespread impacts on the movements of animals, as con
 1.  Home range size implications: Do animals exhibit smaller home ranges in high human impact areas? This is examined by comparing red fox (*vulpes vulpes*) home ranges in low and high human impact areas.
 2.  Habitat selection in human-influenced landscapes: How do animals select habitats under varying levels of human presence? This is analysed based on bobcat (*lynx rufus*) and coyote (*canis latrans*) data from a national park area.
 
-Different data sets are used for each research question. Relying on Movebank data, as described in @sec-movebank, presents additional challenges because data is used for purposes it was not originally collected for, and compared between different studies.
+Different datasets are used for each research question. Relying on Movebank data, as described in @sec-movebank, presents additional challenges because data is used for purposes it was not originally collected for, and compared between different studies.
 
 # Material and Methods
 
-This section describes the data sets, the steps taken to prepare and process the different data sets in use, and the methodological approach.
+This section describes the datasets, the steps taken to prepare and process the different datasets in use, and the methodological approach.
 
-## Data sets
+## Datasets
 
 The Movebank database by @kays2022movebank enables researchers to publish animal tracking data for public use. The following data is selected: Red fox data from @porteus2024movement for the outskirt areas of villages in Wiltshire, UK and from @lai2022red for the remote uninhabited islands Bylot and Herschel in Canada, and bobcat and coyote data from @prugh2023fear for remote areas with some rural structures in northern Washington, US. For the human footprint data, the global terrestrial human footprint data by @gassert2023operational is chosen. For land cover, satellite data described in @zanaga2022esa is employed.
 
@@ -42,13 +42,13 @@ This section describes data preparation and processing for all the datasets empl
 
 ### Movebank data {#sec-movebank}
 
-All Movebank data sets have the same schema. This simplifies data handling, enables code re-use, and requires the data contributors do perform preprocessing and data cleaning on their side to provide the data in an appropriate format. Libraries for data processing and trajectory handling in R are provided by @kranstauber2024move2 and @signer2019animal.
+All Movebank datasets have the same schema. This simplifies data handling, enables code re-use, and requires the data contributors do perform preprocessing and data cleaning on their side to provide the data in an appropriate format. Libraries for data processing and trajectory handling in R are provided by @kranstauber2024move2 and @signer2019animal.
 
 The R code for data download, preprocessing, and serialization of relevant data and charts can be found in: [Red fox: UK wader nesting season home ranges](https://elkeelke.github.io/MovebankProject/preprocessing_uk_wader_nesting_season_home_range.html), [Red fox: montly home ranges](https://elkeelke.github.io/MovebankProject/preprocessing_monthly_home_ranges.html), [Bobcat/coyote: data preparation](https://elkeelke.github.io/MovebankProject/preprocessing_bobcat_coyote.html). The R code for statistical modelling can be found in [Bobcat/coyote: modelling](https://elkeelke.github.io/MovebankProject/preprocessing_ssf.html).
 
 ### Human footprint data
 
-The global 100 meter resolution terrestrial human footprint data (HFP-100) is a raster data set using Mollweide projection as described by @lapaine2011mollweide. The 2020 version of the data was used. The relevant areas were downloaded using a 125 km buffer around the tracking points, and projected to the WGS84 coordinate system: [HFP-100 download](https://elkeelke.github.io/MovebankProject/preprocessing_HFP_subsetting.html).
+The global 100 meter resolution terrestrial human footprint data (HFP-100) is a raster dataset using Mollweide projection as described by @lapaine2011mollweide. The 2020 version of the data was used. The relevant areas were downloaded using a 125 km buffer around the tracking points, and projected to the WGS84 coordinate system: [HFP-100 download](https://elkeelke.github.io/MovebankProject/preprocessing_HFP_subsetting.html).
 
 ### Land cover data
 
@@ -56,7 +56,7 @@ The relevant European Space Agency (ESA) WorldCover 2021 data at 10 m resolution
 
 ## Data exploration and analysis
 
-This section describes the data exploration steps taken for read fox data, and for bobcat/coyote data.
+This section describes the data exploration steps taken for red fox data, and for bobcat and coyote data.
 
 ### Red fox data {#sec-redfoxdata}
 
@@ -106,11 +106,11 @@ Box plots of sampling rates for bobcat and coyote data
 
 ### Home range size assessment
 
-The red fox data is used for home range size assessment for rural and remote locations. Home range sizes are calculated using minimum convex polygons, which provides easily comparable estimates of the area used by each individual animal. As discussed in @sec-redfoxdata, the data for the two locations have different temporal scale. @laube2011 have found that the choice of temporal scale has considerable effects on movement parameter calculations, in turn affecting home range results.
+The red fox data is used for home range size assessment for rural and remote locations. Home range sizes are calculated using minimum convex polygons, which provides easily comparable estimates of the area used by each individual animal. As discussed in @sec-redfoxdata, the datasets for the two locations have different temporal scale. 
 
-How to make this data comparable? Problem #1 is that the sampling intervals are different. Problem #2 is that the data coverage varies by time of the year. Problem #3 is that there are highly different amounts of data. Selecting the means and parameters for the comparison involves complex choices that will influence the results. For #1, a possible approach to achieve similar sampling intervals would be to sample a random afternoon data point for each 24 hour window. However, this would include the implicit assumption that foxes will follow similar daily patterns in the different environments. For #2, a possible approach would be to compare the data for the same time of the year. But since the geographical locations are different, the seasonal weather conditions will differ for the same day of the year, likely leading to different animal behavior. For #3, aggregated comparisons can solve the issue, assuming there is enough data for the smaller data source.
+@laube2011 have found that the choice of temporal scale has considerable effects on movement parameter calculations, in turn affecting home range results. How to make this data comparable? Problem #1 is that the sampling intervals are different. Problem #2 is that the data coverage varies by time of the year. Problem #3 is that there are highly different amounts of data. Selecting the means and parameters for the comparison involves complex choices that will influence the results. For #1, a possible approach to achieve similar sampling intervals would be to sample a random afternoon data point for each 24 hour window. However, this would include the implicit assumption that foxes will follow similar daily patterns in the different environments. For #2, a possible approach would be to compare the data for the same time of the year. But since the geographical locations are different, the seasonal weather conditions will differ for the same day of the year, likely leading to different animal behavior. For #3, aggregated comparisons can solve the issue, assuming there is enough data for the smaller data source.
 
-For data exploration the simplest possible imperfect approach is employed, which is to ignore the different sampling intervals for problem #1, to compare the data for the same time of the year for problem #2 even if animal behavior might be different, and to use exploratory data analysis to find out if a representative answer can be found given the amount of data present for problem #3. Note that this approach has obvious limits. Among them is that the Herschel data is not applicable, since it has minimal overlaps with the Wiltshire data (see @fig-datapoints-month). To explore the impact of sampling intervals for problem #1, the home ranges for the Wiltshire data are additionally calculated on downsampled data, where a random data point from every 24 hour period is selected. Finally, an analysis of monthly home ranges is conducted on all three data sets as an alternative solution to address problem #2.
+For data exploration the simplest possible imperfect approach is employed, which is to ignore the different sampling intervals for problem #1, to compare the data for the same time of the year for problem #2 even if animal behavior might be different, and to use exploratory data analysis to find out if a representative answer can be found given the amount of data present for problem #3. Note that this approach has obvious limits. Among them is that the Herschel data is not applicable, since it has minimal overlaps with the Wiltshire data (see @fig-datapoints-month). To explore the impact of sampling intervals for problem #1, the home ranges for the Wiltshire data are additionally calculated on downsampled data, where a random data point from every 24 hour period is selected. Finally, an analysis of monthly home ranges is conducted on all three datasets as an alternative solution to address problem #2.
 
 ### Trajectory analysis and habitat selection
 
@@ -185,7 +185,6 @@ box()
 
 TBD For habitat selection, deriving statistically significant results from the bobcat data was not possible. The results for the coyote data are shown in 
 
-
 # Model validation
 
 According to @rykiel1996testing, model validation means demonstrating that a model is acceptable for its intended use. The purpose, criteria, and context of the model must be specified.
@@ -202,13 +201,13 @@ Note that there is one fox with an extraordinarily large home range in @fig-home
 
 While technical aspects such as sampling intervals and home range estimator have significant influence on the calculation results, they play a secondary role in comparison to the difference in fox behavior, which enables the chosen approach of comparing data from heterogeneous sources.
 
-Another instance of data aspects having large effects on the results was observed for the statistical modelling. While we could fit a model for coyote data, this was not possible for the bobcat data. We suspect that the required re-sampling because of the initially irregular sampling rates as shown in @fig-sampling-rates played a role.
+Another instance of data aspects having large effects on the results was observed for the statistical modelling. While we could fit a model for coyote data, this was not possible for the bobcat data. We suspect that the re-sampling required due to irregular sampling rates as shown in @fig-sampling-rates played a role.
 
 TBD habitats
 
-# Conclusion
+# Conclusion and outlook
 
-We have presented two examples demonstrating that human activity influences animal home range sizes and habitat selection significantly. These insights have been created based on externally contributed publicly available data. 
+We have applied spatial data analysis and statistics to externally contributed publicly available data, and have demonstrated two examples for human activity influencing animal home range sizes and habitat selection significantly. It would be interesting to extend the work to further Movebank datasets.
 
 # Appendix
 
