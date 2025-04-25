@@ -90,7 +90,7 @@ Amount of data per year and month
 
 ![Bobcat and coyote locations in the context of the land cover data](img/esa_landcover_study_area_with_animals.png){#fig-esa width="85%"}
 
-![HFP-100 data with bobcat and coyote tracks shown in black and relevant area in red](img/hfp.png){#fig-hfp width="85%"}
+![HFP-100 data with bobcat and coyote tracks](img/hfp.png){#fig-hfp width="85%"}
 
 The data sampling intervals are intended to be four hours, however they are irregular with many outliers (see @fig-sampling-rates). In addition, the bobcat intervals are less dense and less regular in comparison.
 
@@ -103,6 +103,8 @@ Box plots of sampling rates for bobcat and coyote data
 :::
 
 ## Methodology {#sec-methodology}
+
+In this section, the methodologies selected to tackle the research questions are presented in detail.
 
 ### Home range size assessment
 
