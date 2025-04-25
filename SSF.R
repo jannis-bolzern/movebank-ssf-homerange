@@ -8,7 +8,8 @@ pacman::p_load(
   glmmTMB,
   DHARMa,
   emmeans,
-  gratia
+  gratia,
+  ggridges
 )
 
 options(scipen = 999) # turn off scientific notation
@@ -171,12 +172,14 @@ coyote_ssf_data <- read_delim("data/coyote_ssf_data.csv") |>
   filter(n > 100) |>  # select animals with more than 100 fixes
   mutate(land_use_grouped = as.factor(land_use_grouped))
 
+coyote_ssf_data$hfp_std <- scale(coyote_ssf_data$human_footprint)[, 1]
+
 # fit SSF with glmmTMB following Muff et al (2019)
 ssf_coyote <- glmmTMB(
   case_binary_ ~ -1 + 
-    land_use_grouped * (human_footprint + I(human_footprint^2)) + 
+    land_use_grouped * (hfp_std + I(hfp_std^2)) + 
     log_sl_ + 
-    (0 + land_use_grouped + human_footprint + I(human_footprint^2) + log_sl_|| id) +
+    (0 + land_use_grouped + hfp_std + I(hfp_std^2) + log_sl_|| id) +
     (1 | step_id_),
   family = poisson,
   doFit = TRUE,
@@ -186,25 +189,41 @@ ssf_coyote <- glmmTMB(
   control = glmmTMBControl(parallel = nt)
 )
 
+ssf_coyote_linear <- glmmTMB(
+  case_binary_ ~ -1 + 
+    land_use_grouped * hfp_std  + 
+    log_sl_ + 
+    (0 + land_use_grouped + hfp_std + log_sl_|| id) +
+    (1 | step_id_),
+  family = poisson,
+  doFit = TRUE,
+  data = coyote_ssf_data,
+  map = list(theta = factor(c(1:7, NA))),
+  start = list(theta = c(rep(0, times = 7),log(1e3))),
+  control = glmmTMBControl(parallel = nt)
+)
+
 #saveRDS(ssf_coyote, file = "models/ssf_coyote_model.rds")
 #ssf_coyote <- readRDS("models/ssf_coyote_model.rds")
 
 summary(ssf_coyote)
 
-coyote_ssf_data1 <- coyote_ssf_data |> 
-  group_by(step_id_) |> 
-  mutate(samp = sample(n())) |> 
-  filter(samp <= 5, case_binary_ == 0) |> mutate(id = NA) 
+coyote_ssf_pred <- coyote_ssf_data |> 
+  filter(case_binary_ == 0) |> 
+  mutate(id = NA)  # remove ID for population-level prediction
 
-coy_pred <- predict(ssf_coyote, coyote_ssf_data1, re.form = NA, se.fit = TRUE)
-coyote_ssf_data1$fit <- coy_pred$fit
-coyote_ssf_data1$se <- coy_pred$se
-coyote_ssf_data1 <- coyote_ssf_data1 |> ungroup()
+coy_pred <- predict(ssf_coyote, coyote_ssf_pred, re.form = NA, se.fit = TRUE)
+coyote_ssf_pred$fit <- coy_pred$fit
+coyote_ssf_pred$se <- coy_pred$se
+coyote_ssf_pred <- coyote_ssf_pred |> ungroup()
 
-#saveRDS(coyote_ssf_data1, "data/coyote_ssf_pred.rds")
+#saveRDS(coyote_ssf_pred, "data/coyote_ssf_pred.rds")
 #coyote_ssf_pred <- readRDS("data/coyote_ssf_pred.rds")
 
-
+ggplot(coyote_ssf_pred, aes(x = exp(human_footprint), y = fit, color = land_use_grouped)) +
+  geom_point(alpha = 0.3) +
+  geom_smooth(aes(ymin = fit - se, ymax = fit + se, fill = land_use_grouped), stat = "identity", alpha = 0.2) +
+  theme_minimal()
 
 # average effect plot function --------------------------------------------
 
@@ -276,10 +295,9 @@ avg_eff_output[["plot"]][["plot_env"]][["peak_vals"]]
 
 
 
-# RSS ---------------------------------------------------------------------
-# No CI
+# Relative Selection Strength ---------------------------------------------
 
-calc_rss_hfp_landcover <- function(model, data, land_use_col = "land_use_grouped", hfp_col = "human_footprint", n_points = 100) {
+calc_rss_hfp_landcover <- function(model, data, land_use_col = "land_use_grouped", hfp_col = "hfp_std", n_points = 100) {
   
   levels <- unique(data[[land_use_col]])
   all_rss <- purrr::map_dfr(levels, function(lc) {
@@ -293,18 +311,18 @@ calc_rss_hfp_landcover <- function(model, data, land_use_col = "land_use_grouped
     
     # Build newdata for prediction
     newdata <- expand.grid(
-      human_footprint = hfp_seq,
+      hfp_std = hfp_seq,
       land_use_grouped = lc
     ) |> 
       mutate(
-        `I(human_footprint^2)` = human_footprint^2,
+        `I(hfp_std^2)` = hfp_std^2,
         log_sl_ = mean(data$log_sl_, na.rm = TRUE),
         step_id_ = NA,
         id = NA
       )
     
     # Create a baseline: same data with lowest hfp
-    baseline <- newdata |> filter(human_footprint == min(human_footprint))
+    baseline <- newdata |> filter(hfp_std == min(hfp_std))
     
     # Predict
     x1_pred <- predict(model, newdata = newdata, re.form = NA)
@@ -325,75 +343,19 @@ calc_rss_hfp_landcover <- function(model, data, land_use_col = "land_use_grouped
 
 rss_data <- calc_rss_hfp_landcover(model = ssf_coyote, data = coyote_ssf_data)
 
-ggplot(rss_data, aes(x = human_footprint, y = RSS, color = land_use_grouped)) +
+ggplot(rss_data, aes(x = hfp_std, y = RSS, color = land_use_grouped)) +
   geom_line(size = 1.2) +
   geom_hline(yintercept = 1, linetype = "dashed", color = "gray40") +
   labs(x = "Human Footprint", y = "Relative Selection Strength (RSS)", color = "Land Cover") +
   theme_minimal()
 
-
-# RSS with CI (not working)
-
-calc_rss_hfp_landcover <- function(model, data, land_use_col = "land_use_grouped", 
-                                   hfp_col = "human_footprint", n_points = 100) {
-  
-  # Get factor levels from the original data
-  land_use_levels <- levels(factor(data[[land_use_col]]))
-  
-  purrr::map_dfr(land_use_levels, function(lc) {
-    # Create sequence of human footprint values
-    hfp_seq <- seq(min(data[[hfp_col]], na.rm = TRUE), 
-                   max(data[[hfp_col]], na.rm = TRUE), 
-                   length.out = n_points)
-    
-    # Create prediction data frame
-    newdata <- data.frame(
-      human_footprint = hfp_seq,
-      land_use_grouped = factor(lc, levels = land_use_levels),
-      log_sl_ = mean(data$log_sl_, na.rm = TRUE),
-      step_id_ = NA_character_,
-      id = NA_character_
-    )
-    newdata$I.human_footprint.2. <- newdata$human_footprint^2
-    
-    # Create baseline data (minimum HFP)
-    baseline <- newdata[1, ]
-    baseline$human_footprint <- min(data[[hfp_col]], na.rm = TRUE)
-    baseline$I.human_footprint.2. <- baseline$human_footprint^2
-    
-    # Get predictions using predict()
-    pred <- predict(model, newdata = newdata, re.form = NA, se.fit = TRUE)
-    pred_base <- predict(model, newdata = baseline, re.form = NA, se.fit = TRUE)
-    
-    # Calculate log-RSS and CIs
-    logRSS <- pred$fit - pred_base$fit
-    logRSS_se <- sqrt(pred$se.fit^2 + pred_base$se.fit^2)
-    
-    # Return results
-    data.frame(
-      human_footprint = hfp_seq,
-      land_use_grouped = lc,
-      RSS = exp(logRSS),
-      RSS_lower = exp(logRSS - 1.96 * logRSS_se),
-      RSS_upper = exp(logRSS + 1.96 * logRSS_se)
-    )
-  })
-}
-
-# Run the function
-rss_data <- calc_rss_hfp_landcover(model = ssf_coyote, data = coyote_ssf_data)
-
-# Plot results
-ggplot(rss_data, aes(x = human_footprint, y = RSS, 
-                     color = land_use_grouped, fill = land_use_grouped)) +
-  geom_ribbon(aes(ymin = RSS_lower, ymax = RSS_upper), alpha = 0.2, color = NA) +
-  geom_line(size = 1.2) +
-  geom_hline(yintercept = 1, linetype = "dashed", color = "gray40") +
-  labs(x = "Human Footprint", y = "Relative Selection Strength (RSS)", 
-       color = "Land Cover", fill = "Land Cover") +
-  theme_minimal()
-
 # Some plot exploration ---------------------------------------------------
+ggplot(coyote_ssf_data |> filter(case_binary_ == 1),
+       aes(x = human_footprint, fill = land_use_grouped)) +
+  geom_density(alpha = 0.4) +
+  theme_minimal() +
+  labs(x = "Human Footprint", y = "Density",
+       title = "Distribution of Used HFP by Land Cover")
 
 
 # Bivariate density hex plot (continuous y-variable vs human footprint)
@@ -435,8 +397,6 @@ ggplot(coyote_ssf_data, aes(x = land_use_grouped, y = human_footprint)) +
   xlab("Land Use Type") +
   ylab("Human Footprint") +
   ggtitle("Distribution of HFP by Land Use")
-
-library(ggridges)
 
 ggplot(coyote_ssf_data, aes(x = human_footprint, y = land_use_grouped)) +
   geom_density_ridges(scale = 1.2, fill = "lightgreen", alpha = 0.7) +
