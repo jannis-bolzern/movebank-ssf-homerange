@@ -89,9 +89,9 @@ Amount of data per year and month
 
 @fig-esa shows that the two species reside in two separated geographical areas and have interspersed home ranges. It also features a plot of the animal locations in the context of the extracted land cover data. @fig-hfp reveals the human footprint in the area, which is generally low except for some settlements and country roads.
 
-![Bobcat and coyote locations in the context of the land cover data](img/esa_landcover_study_area_with_animals.png){#fig-esa width="85%"}
+![Bobcat and coyote locations in the context of the land cover data](img/esa_landcover_study_area_with_animals.png){#fig-esa width="75%"}
 
-![HFP-100 data with bobcat and coyote tracks](img/hfp.png){#fig-hfp width="85%"}
+![HFP-100 data with bobcat and coyote tracks](img/hfp.png){#fig-hfp width="75%"}
 
 The data sampling intervals are intended to be four hours, however they are irregular with many outliers (see @fig-sampling-rates). In addition, the bobcat intervals are less dense and less regular in comparison.
 
@@ -127,7 +127,7 @@ To compare land cover choices, which translate into habitat characteristics, sev
 
 The resulting fox home ranges for the UK wader nesting season time frame are shown in @fig-home-ranges-bylot and @fig-home-ranges-wiltshire. The median home range size for the remote foxes in Bylot (75.3 km<sup>2</sup>) is more than 65 times larger compared to the rural foxes in Wiltshire (1.1 km<sup>2</sup>). The home ranges for the sub-sampled Wiltshire data are shown in @fig-home-ranges-wiltshire-sampled24h. The median home range size is 0.56 km<sup>2</sup> for the sampled data, which is roughly half as much as for the full data.
 
-![Home ranges for Bylot foxes (March 15th to June 15th, 2012)](img/home_range_bylot_wader.png){#fig-home-ranges-bylot width="60%"}
+![Home ranges for Bylot foxes (March 15th to June 15th, 2012)](img/home_range_bylot_wader.png){#fig-home-ranges-bylot width="50%"}
 
 ::: {#fig-sampling layout-ncol="2"}
 ![10/60 minute sampling interval](img/home_range_wiltshire_wader.png){#fig-home-ranges-wiltshire}
@@ -210,7 +210,7 @@ TBD habitats
 
 # Conclusion and outlook
 
-We have performed spatial data analysis and statistics on externally contributed publicly available data to demonstrate that human activity influences animal behavior significantly. We could show that (1) fox home range sizes are much larger in remote areas, and that (2) forests are preferred over built-up areas for habitat selection depending on human footprint. 
+We have performed spatial data analysis and statistics on externally contributed publicly available data to demonstrate that human activity influences animal behavior significantly. We could show that (1) fox home range sizes are much larger in remote areas, and that (2) bobcats prefer forests over built-up areas for habitat selection depending on human footprint. 
 
 # Appendix
 
