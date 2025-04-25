@@ -1,7 +1,7 @@
 ---
 title: "Modelling"
 format: html
-editor: visual
+freeze: true
 ---
 
 ```{r}
@@ -26,7 +26,7 @@ coyote_ssf_data <- read_delim("data/coyote_ssf_data.csv") |>
 
 coyote_ssf_data$hfp_std <- scale(coyote_ssf_data$human_footprint)[, 1]
 
-# fit SSF with glmmTMB following Muff et al (2019)
+# Fit SSF with glmmTMB following Muff et al (2019)
 ssf_coyote <- glmmTMB(
   case_binary_ ~ -1 + 
     land_use_grouped * (hfp_std + I(hfp_std^2)) + 
@@ -46,17 +46,20 @@ ssf_coyote <- glmmTMB(
 
 summary(ssf_coyote)
 
-coyote_ssf_pred <- coyote_ssf_data |> 
-  filter(case_binary_ == 0) |> 
-  mutate(id = NA)  # remove ID for population-level prediction
+pred_data = file.path(getwd(), "data/coyote_ssf_pred.rds")
+if(!file.exists(pred_data)) {
+  coyote_ssf_pred <- coyote_ssf_data |> 
+    filter(case_binary_ == 0) |> 
+    mutate(id = NA)  # remove ID for population-level prediction
 
-coy_pred <- predict(ssf_coyote, coyote_ssf_pred, re.form = NA, se.fit = TRUE)
-coyote_ssf_pred$fit <- coy_pred$fit
-coyote_ssf_pred$se <- coy_pred$se
-coyote_ssf_pred <- coyote_ssf_pred |> ungroup()
-
-#saveRDS(coyote_ssf_pred, "data/coyote_ssf_pred.rds")
-#coyote_ssf_pred <- readRDS("data/coyote_ssf_pred.rds")
+  # This takes hours to run on an average machine.
+  coy_pred <- predict(ssf_coyote, coyote_ssf_pred, re.form = NA, se.fit = TRUE)
+  coyote_ssf_pred$fit <- coy_pred$fit
+  coyote_ssf_pred$se <- coy_pred$se
+  coyote_ssf_pred <- coyote_ssf_pred |> ungroup()
+  saveRDS(coyote_ssf_pred, "data/coyote_ssf_pred.rds")
+}
+coyote_ssf_pred <- readRDS("data/coyote_ssf_pred.rds")
 
 ggplot(coyote_ssf_pred, aes(x = exp(human_footprint), y = fit, color = land_use_grouped)) +
   geom_point(alpha = 0.3) +
