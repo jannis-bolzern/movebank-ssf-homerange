@@ -1,21 +1,30 @@
 ---
-title: "preprocessing_ESA_world_cover"
+title: "Preprocessing: ESA world cover"
 format: html
 freeze: true
 ---
 
+# Load libraries
 ```{r}
-# 1. LOAD LIBRARIES ------------------------------------------------------------
 pacman::p_load(
   rstac,       # For accessing STAC APIs
   sf,
   terra,
   tidyverse,
-  tidyterra
+  tidyterra,
+  rnaturalearth,
+  ggplot2
 )
+```
 
-# 2. PREPARE STUDY AREA FROM TRACKING DATA -------------------------------------
-# Read and prepare tracking data
+# Load WA state boundary (for analysis) and animal tracking buffer (for the figure)
+```{r}
+wa_boundary <- ne_states(
+  country = "United States of America",
+  returnclass = "sf") |>
+  filter(name == "Washington") |>
+  st_transform("EPSG:4326")  # Convert to WGS84
+
 # From https://www.movebank.org/cms/webapp?gwt_fragment=page%3Dstudies%2Cpath%3Dstudy2636372210
 tracking_data <- read_delim("data/bobcat_coyotes_wa_gps.csv")
 
@@ -25,19 +34,13 @@ animal_sf <- tracking_data |>
     coords = c("location-long", "location-lat"),
     crs = 4326
   )
+```
 
-# Create study area boundary with 10km buffer
-study_area <- animal_sf |>
-  st_union() |>
-  st_convex_hull() |>    # Create minimum convex polygon
-  st_buffer(10000) |>    # 10km buffer in CRS units
-  st_transform(4326)     # Ensure WGS84 for ESA download
-
-# 3. DOWNLOAD ESA WORLDCOVER DATA ----------------------------------------------
-# Connect to Microsoft Planetary Computer STAC
-
+# Download the data if we don't have it yet
+```{r}
 esa_data = file.path(getwd(), "data/esa-worldcover/v200/2021/map")
 if(!file.exists(esa_data)) {
+  # Connect to Microsoft Planetary Computer STAC
   stac_api <- stac("https://planetarycomputer.microsoft.com/api/stac/v1")
   
   # Search for ESA WorldCover 2021 data within study area
@@ -58,8 +61,11 @@ if(!file.exists(esa_data)) {
     output_dir = file.path(getwd(), "data/"),
     overwrite = TRUE
   )
-}  
-# 4. PROCESS ESA DATA ----------------------------------------------------------
+}
+```
+
+# Process the data and write it to file
+```{r}
 # Get all downloaded tiles
 esa_tiles <- list.files(
   path = esa_data,
@@ -68,24 +74,25 @@ esa_tiles <- list.files(
 )
 
 # Merge and crop tiles to study area
-rasters_list <- lapply(esa_tiles, rast)
-combined <- do.call(merge, rasters_list)
-esa_cropped <- crop(combined, vect(study_area))
-land_cover <- mask(esa_cropped, vect(study_area))
+land_cover <- esa_tiles |>
+  lapply(rast) |>
+  (\(x) do.call(merge, x))() |>
+  crop(vect(wa_boundary)) |>
+  mask(vect(wa_boundary))
 
-# Convert to factor for plotting
-land_cover <- as.factor(land_cover)
 
 # Save the final cropped/merged land cover
 writeRaster(
   land_cover,
-  "data/ESA_study_area.tif",   # Output filename
+  "data/ESA_washington.tif",   # Output filename
   overwrite = TRUE,            # Overwrite if exists
   datatype = "INT1U",          # Optimize for categorical data
   gdal = c("COMPRESS=LZW")     # Reduce file size
 )
+```
 
-# 5. VISUALIZE RESULTS ---------------------------------------------------------
+# Create a zoomed in chart for the paper with animal tracks overlay
+```{r}
 # Class labels (ESA WorldCover 2021)
 class_labels <- c(
   "10" = "Tree cover",
@@ -100,6 +107,9 @@ class_labels <- c(
   "95" = "Mangroves",
   "100" = "Moss and lichen"
 )
+
+# Convert to factor for plotting
+land_cover <- as.factor(land_cover)
 
 # Create plot
 ggplot() +
@@ -126,6 +136,11 @@ ggplot() +
   ) +
   scale_color_manual(values = c("Canis latrans" = "black", "Lynx rufus" = "white"), 
                      name = "Species") +
+  coord_sf(
+    xlim = c(-120.7, -117.1),
+    ylim = c(47, 49),
+    expand = FALSE
+  ) +  
   theme(
     legend.background = element_rect(fill = "gray90", color = "black"),
   ) +
@@ -133,23 +148,4 @@ ggplot() +
     color = guide_legend(override.aes = list(size = 4)),
   )
 ggsave("img/esa_landcover_study_area_with_animals.png")
-
-# Create plot
-ggplot() +
-  tidyterra::geom_spatraster(
-    data = land_cover,
-    maxcell = 1e6
-  ) +
-  scale_fill_manual(
-    values = c(
-      "10" = "#006400", "20" = "#FFBB22", "30" = "#FFFF4C",
-      "40" = "#D2B48C", "50" = "#FA0000", "60" = "#B4B4B4",
-      "70" = "#F0F0F0", "80" = "#0064C8", "90" = "#0096A0",
-      "95" = "#00CF75", "100" = "#FAE6A0"
-    ),
-    labels = class_labels,
-    na.value = NA
-  ) +
-  theme_minimal()
-ggsave("img/esa_landcover_study_area_without_animals.png")
 ```
