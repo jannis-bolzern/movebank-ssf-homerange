@@ -45,7 +45,7 @@ This section describes data preparation and processing for all the datasets empl
 
 All Movebank datasets have the same schema. This simplifies data handling, enables code re-use, and requires the data contributors do perform preprocessing and data cleaning on their side to provide the data in an appropriate format. Libraries for data processing and trajectory handling in R are provided by @kranstauber2024move2 and @signer2019animal.
 
-The R code for data download, preprocessing, and serialization of relevant data and charts can be found in: [Red fox: UK wader nesting season home ranges](https://elkeelke.github.io/MovebankProject/preprocessing_uk_wader_nesting_season_home_range.html), [Red fox: montly home ranges](https://elkeelke.github.io/MovebankProject/preprocessing_monthly_home_ranges.html), [Bobcat/coyote: data preparation](https://elkeelke.github.io/MovebankProject/preprocessing_bobcat_coyote.html). 
+The R code for data download, preprocessing, and serialization of relevant data and charts can be found in: [Red fox: UK wader nesting season home ranges](https://elkeelke.github.io/MovebankProject/preprocessing_uk_wader_nesting_season_home_range.html), [Red fox: montly home ranges](https://elkeelke.github.io/MovebankProject/preprocessing_monthly_home_ranges.html), [Bobcat/coyote: data preparation](https://elkeelke.github.io/MovebankProject/preprocessing_bobcat_coyote.html). The R code for statistical modelling can be found in [Bobcat/coyote: modelling](https://elkeelke.github.io/MovebankProject/preprocessing_ssf.html).
 
 ### Human footprint data
 
