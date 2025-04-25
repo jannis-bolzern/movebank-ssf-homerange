@@ -1,9 +1,10 @@
 ---
-title: "Modelling"
+title: "Statistical modelling"
 format: html
 freeze: true
 ---
 
+# Setup
 ```{r}
 # Load necessary packages -----------------------------------------------------
 pacman::p_load(
@@ -17,36 +18,46 @@ pacman::p_load(
 nt <- parallel::detectCores() - 2
 options(scipen = 0)
 options(digits = 7)
+```
 
-# Fit SSF: Coyote -------------------------------------------------------------
-# Read SSF ready data
-coyote_ssf_data <- read_delim("data/coyote_ssf_data.csv") |> 
-  filter(n > 100) |>  # select animals with more than 100 fixes
-  mutate(land_use_grouped = as.factor(land_use_grouped))
-
-coyote_ssf_data$hfp_std <- scale(coyote_ssf_data$human_footprint)[, 1]
-
-# Fit SSF with glmmTMB following Muff et al (2019)
-ssf_coyote <- glmmTMB(
-  case_binary_ ~ -1 + 
-    land_use_grouped * (hfp_std + I(hfp_std^2)) + 
-    log_sl_ + 
-    (0 + land_use_grouped + hfp_std + I(hfp_std^2) + log_sl_|| id) +
-    (1 | step_id_),
-  family = poisson,
-  doFit = TRUE,
-  data = coyote_ssf_data,
-  map = list(theta = factor(c(1:8, NA))),
-  start = list(theta = c(rep(0, times = 8),log(1e3))),
-  control = glmmTMBControl(parallel = nt)
-)
-
-#saveRDS(ssf_coyote, file = "models/ssf_coyote_model.rds")
-#ssf_coyote <- readRDS("models/ssf_coyote_model.rds")
-
+# Fit SSF: Coyote
+```{r}
+ssf_model_filename = "models/ssf_coyote_model.rds"
+ssf_model_data = file.path(getwd(), ssf_model_filename)
+if(!file.exists(ssf_model_data)) {
+  # Read SSF ready data
+  coyote_ssf_data <- read_delim("data/coyote_ssf_data.csv") |> 
+    filter(n > 100) |>  # select animals with more than 100 fixes
+    mutate(land_use_grouped = as.factor(land_use_grouped))
+  
+  coyote_ssf_data$hfp_std <- scale(coyote_ssf_data$human_footprint)[, 1]
+  
+  # Fit SSF with glmmTMB following Muff et al (2019)
+  ssf_coyote <- glmmTMB(
+    case_binary_ ~ -1 + 
+      land_use_grouped * (hfp_std + I(hfp_std^2)) + 
+      log_sl_ + 
+      (0 + land_use_grouped + hfp_std + I(hfp_std^2) + log_sl_|| id) +
+      (1 | step_id_),
+    family = poisson,
+    doFit = TRUE,
+    data = coyote_ssf_data,
+    map = list(theta = factor(c(1:8, NA))),
+    start = list(theta = c(rep(0, times = 8),log(1e3))),
+    control = glmmTMBControl(parallel = nt)
+  )
+  
+  saveRDS(ssf_coyote, file = ssf_model_filename)
+}
+ssf_coyote <- readRDS(ssf_model_filename)
 summary(ssf_coyote)
+```
 
-pred_data = file.path(getwd(), "data/coyote_ssf_pred.rds")
+# Average effect plots (turned off by default in the chunk settings)
+```{r}
+#| eval: false
+#| include: false
+pred_data = file.path(getwd(), "models/coyote_ssf_pred.rds")
 if(!file.exists(pred_data)) {
   coyote_ssf_pred <- coyote_ssf_data |> 
     filter(case_binary_ == 0) |> 
@@ -57,9 +68,9 @@ if(!file.exists(pred_data)) {
   coyote_ssf_pred$fit <- coy_pred$fit
   coyote_ssf_pred$se <- coy_pred$se
   coyote_ssf_pred <- coyote_ssf_pred |> ungroup()
-  saveRDS(coyote_ssf_pred, "data/coyote_ssf_pred.rds")
+  saveRDS(coyote_ssf_pred, "models/coyote_ssf_pred.rds")
 }
-coyote_ssf_pred <- readRDS("data/coyote_ssf_pred.rds")
+coyote_ssf_pred <- readRDS("models/coyote_ssf_pred.rds")
 
 ggplot(coyote_ssf_pred, aes(x = exp(human_footprint), y = fit, color = land_use_grouped)) +
   geom_point(alpha = 0.3) +
@@ -79,7 +90,6 @@ avg_eff_plot_hfp_landuse <- function(fittedResponse, nsim = 100, k = 10, showPea
   fit_sample_matrix <- matrix(fit_sample, nrow = nrow(fittedResponse), ncol = nsim)
   
   smooth_list <- list()
-  
   for (j in 1:nsim) {
     message("GAM smoothing sample ", j)
     smooth_list[[j]] <- mgcv::bam(
@@ -125,19 +135,16 @@ avg_eff_plot_hfp_landuse <- function(fittedResponse, nsim = 100, k = 10, showPea
   return(list(plot = p))
 }
 
-
 coyote_ssf_pred <- coyote_ssf_pred |> 
   mutate(land_use_grouped = as.factor(land_use_grouped))
-
 
 avg_eff_output <- avg_eff_plot_hfp_landuse(coyote_ssf_pred, nsim = 100, showPeakValue = TRUE)
 
 avg_eff_output[["plot"]][["plot_env"]][["peak_vals"]]
+```
 
-
-
-# Relative Selection Strength ---------------------------------------------
-
+# Relative Selection Strength
+```{r}
 calc_rss_hfp_landcover <- function(model, data, land_use_col = "land_use_grouped", hfp_col = "hfp_std", n_points = 100) {
   
   levels <- unique(data[[land_use_col]])
@@ -189,15 +196,16 @@ ggplot(rss_data, aes(x = hfp_std, y = RSS, color = land_use_grouped)) +
   geom_hline(yintercept = 1, linetype = "dashed", color = "gray40") +
   labs(x = "Human Footprint", y = "Relative Selection Strength (RSS)", color = "Land Cover") +
   theme_minimal()
+```
 
-# Some plot exploration ---------------------------------------------------
+# More plots
+```{r}
 ggplot(coyote_ssf_data |> filter(case_binary_ == 1),
        aes(x = human_footprint, fill = land_use_grouped)) +
   geom_density(alpha = 0.4) +
   theme_minimal() +
   labs(x = "Human Footprint", y = "Density",
        title = "Distribution of Used HFP by Land Cover")
-
 
 # Bivariate density hex plot (continuous y-variable vs human footprint)
 hex_plot_fun <- function(data, yvar, ylab, title_) {
@@ -246,7 +254,6 @@ ggplot(coyote_ssf_data, aes(x = human_footprint, y = land_use_grouped)) +
   ylab("Land Use") +
   ggtitle("Distribution of Human Footprint across Land Use")
 
-
 ggplot(coyote_ssf_data, aes(x = land_use_grouped, y = human_footprint, fill = factor(case_binary_))) +
   geom_boxplot(position = position_dodge(0.8)) +
   scale_fill_manual(values = c("0" = "grey80", "1" = "dodgerblue"), name = "Used?") +
@@ -255,9 +262,10 @@ ggplot(coyote_ssf_data, aes(x = land_use_grouped, y = human_footprint, fill = fa
   ylab("Human Footprint") +
   ggtitle("HFP by Land Use (Used vs. Available)") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
 
-
-# Fit SSF: Bobcat -------------------------------------------------------------
+# Fit SSF: Bobcat
+```{r}
 # Read SSF ready data
 bobcat_ssf_data <- read_delim("data/bobcat_ssf_data.csv") |> 
   filter(n > 100) # select animals with more than 100 fixes
@@ -296,3 +304,4 @@ confint(ssf_bobcat)
 trends_bobcat <- emtrends(ssf_bobcat, ~ land_use_grouped, var = "human_footprint") |> 
   summary(infer = c(TRUE, TRUE))
 ```
+
