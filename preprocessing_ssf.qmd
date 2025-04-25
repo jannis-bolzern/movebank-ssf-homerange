@@ -300,5 +300,6 @@ confint(ssf_bobcat)
 # Marginal trends for bobcats
 trends_bobcat <- emtrends(ssf_bobcat, ~ land_use_grouped, var = "human_footprint") |> 
   summary(infer = c(TRUE, TRUE))
+trends_bobcat
 ```
 
