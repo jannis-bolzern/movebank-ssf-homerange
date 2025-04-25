@@ -19,8 +19,8 @@ pacman::p_load(
 # Load Washington boundary in Mollweide
 wa_boundary <- ne_states(
   country = "United States of America",
-  returnclass = "sf") %>%
-  filter(name == "Washington") %>%
+  returnclass = "sf") |>
+  filter(name == "Washington") |>
   st_transform("ESRI:54009")  # Convert to Mollweide
 ```
 
