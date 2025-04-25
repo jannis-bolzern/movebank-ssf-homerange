@@ -20,16 +20,19 @@ options(scipen = 0)
 options(digits = 7)
 ```
 
-# Fit SSF: Coyote
+# Coyotes
+## Read SSF ready data
+```{r}
+coyote_ssf_data <- read_delim("data/coyote_ssf_data.csv") |> 
+  filter(n > 100) |>  # select animals with more than 100 fixes
+  mutate(land_use_grouped = as.factor(land_use_grouped))
+```
+
+## Fit SSF
 ```{r}
 ssf_model_filename = "models/ssf_coyote_model.rds"
 ssf_model_data = file.path(getwd(), ssf_model_filename)
 if(!file.exists(ssf_model_data)) {
-  # Read SSF ready data
-  coyote_ssf_data <- read_delim("data/coyote_ssf_data.csv") |> 
-    filter(n > 100) |>  # select animals with more than 100 fixes
-    mutate(land_use_grouped = as.factor(land_use_grouped))
-  
   coyote_ssf_data$hfp_std <- scale(coyote_ssf_data$human_footprint)[, 1]
   
   # Fit SSF with glmmTMB following Muff et al (2019)
@@ -53,7 +56,7 @@ ssf_coyote <- readRDS(ssf_model_filename)
 summary(ssf_coyote)
 ```
 
-# Average effect plots (turned off by default in the chunk settings)
+## Average effect plots (turned off by default in the chunk settings)
 ```{r}
 #| eval: false
 #| include: false
@@ -137,13 +140,11 @@ avg_eff_plot_hfp_landuse <- function(fittedResponse, nsim = 100, k = 10, showPea
 
 coyote_ssf_pred <- coyote_ssf_pred |> 
   mutate(land_use_grouped = as.factor(land_use_grouped))
-
 avg_eff_output <- avg_eff_plot_hfp_landuse(coyote_ssf_pred, nsim = 100, showPeakValue = TRUE)
-
 avg_eff_output[["plot"]][["plot_env"]][["peak_vals"]]
 ```
 
-# Relative Selection Strength
+## Relative Selection Strength
 ```{r}
 calc_rss_hfp_landcover <- function(model, data, land_use_col = "land_use_grouped", hfp_col = "hfp_std", n_points = 100) {
   
@@ -198,7 +199,7 @@ ggplot(rss_data, aes(x = hfp_std, y = RSS, color = land_use_grouped)) +
   theme_minimal()
 ```
 
-# More plots
+## More plots
 ```{r}
 ggplot(coyote_ssf_data |> filter(case_binary_ == 1),
        aes(x = human_footprint, fill = land_use_grouped)) +
@@ -264,7 +265,7 @@ ggplot(coyote_ssf_data, aes(x = land_use_grouped, y = human_footprint, fill = fa
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
-# Fit SSF: Bobcat
+# Bobcats
 ```{r}
 # Read SSF ready data
 bobcat_ssf_data <- read_delim("data/bobcat_ssf_data.csv") |> 
