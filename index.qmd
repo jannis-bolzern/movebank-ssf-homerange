@@ -13,7 +13,7 @@ execute:
 lang: en
 bibliography: bibliography.bib
 keep-tex: true
-freeze: auto
+freeze: true
 ---
 
 # Abstract

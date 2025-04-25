@@ -1,6 +1,7 @@
 ---
 title: "Preprocessing: UK wader nesting season home range"
 format: html
+freeze: true
 ---
 
 ## EDA over all the study data

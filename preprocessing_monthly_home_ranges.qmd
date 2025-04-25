@@ -1,6 +1,7 @@
 ---
 title: "Preprocessing: monthly home ranges"
 format: html
+freeze: true
 ---
 
 ```{r}

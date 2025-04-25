@@ -2,6 +2,7 @@
 title: "Preprocessing for SSF"
 format: html
 editor: visual
+freeze: true
 ---
 
 ```{r}

@@ -1,11 +1,11 @@
 ---
 title: "KDE"
 format: html
-editor: visual
+freeze: true
 ---
 
 #### Kernel Density Estimation (KDE)
- 
+
 ```{r}
 library(sp)
 library(sf)
@@ -51,9 +51,9 @@ sp_points <- as(data, "Spatial")
  
 #rm(sp_points, kud, terr_kde)
 ```
- 
+
 Combine the land cover data and the KDE estimation
- 
+
 ```{r}
 # intersect the KDE area with the land cover data
 #terr_kde <- st_intersection(terr_sf_kde, shape)
