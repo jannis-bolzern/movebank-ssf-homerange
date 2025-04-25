@@ -189,20 +189,6 @@ ssf_coyote <- glmmTMB(
   control = glmmTMBControl(parallel = nt)
 )
 
-ssf_coyote_linear <- glmmTMB(
-  case_binary_ ~ -1 + 
-    land_use_grouped * hfp_std  + 
-    log_sl_ + 
-    (0 + land_use_grouped + hfp_std + log_sl_|| id) +
-    (1 | step_id_),
-  family = poisson,
-  doFit = TRUE,
-  data = coyote_ssf_data,
-  map = list(theta = factor(c(1:7, NA))),
-  start = list(theta = c(rep(0, times = 7),log(1e3))),
-  control = glmmTMBControl(parallel = nt)
-)
-
 #saveRDS(ssf_coyote, file = "models/ssf_coyote_model.rds")
 #ssf_coyote <- readRDS("models/ssf_coyote_model.rds")
 
