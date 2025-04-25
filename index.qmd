@@ -125,7 +125,7 @@ To compare land cover choices, which translate into habitat characteristics, sev
 
 # Results
 
-The resulting home ranges for the UK wader nesting season time frame are shown in @fig-home-ranges-bylot and @fig-home-ranges-wiltshire. The median home range size for the remote foxes in Bylot (75.3 km<sup>2</sup>) is more than 65 times larger compared to the rural foxes in Wiltshire (1.1 km<sup>2</sup>). The home ranges for the sub-sampled Wiltshire data are shown in @fig-home-ranges-wiltshire-sampled24h. The median home range size is 0.56 km<sup>2</sup> for the sampled data, which is roughly half as much as for the full data.
+The resulting fox home ranges for the UK wader nesting season time frame are shown in @fig-home-ranges-bylot and @fig-home-ranges-wiltshire. The median home range size for the remote foxes in Bylot (75.3 km<sup>2</sup>) is more than 65 times larger compared to the rural foxes in Wiltshire (1.1 km<sup>2</sup>). The home ranges for the sub-sampled Wiltshire data are shown in @fig-home-ranges-wiltshire-sampled24h. The median home range size is 0.56 km<sup>2</sup> for the sampled data, which is roughly half as much as for the full data.
 
 ![Home ranges for Bylot foxes (March 15th to June 15th, 2012)](img/home_range_bylot_wader.png){#fig-home-ranges-bylot width="60%"}
 
@@ -210,7 +210,7 @@ TBD habitats
 
 # Conclusion and outlook
 
-We have performed spatial data analysis and statistics on externally contributed publicly available data to demonstrate that human activity influences animal behavior significantly. We could show that fox home range sizes are much larger in remote areas, and that forests are preferred over built-up areas for habitat selection depending on human footprint. 
+We have performed spatial data analysis and statistics on externally contributed publicly available data to demonstrate that human activity influences animal behavior significantly. We could show that (1) fox home range sizes are much larger in remote areas, and that (2) forests are preferred over built-up areas for habitat selection depending on human footprint. 
 
 # Appendix
 
