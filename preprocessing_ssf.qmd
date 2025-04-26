@@ -133,13 +133,13 @@ if(!file.exists(pred_data)) {
   coy_pred <- predict(ssf_coyote, coyote_ssf_pred, re.form = NA, se.fit = TRUE)
   coyote_ssf_pred$fit <- coy_pred$fit
   coyote_ssf_pred$se <- coy_pred$se
+  coyote_ssf_pred <- coyote_ssf_pred |> 
+    mutate(land_use_grouped = as.factor(land_use_grouped))
   coyote_ssf_pred <- coyote_ssf_pred |> ungroup()
   saveRDS(coyote_ssf_pred, pred_filename)
+  
 }
 coyote_ssf_pred <- readRDS(pred_filename)
-# TBD: Takes forever, better to include this in the written file for caching.
-coyote_ssf_pred <- coyote_ssf_pred |> 
-  mutate(land_use_grouped = as.factor(land_use_grouped))
 
 # Overview plot, commented out because it takes forever to run and save.
 # Note that there seems some kind of caching of commands until the data is
