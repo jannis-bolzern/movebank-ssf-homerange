@@ -6,7 +6,7 @@ freeze: true
 
 # Setup
 ```{r}
-# Load necessary packages -----------------------------------------------------
+# Load necessary packages
 pacman::p_load(
   tidyverse,
   glmmTMB,
@@ -31,6 +31,7 @@ coyote_ssf_data$hfp_std <- scale(coyote_ssf_data$human_footprint)[, 1]
 
 ## Fit SSF
 ```{r}
+# Load data from file, or if model if data doesn't exist yet on file.
 ssf_model_filename = "models/ssf_coyote_model.rds"
 ssf_model_data = file.path(getwd(), ssf_model_filename)
 if(!file.exists(ssf_model_data)) {
@@ -54,43 +55,30 @@ ssf_coyote <- readRDS(ssf_model_filename)
 summary(ssf_coyote)
 ```
 
-## Average effect plots
+## Average effect plot
 ```{r}
-pred_data = file.path(getwd(), "models/coyote_ssf_pred.rds")
-if(!file.exists(pred_data)) {
-  coyote_ssf_pred <- coyote_ssf_data |> 
-    filter(case_binary_ == 0) |> 
-    mutate(id = NA)  # remove ID for population-level prediction
-
-  # This takes hours to run on an average machine.
-  coy_pred <- predict(ssf_coyote, coyote_ssf_pred, re.form = NA, se.fit = TRUE)
-  coyote_ssf_pred$fit <- coy_pred$fit
-  coyote_ssf_pred$se <- coy_pred$se
-  coyote_ssf_pred <- coyote_ssf_pred |> ungroup()
-  saveRDS(coyote_ssf_pred, "models/coyote_ssf_pred.rds")
-}
-coyote_ssf_pred <- readRDS("models/coyote_ssf_pred.rds")
-
-ggplot(coyote_ssf_pred, aes(x = exp(human_footprint), y = fit, color = land_use_grouped)) +
-  geom_point(alpha = 0.3) +
-  geom_smooth(aes(ymin = fit - se, ymax = fit + se, fill = land_use_grouped), stat = "identity", alpha = 0.2) +
-  theme_minimal()
-
-# average effect plot function --------------------------------------------
-
+#'
+#' Create average effect plot
+#'
+#' This function creates a plot
+#'
+#' @param fittedResponse The prediction
+#' @param nsim The number of simulations to run
+#' @param k The basis dimension of the smooth term
+#' @param showPeakValue If peak values should be included in the chart
+#'
+#' @return The plot
+#' @export
 avg_eff_plot_hfp_landuse <- function(fittedResponse, nsim = 100, k = 10, showPeakValue = TRUE) {
-  
   set.seed(123)
   # Monte Carlo sampling of predictions based on fit ± se
   fit_sample <- sapply(rep(1, nsim), function(i) {
     rnorm(n = nrow(fittedResponse), mean = fittedResponse$fit, sd = fittedResponse$se)
   })
-  
   fit_sample_matrix <- matrix(fit_sample, nrow = nrow(fittedResponse), ncol = nsim)
-  
   smooth_list <- list()
   for (j in 1:nsim) {
-    message("GAM smoothing sample ", j)
+    message("GAM smoothing sample: #", j)
     smooth_list[[j]] <- mgcv::bam(
       fit_sample_matrix[, j] ~ s(human_footprint, by = land_use_grouped, bs = "ts", k = k) + land_use_grouped,
       data = fittedResponse,
@@ -125,7 +113,6 @@ avg_eff_plot_hfp_landuse <- function(fittedResponse, nsim = 100, k = 10, showPea
       filter(est == max(est)) |>
       slice(rep(1:n(), each = 2)) |>
       mutate(est = ifelse(row_number() %% 2 == 1, est, -Inf))
-    
     p <- p + geom_line(data = peak_vals, aes(x = hfp, y = est, group = land_use_grouped), 
                        linetype = "dashed", size = 0.6, alpha = 0.3, color = "black")
   }
@@ -134,10 +121,39 @@ avg_eff_plot_hfp_landuse <- function(fittedResponse, nsim = 100, k = 10, showPea
   return(list(plot = p))
 }
 
+# Load data from file, or run prediction if data doesn't exist yet on file.
+pred_filename = "models/coyote_ssf_pred.rds"
+pred_data = file.path(getwd(), pred_filename)
+if(!file.exists(pred_data)) {
+  coyote_ssf_pred <- coyote_ssf_data |> 
+    filter(case_binary_ == 0) |> 
+    mutate(id = NA)  # remove ID for population-level prediction
+
+  # This takes hours to run on an average machine.
+  coy_pred <- predict(ssf_coyote, coyote_ssf_pred, re.form = NA, se.fit = TRUE)
+  coyote_ssf_pred$fit <- coy_pred$fit
+  coyote_ssf_pred$se <- coy_pred$se
+  coyote_ssf_pred <- coyote_ssf_pred |> ungroup()
+  saveRDS(coyote_ssf_pred, pred_filename)
+}
+coyote_ssf_pred <- readRDS(pred_filename)
+# TBD: Takes forever, better to include this in the written file for caching.
 coyote_ssf_pred <- coyote_ssf_pred |> 
   mutate(land_use_grouped = as.factor(land_use_grouped))
-avg_eff_output <- avg_eff_plot_hfp_landuse(coyote_ssf_pred, nsim = 100, showPeakValue = TRUE)
+
+# Rough plot, commented out because it takes forever to run and save.
+# Note that there seems some kind of caching of commands until the data is
+# actually required, therefore execute the ggsave to trigger execution.
+ggplot(coyote_ssf_pred, aes(x = exp(human_footprint), y = fit, color = land_use_grouped)) +
+  geom_point(alpha = 0.3) +
+  geom_smooth(aes(ymin = fit - se, ymax = fit + se, fill = land_use_grouped), stat = "identity", alpha = 0.2) +
+  theme_minimal()
+ggsave("img/coyote_effects_rough.png")
+
+# Main plot.
+avg_eff_output <- avg_eff_plot_hfp_landuse(coyote_ssf_pred, nsim = 100, k = 10, showPeakValue = TRUE)
 avg_eff_output[["plot"]][["plot_env"]][["peak_vals"]]
+ggsave("img/coyote_effects_smooth.png")
 ```
 
 ## Relative Selection Strength
