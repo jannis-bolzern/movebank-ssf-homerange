@@ -102,7 +102,7 @@ avg_eff_plot_hfp_landuse <- function(fittedResponse, nsim = 100, k = 10, showPea
   p <- ggplot(avg_smooth, aes(x = hfp, y = est)) +
     geom_ribbon(aes(ymin = lower_ci, ymax = upper_ci), alpha = 0.25, fill = "steelblue", colour = NA) +
     geom_line(color = "steelblue", size = 0.9) +
-    facet_wrap(~land_use_grouped, scales = "free_y") +
+    facet_wrap(~land_use_grouped, scales = "fixed") +
     theme_minimal() +
     labs(x = "Human Footprint", y = "Relative Use (log scale)") +
     geom_hline(yintercept = 0, linetype = "dashed", color = "gray50")
@@ -141,19 +141,18 @@ coyote_ssf_pred <- readRDS(pred_filename)
 coyote_ssf_pred <- coyote_ssf_pred |> 
   mutate(land_use_grouped = as.factor(land_use_grouped))
 
-# Rough plot, commented out because it takes forever to run and save.
+# Overview plot, commented out because it takes forever to run and save.
 # Note that there seems some kind of caching of commands until the data is
 # actually required, therefore execute the ggsave to trigger execution.
-ggplot(coyote_ssf_pred, aes(x = exp(human_footprint), y = fit, color = land_use_grouped)) +
-  geom_point(alpha = 0.3) +
-  geom_smooth(aes(ymin = fit - se, ymax = fit + se, fill = land_use_grouped), stat = "identity", alpha = 0.2) +
-  theme_minimal()
-ggsave("img/coyote_effects_rough.png")
+#ggplot(coyote_ssf_pred, aes(x = exp(human_footprint), y = fit, color = land_use_grouped)) +
+#  geom_point(alpha = 0.3) +
+#  geom_smooth(aes(ymin = fit - se, ymax = fit + se, fill = land_use_grouped), stat = "identity", alpha = 0.2) +
+#  theme_minimal()
+#ggsave("img/coyote_effects_overview.png")
 
-# Main plot.
+# Main plot. There are warnings but they are irrelevant.
 avg_eff_output <- avg_eff_plot_hfp_landuse(coyote_ssf_pred, nsim = 100, k = 10, showPeakValue = TRUE)
-avg_eff_output[["plot"]][["plot_env"]][["peak_vals"]]
-ggsave("img/coyote_effects_smooth.png")
+ggsave("img/coyote_effects_facets.png")
 ```
 
 ## Relative Selection Strength
