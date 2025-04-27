@@ -119,6 +119,7 @@ NAflag(hfp) <- 64536  # Set no-data value
 hfp_capped <- classify(hfp, matrix(c(50000, Inf, 50000), ncol = 3, byrow = TRUE)) # Cap at 50k
 hfp_scaled <- app(hfp_capped, \(x) (x / 50000) - 0.5)  # Scale to -0.5–0.5
 
+# Note that land use and land cover are the same thing.
 land_use <- rast("data/ESA_washington.tif")
 
 # Land use class labels (ESA WorldCover 2021)
