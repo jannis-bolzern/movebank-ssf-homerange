@@ -62,26 +62,26 @@ summary(ssf_coyote)
 #'
 #' This function creates a plot
 #'
-#' @param fittedResponse The prediction
+#' @param prediction The prediction
 #' @param nsim The number of simulations to run
 #' @param k The basis dimension of the smooth term
 #' @param showPeakValue If peak values should be included in the chart
 #'
 #' @return The plot
 #' @export
-avg_eff_plot_hfp_landuse <- function(fittedResponse, nsim = 100, k = 10, showPeakValue = TRUE) {
+avg_eff_plot_hfp_landuse <- function(prediction, nsim = 100, k = 10, showPeakValue = TRUE) {
   set.seed(123)
   # Monte Carlo sampling of predictions based on fit ± se
   fit_sample <- sapply(rep(1, nsim), function(i) {
-    rnorm(n = nrow(fittedResponse), mean = fittedResponse$fit, sd = fittedResponse$se)
+    rnorm(n = nrow(prediction), mean = prediction$fit, sd = prediction$se)
   })
-  fit_sample_matrix <- matrix(fit_sample, nrow = nrow(fittedResponse), ncol = nsim)
+  fit_sample_matrix <- matrix(fit_sample, nrow = nrow(prediction), ncol = nsim)
   smooth_list <- list()
   for (j in 1:nsim) {
     message("GAM smoothing sample: #", j)
     smooth_list[[j]] <- mgcv::bam(
       fit_sample_matrix[, j] ~ s(human_footprint, by = land_use_grouped, bs = "ts", k = k) + land_use_grouped,
-      data = fittedResponse,
+      data = prediction,
       select = TRUE, discrete = TRUE, nthreads = nt
     ) |>
       gratia::smooth_estimates(unconditional = FALSE, overall_uncertainty = TRUE) |>
@@ -157,13 +157,27 @@ ggsave("img/coyote_effects_facets.png")
 
 ## Relative Selection Strength
 ```{r}
+#'
+#' Create relative selection strength plot
+#'
+#' This function creates a plot
+#'
+#' @param model The SFF model
+#' @param data The data the model was created from
+#' @param land_use_col The column in the data that contains land cover data
+#' @param hfp_col The column in the data that contains human footprint data
+#' @param n_points The number of data points to use for the prediction
+#'
+#' @return The plot
+#' @export
 calc_rss_hfp_landcover <- function(model, data, land_use_col = "land_use_grouped", hfp_col = "hfp_std", n_points = 100) {
   
   levels <- unique(data[[land_use_col]])
   all_rss <- purrr::map_dfr(levels, function(lc) {
     
     # Subset data for this land use class
-    dat_lc <- data |> filter(!!sym(land_use_col) == lc)
+    dat_lc <- data |> 
+      filter(!!sym(land_use_col) == lc)
     
     # Range of human footprint within this class
     hfp_range <- range(dat_lc[[hfp_col]], na.rm = TRUE)
@@ -202,7 +216,6 @@ calc_rss_hfp_landcover <- function(model, data, land_use_col = "land_use_grouped
 }
 
 rss_data <- calc_rss_hfp_landcover(model = ssf_coyote, data = coyote_ssf_data)
-
 ggplot(rss_data, aes(x = hfp_std, y = RSS, color = land_use_grouped)) +
   geom_line(size = 1.2) +
   geom_hline(yintercept = 1, linetype = "dashed", color = "gray40") +
