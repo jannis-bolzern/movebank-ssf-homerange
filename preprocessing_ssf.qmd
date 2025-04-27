@@ -174,11 +174,10 @@ if(!file.exists(pred_data)) {
   coyote_ssf_pred$se <- coy_pred$se
   coyote_ssf_pred <- coyote_ssf_pred |> ungroup()
   saveRDS(coyote_ssf_pred, pred_filename)
-  
 }
 coyote_ssf_pred <- readRDS(pred_filename)
 
-# Note there are warnings but they are irrelevant.
+# Note that there are warnings, but they are irrelevant.
 avg_eff_output <- avg_eff_plot_hfp_landuse(coyote_ssf_pred, nsim = 10, k = 10, showPeakValue = TRUE)
 ggsave("img/coyote_effects_facets.png")
 ```
