@@ -108,7 +108,7 @@ class_labels <- c(
   "100" = "Moss and lichen"
 )
 
-# Convert to factor for plotting
+# Convert to factors for plotting
 land_cover <- as.factor(land_cover)
 
 # Create plot
@@ -119,9 +119,9 @@ ggplot() +
   ) +
   scale_fill_manual(
     values = c(
-      "10" = "#006400", "20" = "#FFBB22", "30" = "#FFFF4C",
+      "10" = "#006400", "20" = "#FFBB22", "30" = "#00CF75",
       "40" = "#D2B48C", "50" = "#FA0000", "60" = "#B4B4B4",
-      "70" = "#F0F0F0", "80" = "#0064C8", "90" = "#0096A0",
+      "70" = "#FFFF4C", "80" = "#0064C8", "90" = "#0096A0",
       "95" = "#00CF75", "100" = "#FAE6A0"
     ),
     labels = class_labels,
