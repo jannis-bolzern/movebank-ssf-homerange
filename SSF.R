@@ -309,12 +309,26 @@ saveRDS(ssf_coyote, file = "models/ssf_coyote_model.rds")
 ssf_coyote <- readRDS("models/ssf_coyote_model.rds")
 
 # 3.3 Summarize / check model ---------------------------------------------
+# Print model summary (fixed effects, random effects, fit statistics)
 summary(ssf_coyote)
 
-trends_coyote <- emtrends(ssf_coyote, ~ land_use_grouped, var = "hfp_std", max.degree = 2) |>
+# Estimate marginal trends (linear + quadratic) of HFP across land use types
+emtrends(ssf_coyote, ~ land_use_grouped, var = "hfp_std", max.degree = 2) |>
   summary(infer = c(TRUE, TRUE))
 
-trends_coyote
+# Test for overdispersion 
+check_overdispersion(ssf_coyote)
+
+# Calculate VIFs
+check_collinearity(ssf_coyote)
+
+# Plot predicted vs. observed use
+coyote_ssf_data$predicted <- predict(ssf_coyote, type = "response")
+ggplot(coyote_ssf_data, aes(x = predicted, fill = as.factor(case_binary_))) +
+  geom_density(alpha = 0.5) +
+  scale_fill_manual(values = c("0" = "gray80", "1" = "#5495CFFF"), name = "Used") +
+  theme_publication_dark() +
+  labs(x = "Predicted Relative Use (exp(η))", y = "Density")
 
 # 4. SSF Results Visualization --------------------------------------------
 # 4.1 Predict for average effect plots ------------------------------------
