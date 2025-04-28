@@ -112,3 +112,79 @@ ggplot() +
   )
 ggsave("img/hfp.png")
 ```
+
+# Adjusted plot for correctly scaled HFP and consistent theme
+```{r}
+hfp <- rast("data/HFP_washington.tif")
+NAflag(hfp) <- 64536  # Set no-data value
+hfp_capped <- classify(hfp, matrix(c(50000, Inf, 50000), ncol = 3, byrow = TRUE)) # Cap at 50k
+hfp_scaled <- hfp_capped/1000 # Scale to 0-50
+
+ggplot() +
+  # Human Footprint Raster (using viridis option "D")
+  tidyterra::geom_spatraster(
+    data = hfp_scaled,
+    maxcell = 1e6
+  ) +
+  scale_fill_viridis_c(
+    option = "D",
+    na.value = "transparent",  # Changed from gray90 to match dark theme
+    name = "Human Footprint Index"
+  ) +
+  
+  # Animal Tracking Data (consistent with your first plot)
+  geom_sf(
+    data = animal_sf,
+    aes(color = `individual-taxon-canonical-name`),
+    size = 0.7,  # Increased from 0.1 for visibility
+    alpha = 1     # Changed from 0.7 for better visibility
+  ) +
+  scale_color_manual(
+    values = c("Lynx rufus" = "black", "Canis latrans" = "gray30"),  # Matching first plot
+    labels = c(expression(italic("Lynx rufus")), expression(italic("Canis latrans"))),
+    name = "Species"
+  ) +
+  
+  # Coordinate System
+  coord_sf(
+    xlim = c(-120.7, -117.1),
+    ylim = c(47, 49),
+    expand = FALSE
+  ) +
+  
+  # Dark Theme (matching SSF plots)
+  theme(
+    legend.position = "right",
+    text = element_text(color = "white"),
+    axis.text = element_text(color = "white"),
+    panel.background = element_rect(fill = "#2D2D2D", color = NA),
+    plot.background = element_rect(fill = "#2D2D2D", color = NA),
+    panel.grid = element_blank(), 
+    axis.ticks = element_blank(),
+    legend.background = element_rect(fill = "#2D2D2D", color = NA),
+    legend.key = element_rect(fill = "#2D2D2D", color = NA),
+    strip.text = element_text(color = "white", size = 10),
+    plot.title = element_text(margin = margin(b = 15)),
+    axis.title.x = element_text(margin = margin(t = 15)),
+    axis.title.y = element_text(margin = margin(r = 15)),
+    plot.margin = margin(20, 20, 20, 20, unit = "pt")
+  ) +
+  guides(
+    color = guide_legend(
+      override.aes = list(
+        size = 5,
+        shape = 21,
+        fill = c("black", "gray30"),
+        color = "white",
+        stroke = 0.2
+      )
+    )
+  )
+      
+ggsave("img/hfp_adj.png",
+         bg = "#2D2D2D",
+         width = 10, height = 5.5,
+         dpi = 300)
+
+```
+

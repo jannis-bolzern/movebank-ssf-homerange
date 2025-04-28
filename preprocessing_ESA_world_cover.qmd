@@ -218,7 +218,8 @@ ggplot() +
     axis.text = element_text(color = "white"),
     panel.background = element_rect(fill = "#2D2D2D", color = NA),
     plot.background = element_rect(fill = "#2D2D2D", color = NA),
-    panel.grid = element_line(color = "#424242"), 
+    panel.grid = element_blank(), 
+    axis.ticks = element_blank(),
     legend.background = element_rect(fill = "#2D2D2D", color = NA),
     legend.key = element_rect(fill = "#2D2D2D", color = NA),
     strip.text = element_text(color = "white", size = 10),
@@ -231,18 +232,17 @@ ggplot() +
     color = guide_legend(
       override.aes = list(
         size = 5,
-        shape = 21,           # Shape with fill + border (21 = filled circle)
-        fill = c("black", "gray30"),  # Inner fill colors
-        color = "white",      # Border color (white outline)
-        stroke = 0.2         # Border thickness
+        shape = 21, 
+        fill = c("black", "gray30"), 
+        color = "white", 
+        stroke = 0.2
       )
     )
   )
       
-      
 ggsave("img/esa_landcover_study_area_with_animals_adj.png",
          bg = "#2D2D2D",
-         width = 10, height = 6,
+         width = 10, height = 5.5,
          dpi = 300)
 
 ```
