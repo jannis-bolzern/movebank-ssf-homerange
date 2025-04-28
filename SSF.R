@@ -374,10 +374,10 @@ avg_eff_plot_hfp_landuse <- function(fittedResponse,
   
   p <- ggplot(avg_smooth,
               aes(x = hfp, y = est, colour = land_use_grouped, fill = land_use_grouped)) +
-    geom_ribbon(aes(ymin = lower_ci, ymax = upper_ci), alpha = 0.2, colour = NA) +
-    geom_line(linewidth = 1.2) +
     geom_hline(yintercept = 0,  linetype = "dashed", colour = "gray50") +
     geom_vline(xintercept = 0, linetype = "dotted", colour = "gray70") +
+    geom_ribbon(aes(ymin = lower_ci, ymax = upper_ci), alpha = 0.2, colour = NA) +
+    geom_line(linewidth = 1.2) +
     facet_wrap(~land_use_grouped, scales = "fixed", nrow = 2) +
     scale_colour_manual(values = landuse_colors) +
     scale_fill_manual(values   = landuse_colors) +
@@ -488,6 +488,9 @@ calc_rss_hfp_landuse <- function(model, data,
 # 4.4 Generate and plot average effect ------------------------------------
 p_avg_effect <- avg_eff_plot_hfp_landuse(coyote_ssf_pred, nsim = 1000, save_path = "img/avg_effect.png")
 print(p_avg_effect)
+
+# Report peaks
+p_avg_effect$plot_env$peak_vals
 
 # 4.5 Generate and plot RSS -----------------------------------------------
 p_rss <- calc_rss_hfp_landuse(ssf_coyote, coyote_ssf_data, save_path = "img/rss.png")
