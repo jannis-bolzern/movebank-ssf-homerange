@@ -176,6 +176,26 @@ land_cover_grouped <- classify(land_cover, reclassification_matrix)
 # Convert the reclassified raster to a factor for plotting
 land_cover_grouped <- as.factor(land_cover_grouped)
 
+# Plot theme
+theme_publication_dark <- function(base_size = 14, legend_position = "bottom") {
+  theme_minimal(base_size = base_size) +
+    theme(
+      legend.position = legend_position,
+      text = element_text(color = "white"),
+      axis.text = element_text(color = "white"),
+      panel.background = element_rect(fill = "#2D2D2D", color = NA),
+      plot.background = element_rect(fill = "#2D2D2D", color = NA),
+      panel.grid = element_line(color = "#424242"), 
+      legend.background = element_rect(fill = "#2D2D2D", color = NA),
+      legend.key = element_rect(fill = "#2D2D2D", color = NA),
+      strip.text = element_text(color = "white", size = 10),
+      plot.title = element_text(margin = margin(b = 15)),
+      axis.title.x = element_text(margin = margin(t = 15)),
+      axis.title.y = element_text(margin = margin(r = 15)),
+      plot.margin = margin(20, 20, 20, 20, unit = "pt")
+    )
+}
+
 # Define the plot
 ggplot() +
   tidyterra::geom_spatraster(
