@@ -2,6 +2,8 @@
 # Load libraries
 pacman::p_load(
   tidyverse,
+  leaflet,
+  pals,
   amt,
   sf,
   geosphere,
@@ -11,7 +13,8 @@ pacman::p_load(
   emmeans,
   paletteer,
   gratia,
-  ggridges
+  ggridges,
+  performance
 )
 
 # Set options
@@ -44,7 +47,7 @@ landuse_colors <- paletteer_d("nationalparkcolors::Badlands") |>
   setNames(c("Water", "Cropland", "BuiltUp", "TreeCover", "Open"))
 
 # 1. Data Preparation -----------------------------------------------------
-# 1.1 Load raw tracking data ----------------------------------------------
+# 1.1 Load, visualize and filter raw tracking data ------------------------
 tracking_data <- read_delim("data/bobcat_coyotes_wa_gps.csv") |> 
   dplyr::rename(
     long = `location-long`, 
@@ -53,7 +56,25 @@ tracking_data <- read_delim("data/bobcat_coyotes_wa_gps.csv") |>
     timestamp = `timestamp`,
     species = `individual-taxon-canonical-name`) |> 
   dplyr::arrange(id, timestamp) |> 
-  dplyr::select(id, species, timestamp, lat, long) |> 
+  dplyr::select(id, species, timestamp, lat, long)
+
+# Create interactive map with random subset of locations and distinct species colors
+leaflet() |> 
+  addProviderTiles(providers$Esri.NatGeoWorldMap) |> 
+  addCircles(data = tracking_data |> 
+               mutate(rand = round(runif(n(), 0, 5))) |> 
+               filter(rand == 1),
+             color = ~ colorFactor(c("#5495CFFF", "#DB4743FF"), domain = species)(species), 
+             label = ~ paste(id, timestamp), 
+             opacity = 0.7) |> 
+  addLegend(position = "topright", 
+            colors = c("#5495CFFF", "#DB4743FF"), 
+            labels = c("Coyote", "Bobcat"), 
+            title = "Species",
+            opacity = 0.7)
+
+# Filter out MVBOB71M after dispersal from home range
+tracking_data <- tracking_data |> 
   dplyr::filter(!(id == "MVBOB71M" & timestamp > as.POSIXct("2019-09-24 00:00:00")))
 
 # 1.2 Create amt tracks ---------------------------------------------------
@@ -84,8 +105,8 @@ ggplot(trackSummarySamples,
            color = species)) +
   stat_boxplot(geom = "errorbar", width = 0.4, linewidth = 0.7) +
   geom_boxplot(outlier.shape = NA, linewidth = 0.7) +
-  scale_fill_manual(values  = c(Bobcat = "#3c566e",  Coyote = "#DB4743FF")) +
-  scale_color_manual(values = c(Bobcat = "#5495CFFF",  Coyote = "#DB4743FF")) +
+  scale_fill_manual(values  = c(Bobcat = "#723735")) +
+  scale_color_manual(values = c(Bobcat = "#DB4743FF",  Coyote = "#5495CFFF")) +
   labs(title = "GPS sampling interval by species (outliers hidden)",
        x = NULL, y = "Sampling interval in hours") +
   coord_cartesian(ylim = c(0, 15)) +
@@ -100,7 +121,7 @@ ggplot(trackSummarySamples,
            fill  = species,
            color = species)) +
   geom_boxplot(outlier.alpha = 0.5, width = 0.7, linewidth = 0.7) +                   
-  scale_color_manual(values = c(Bobcat = "#5495CFFF",  Coyote = "#DB4743FF")) +
+  scale_color_manual(values = c(Bobcat = "#DB4743FF",  Coyote = "#5495CFFF")) +
   labs(title = "GPS sampling interval by species (outliers shown)",
        x = NULL, y = "Sampling interval in hours") +
   coord_cartesian(ylim = c(0, 1000)) +
@@ -326,8 +347,8 @@ check_collinearity(ssf_coyote)
 coyote_ssf_data$predicted <- predict(ssf_coyote, type = "response")
 ggplot(coyote_ssf_data, aes(x = predicted, fill = as.factor(case_binary_))) +
   geom_density(alpha = 0.5) +
-  scale_fill_manual(values = c("0" = "gray80", "1" = "#5495CFFF"), name = "Used") +
-  theme_publication_dark() +
+  scale_fill_manual(values = c("1" = "#5495CFFF", "0" = "gray80"), name = "Used") +
+  theme_publication_dark(legend_position = "right") +
   labs(x = "Predicted Relative Use (exp(η))", y = "Density")
 
 # 4. SSF Results Visualization --------------------------------------------
