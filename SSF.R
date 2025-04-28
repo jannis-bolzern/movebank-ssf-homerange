@@ -3,7 +3,6 @@
 pacman::p_load(
   tidyverse,
   leaflet,
-  pals,
   amt,
   sf,
   geosphere,
