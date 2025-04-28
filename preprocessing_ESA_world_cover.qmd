@@ -149,3 +149,78 @@ ggplot() +
   )
 ggsave("img/esa_landcover_study_area_with_animals.png")
 ```
+
+# Adjusted plot using the same land use grouping as is used in analysis
+```{r}
+# Load the raster data
+land_cover <- rast("data/ESA_washington.tif")
+
+# Define the reclassification matrix
+reclassification_matrix <- matrix(c(
+  10, 1,  # Tree cover -> 1
+  20, 2,  # Open -> 2
+  30, 2,  # Open -> 2
+  40, 3,  # Cropland -> 3
+  50, 4,  # Built-up -> 4
+  60, 2,  # Open -> 2
+  70, 2,  # Open -> 2
+  80, 5,  # Water -> 5
+  90, 5,  # Water -> 5
+  95, 5,  # Water -> 5
+  100, 2  # Open -> 2
+), ncol = 2, byrow = TRUE)
+
+# Reclassify the raster using the matrix
+land_cover_grouped <- classify(land_cover, reclassification_matrix)
+
+# Convert the reclassified raster to a factor for plotting
+land_cover_grouped <- as.factor(land_cover_grouped)
+
+# Define the plot
+ggplot() +
+  tidyterra::geom_spatraster(
+    data = land_cover_grouped,
+    maxcell = 1e6
+  ) +
+  scale_fill_manual(
+    values = c(
+      "1" = "#7C873EFF",   # Tree cover
+      "2" = "#FEF4D5FF",   # Open (Grassland, Bare/sparse vegetation, Moss and lichen)
+      "3" = "#F5AF4DFF",   # Cropland
+      "4" = "#DB4743FF",   # Built-up
+      "5" = "#5495CFFF"    # Water (Permanent water bodies, Herbaceous wetland)
+    ),
+    labels = c("Tree Cover", "Open", "Cropland", "Built-up", "Water"),
+    na.translate = FALSE,
+    name = "Land Cover Category"
+  ) +
+  geom_sf(
+    data = animal_sf,
+    aes(color = `individual-taxon-canonical-name`),
+    size = 0.7,
+    alpha = 1
+  ) +
+  scale_color_manual(values = c("Lynx rufus" = "black", "Canis latrans" = "gray40"), 
+                     labels = c(
+                       expression(italic("Lynx rufus")),
+                       expression(italic("Canis latrans"))
+                     ),
+                     name = "Species") +
+  coord_sf(
+    xlim = c(-120.8, -117.1),
+    ylim = c(47, 49),
+    expand = FALSE
+  ) +
+  theme_publication_dark(legend_position = "right") +
+  guides(
+    color = guide_legend(
+      override.aes = list(size = 5)),
+  )
+
+ggsave("img/esa_landcover_study_area_with_animals_adj.png",
+         bg = "#2D2D2D",
+         width = 10, height = 6,
+         dpi = 300)
+
+```
+
