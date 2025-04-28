@@ -70,7 +70,7 @@ leaflet() |>
             colors = c("#5495CFFF", "#DB4743FF"), 
             labels = c("Coyote", "Bobcat"), 
             title = "Species",
-            opacity = 0.7)
+            opacity = 1)
 
 # Filter out MVBOB71M after dispersal from home range
 tracking_data <- tracking_data |> 
