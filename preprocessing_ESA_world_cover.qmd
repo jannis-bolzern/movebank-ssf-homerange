@@ -176,26 +176,6 @@ land_cover_grouped <- classify(land_cover, reclassification_matrix)
 # Convert the reclassified raster to a factor for plotting
 land_cover_grouped <- as.factor(land_cover_grouped)
 
-# Plot theme
-theme_publication_dark <- function(base_size = 14, legend_position = "bottom") {
-  theme_minimal(base_size = base_size) +
-    theme(
-      legend.position = legend_position,
-      text = element_text(color = "white"),
-      axis.text = element_text(color = "white"),
-      panel.background = element_rect(fill = "#2D2D2D", color = NA),
-      plot.background = element_rect(fill = "#2D2D2D", color = NA),
-      panel.grid = element_line(color = "#424242"), 
-      legend.background = element_rect(fill = "#2D2D2D", color = NA),
-      legend.key = element_rect(fill = "#2D2D2D", color = NA),
-      strip.text = element_text(color = "white", size = 10),
-      plot.title = element_text(margin = margin(b = 15)),
-      axis.title.x = element_text(margin = margin(t = 15)),
-      axis.title.y = element_text(margin = margin(r = 15)),
-      plot.margin = margin(20, 20, 20, 20, unit = "pt")
-    )
-}
-
 # Define the plot
 ggplot() +
   tidyterra::geom_spatraster(
@@ -220,7 +200,7 @@ ggplot() +
     size = 0.7,
     alpha = 1
   ) +
-  scale_color_manual(values = c("Lynx rufus" = "black", "Canis latrans" = "gray40"), 
+  scale_color_manual(values = c("Lynx rufus" = "gray10", "Canis latrans" = "gray30"), 
                      labels = c(
                        expression(italic("Lynx rufus")),
                        expression(italic("Canis latrans"))
@@ -231,12 +211,35 @@ ggplot() +
     ylim = c(47, 49),
     expand = FALSE
   ) +
-  theme_publication_dark(legend_position = "right") +
+  # Dark Theme (matching SSF plots)
+  theme(
+    legend.position = "right",
+    text = element_text(color = "white"),
+    axis.text = element_text(color = "white"),
+    panel.background = element_rect(fill = "#2D2D2D", color = NA),
+    plot.background = element_rect(fill = "#2D2D2D", color = NA),
+    panel.grid = element_line(color = "#424242"), 
+    legend.background = element_rect(fill = "#2D2D2D", color = NA),
+    legend.key = element_rect(fill = "#2D2D2D", color = NA),
+    strip.text = element_text(color = "white", size = 10),
+    plot.title = element_text(margin = margin(b = 15)),
+    axis.title.x = element_text(margin = margin(t = 15)),
+    axis.title.y = element_text(margin = margin(r = 15)),
+    plot.margin = margin(20, 20, 20, 20, unit = "pt")
+  ) +
   guides(
     color = guide_legend(
-      override.aes = list(size = 5)),
+      override.aes = list(
+        size = 5,
+        shape = 21,           # Shape with fill + border (21 = filled circle)
+        fill = c("black", "gray30"),  # Inner fill colors
+        color = "white",      # Border color (white outline)
+        stroke = 0.2         # Border thickness
+      )
+    )
   )
-
+      
+      
 ggsave("img/esa_landcover_study_area_with_animals_adj.png",
          bg = "#2D2D2D",
          width = 10, height = 6,
