@@ -209,7 +209,7 @@ TBD habitats
 
 # Conclusion and outlook
 
-We have performed spatial data analysis and statistics on externally contributed publicly available data to demonstrate that human activity influences animal behavior significantly. We could show that (1) fox home range sizes are much larger in remote areas, and that (2) bobcats prefer forests over built-up areas for habitat selection depending on human footprint. 
+We have performed spatial data analysis and statistical modeling on externally contributed publicly available data to demonstrate that human activity influences animal behavior significantly. We could show that (1) fox home range sizes are much larger in remote areas, and that (2) coyotes prefer forests over built-up areas for habitat selection depending on human footprint. 
 
 # Appendix
 

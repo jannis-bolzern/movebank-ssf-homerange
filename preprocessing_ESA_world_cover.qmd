@@ -192,7 +192,7 @@ ggplot() +
     ),
     labels = c("Tree Cover", "Open", "Cropland", "Built-up", "Water"),
     na.translate = FALSE,
-    name = "Land Cover Category"
+    name = "Land Cover Category  "
   ) +
   geom_sf(
     data = animal_sf,
@@ -207,7 +207,7 @@ ggplot() +
                      ),
                      name = "Species") +
   coord_sf(
-    xlim = c(-120.8, -117.1),
+    xlim = c(-120.75, -117.1),
     ylim = c(47, 49),
     expand = FALSE
   ) +
@@ -230,6 +230,7 @@ ggplot() +
   ) +
   guides(
     color = guide_legend(
+      order = 1,
       override.aes = list(
         size = 5,
         shape = 21, 

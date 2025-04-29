@@ -115,6 +115,13 @@ ggsave("img/hfp.png")
 
 # Adjusted plot for correctly scaled HFP and consistent theme
 ```{r}
+tracking_data <- read_delim("data/bobcat_coyotes_wa_gps.csv")
+animal_sf <- tracking_data |>
+  st_as_sf(
+    coords = c("location-long", "location-lat"),
+    crs = 4326  # WGS84
+  )
+
 hfp <- rast("data/HFP_washington.tif")
 NAflag(hfp) <- 64536  # Set no-data value
 hfp_capped <- classify(hfp, matrix(c(50000, Inf, 50000), ncol = 3, byrow = TRUE)) # Cap at 50k
@@ -126,9 +133,10 @@ ggplot() +
     data = hfp_scaled,
     maxcell = 1e6
   ) +
-  scale_fill_viridis_c(
-    option = "D",
-    na.value = "transparent",  # Changed from gray90 to match dark theme
+  scale_fill_gradientn(
+    colors = c("#FFE6E6", "#FFAAAA", "#FF6B6B", "#FF0000", "#8B0000"),  # Red to white
+    #colors = c("#606930", "#7C873EFF", "#FEF4D5FF", "#F5AF4DFF", "#DB4743FF", "#ab2521"),  # Red to green
+    na.value = "transparent",
     name = "Human Footprint Index"
   ) +
   
@@ -136,18 +144,18 @@ ggplot() +
   geom_sf(
     data = animal_sf,
     aes(color = `individual-taxon-canonical-name`),
-    size = 0.7,  # Increased from 0.1 for visibility
-    alpha = 1     # Changed from 0.7 for better visibility
+    size = 0.7,
+    alpha = 1
   ) +
   scale_color_manual(
-    values = c("Lynx rufus" = "black", "Canis latrans" = "gray30"),  # Matching first plot
+    values = c("Lynx rufus" = "black", "Canis latrans" = "gray30"),
     labels = c(expression(italic("Lynx rufus")), expression(italic("Canis latrans"))),
     name = "Species"
   ) +
   
   # Coordinate System
   coord_sf(
-    xlim = c(-120.7, -117.1),
+    xlim = c(-120.75, -117.1),
     ylim = c(47, 49),
     expand = FALSE
   ) +
@@ -171,6 +179,7 @@ ggplot() +
   ) +
   guides(
     color = guide_legend(
+      order = 1,
       override.aes = list(
         size = 5,
         shape = 21,
@@ -181,7 +190,7 @@ ggplot() +
     )
   )
       
-ggsave("img/hfp_adj.png",
+ggsave("img/hfp_adj_rw.png",
          bg = "#2D2D2D",
          width = 10, height = 5.5,
          dpi = 300)
