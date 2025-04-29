@@ -1,7 +1,7 @@
 ---
 title: "SSF"
 format: html
-freeze: true
+freeze: auto
 ---
 ```{r}
 # 0. Setup ----------------------------------------------------------------

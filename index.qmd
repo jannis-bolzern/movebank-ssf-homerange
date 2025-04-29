@@ -12,6 +12,7 @@ execute:
   message: false
 lang: en
 bibliography: bibliography.bib
+freeze: auto
 ---
 
 # Abstract
