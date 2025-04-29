@@ -8,7 +8,6 @@ freeze: auto
 # Load libraries
 pacman::p_load(
   tidyverse,
-#  leaflet,
   amt,
   sf,
   geosphere,
@@ -61,25 +60,8 @@ tracking_data <- read_delim("data/bobcat_coyotes_wa_gps.csv") |>
     timestamp = `timestamp`,
     species = `individual-taxon-canonical-name`) |> 
   dplyr::arrange(id, timestamp) |> 
-  dplyr::select(id, species, timestamp, lat, long)
-
-# Create interactive map with random subset of locations and distinct species colors
-#leaflet() |> 
-#  addProviderTiles(providers$Esri.NatGeoWorldMap) |> 
-#  addCircles(data = tracking_data |> 
-#               mutate(rand = round(runif(n(), 0, 5))) |> 
-#               filter(rand == 1),
-#             color = ~ colorFactor(c("#5495CFFF", "#DB4743FF"), domain = species)(species), 
-#             label = ~ paste(id, timestamp), 
-#             opacity = 0.7) |> 
-#  addLegend(position = "topright", 
-#            colors = c("#5495CFFF", "#DB4743FF"), 
-#            labels = c("Coyote", "Bobcat"), 
-#            title = "Species",
-#            opacity = 1)
-
-# Filter out MVBOB71M after dispersal from home range
-tracking_data <- tracking_data |> 
+  dplyr::select(id, species, timestamp, lat, long) |> 
+  # Filter out MVBOB71M after dispersal
   dplyr::filter(!(id == "MVBOB71M" & timestamp > as.POSIXct("2019-09-24 00:00:00")))
 
 # 1.2 Create amt tracks ---------------------------------------------------
