@@ -297,7 +297,7 @@ coyote_ssf_data <- readRDS("data/coyote_ssf_data.rds") |>
 coyote_ssf_data$hfp_std <- scale(coyote_ssf_data$human_footprint)[, 1]
 
 # 3.1 Fit the model -------------------------------------------------------
-# Fit SSF with glmmTMB following Muff et al (2019)
+# Fit SSF with glmmTMB following Muff et al. (2019)
 ssf_coyote <- glmmTMB(
   case_binary_ ~ -1 + 
     land_use_grouped * (hfp_std + I(hfp_std^2)) + 
@@ -337,6 +337,46 @@ ggplot(coyote_ssf_data, aes(x = predicted, fill = as.factor(case_binary_))) +
   scale_fill_manual(values = c("1" = "#5495CFFF", "0" = "gray80"), name = "Used") +
   theme_publication_dark(legend_position = "right") +
   labs(x = "Predicted Relative Use (exp(η))", y = "Density")
+
+# 4. Bobcat SSF Modeling --------------------------------------------------
+# Read SSF ready data and filter
+bobcat_ssf_data <- readRDS("data/bobcat_ssf_data.rds") |> 
+  filter(n > 100) # Select animals with more than 100 fixes
+
+# Standardize HFP for modeling
+bobcat_ssf_data$hfp_std <- scale(bobcat_ssf_data$human_footprint)[, 1]
+
+# Counts of used (1) vs. available (0) per land use category
+table(case = bobcat_ssf_data$case_binary_, 
+      land_use = bobcat_ssf_data$land_use_grouped)
+
+# Dropping land use groups with too few used steps
+# (virtually no variation in case status)
+bobcat_ssf_filtered <- bobcat_ssf_data |> 
+   filter(!(land_use_grouped %in% c("BuiltUp", "Snow and ice", "Water", "Cropland")))
+
+# Fit SSF with glmmTMB following Muff et al. (2019)
+ssf_bobcat <- glmmTMB(
+  case_binary_ ~ -1 + 
+    land_use_grouped * (hfp_std + I(hfp_std^2)) + 
+    log_sl_ + 
+    (0 + land_use_grouped + hfp_std + I(hfp_std^2) + log_sl_|| id) +
+    (1 | step_id_),
+  family = poisson,
+  doFit = TRUE,
+  data = bobcat_ssf_filtered,
+  map = list(theta = factor(c(1:5, NA))),
+  start = list(theta = c(rep(0, times = 5),log(1e3))),
+  control = glmmTMBControl(parallel = nt)
+)
+
+summary(ssf_bobcat)
+
+# Bobcat model does not converge when trying to model random slopes for habitat covariates. 
+# The model would have to be simplified to a point where it cannot follow the suggested method by Muff et al.
+# Dropping land groups with too few usable steps greatly reduces the ecological richness of the model.
+# The bobcat data cannot support a full, comparable SSF with interaction between habitat and human footprint.
+# Bobcats are excluded from the final SSF analysis.
 
 # 4. SSF Results Visualization --------------------------------------------
 # 4.1 Predict for average effect plots ------------------------------------
@@ -517,4 +557,5 @@ p_avg_effect$plot_env$peak_vals
 # 4.5 Generate and plot RSS -----------------------------------------------
 p_rss <- calc_rss_hfp_landuse(ssf_coyote, coyote_ssf_data, save_path = "img/rss.png")
 print(p_rss)
+
 ```
