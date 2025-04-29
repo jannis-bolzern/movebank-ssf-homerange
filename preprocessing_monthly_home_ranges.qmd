@@ -101,7 +101,7 @@ calculate_monthly_home_ranges <- function(ts_start, num_months, study_id, licens
 # Define colors for Bylot, Herschel, Wiltshire foxes
 bylot_colors <- c("#DB4743FF", "#5495CFFF")
 herschel_colors <- c("#F5AF4DFF", "#7C873EFF")
-wiltshire_colors <- viridis::viridis(35, option = "plasma")
+wiltshire_colors <- viridis::viridis(35, option = "turbo")
 ```
 
 
