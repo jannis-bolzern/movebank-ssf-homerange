@@ -32,45 +32,6 @@ foxes_herschel <- movebank_download_study(
 ```
 
 ### Check if the data looks correct (i.e., positioned on the correct island)
-
-```{r}
-library("sf")
-library("tmap")
-tmap_options(basemaps = "OpenStreetMap")
-tmap_mode("view")
-bylot_tracks <- mt_track_lines(foxes_bylot)
-bylot_tracks_buffer <- st_buffer(bylot_tracks, dist = 50000)
-map <- 
-  tm_shape(bylot_tracks_buffer) + 
-  tm_borders(alpha = 0) +
-  tm_shape(bylot_tracks) +
-  tm_lines()
-tmap_save(map, filename = "img/bylot_map.html")
-webshot("img/bylot_map.html", file = "img/bylot_map.png", vwidth = 800, vheight = 600)
-```
-
-```{r}
-herschel_tracks <- mt_track_lines(foxes_herschel)
-herschel_tracks_buffer <- st_buffer(herschel_tracks, dist = 50000)
-map <- tm_shape(herschel_tracks_buffer) + 
-  tm_borders(alpha = 0) +
-  tm_shape(herschel_tracks) +
-  tm_lines()
-tmap_save(map, filename = "img/herschel_map.html")
-webshot("img/herschel_map.html", file = "img/herschel_map.png", vwidth = 800, vheight = 600)
-```
-
-```{r}
-wilt_tracks <- mt_track_lines(foxes_wiltshire)
-wilt_tracks_buffer <- st_buffer(wilt_tracks, dist = 200)
-map <- tm_shape(wilt_tracks_buffer) + 
-  tm_borders(alpha = 0) +
-  tm_shape(wilt_tracks) +
-  tm_lines()
-tmap_save(map, filename = "img/wiltshire_map.html")
-webshot("img/wiltshire_map.html", file = "img/wiltshire_map.png", vwidth = 800, vheight = 600)
-```
-
 # Updated maps
 
 ```{r}
@@ -78,6 +39,10 @@ library(sf)
 library(ggplot2)
 library(ggspatial)
 library(maptiles)
+
+bylot_tracks <- mt_track_lines(foxes_bylot)
+herschel_tracks <- mt_track_lines(foxes_herschel)
+wilt_tracks <- mt_track_lines(foxes_wiltshire)
 
 make_track_map <- function(lines_sf,
                            bbox = NULL,
@@ -87,23 +52,18 @@ make_track_map <- function(lines_sf,
                            line_color = "red",
                            map_title = "Tracks") {
   
-  # Transform to Web Mercator (3857) for plotting
   lines_3857 <- st_transform(lines_sf, 3857)
   
-  # If bbox not provided, create from data + buffer
   if (is.null(bbox)) {
     buf <- st_buffer(lines_sf, buffer_dist)
     bbox <- st_bbox(buf)
   } else {
-    # Convert numeric bbox to sfc object
     bbox <- st_bbox(setNames(bbox, c("xmin", "ymin", "xmax", "ymax")), crs = 4326)
   }
   
-  # Convert bbox to 3857 for tile fetching
   bbox_sfc <- st_as_sfc(bbox) %>% st_transform(3857)
   bbox_merc <- st_bbox(bbox_sfc)
   
-  # Get tiles (with error handling)
   tile_raster <- tryCatch({
     get_tiles(bbox_merc, provider = tile_provider, zoom = zoom, crop = TRUE)
   }, error = function(e) {
@@ -111,12 +71,10 @@ make_track_map <- function(lines_sf,
     NULL
   })
   
-  # Calculate aspect ratio (height/width)
   x_range <- bbox_merc["xmax"] - bbox_merc["xmin"]
   y_range <- bbox_merc["ymax"] - bbox_merc["ymin"]
   plot_aspect <- y_range / x_range
   
-  # Build plot
   gg <- ggplot() +
     {if(!is.null(tile_raster)) layer_spatial(tile_raster)} +
     geom_sf(data = lines_3857, color = line_color, linewidth = 0.5) +
@@ -127,9 +85,9 @@ make_track_map <- function(lines_sf,
     coord_sf(xlim = c(bbox_merc["xmin"], bbox_merc["xmax"]),
              ylim = c(bbox_merc["ymin"], bbox_merc["ymax"]),
              expand = FALSE) +
-    labs(title = map_title, caption = tile_provider) +
+    labs(title = map_title, caption = "© ESRI World Topographic Map") +
     theme(
-      legend.position = "right",
+      legend.position = "none",
       text = element_text(color = "white"),
       axis.text = element_text(color = "white"),
       panel.background = element_rect(fill = "#2D2D2D", color = NA),
@@ -147,7 +105,6 @@ make_track_map <- function(lines_sf,
   
   return(gg)
 }
-
 
 # Bylot Island
 bylot_bbox <- c(-82.3935,72.4252,-76.1245,74.1815)
@@ -205,27 +162,75 @@ ggplot(year_count, aes(x = factor(year), y = count, color = source, fill = sourc
   geom_bar(stat = "identity", width = 0.5) +
   facet_wrap(~ ifelse(source %in% c("Bylot", "Herschel"), "Bylot/Herschel", "Wiltshire"), scales = "free_y") +
   labs(x = "Year", y = "Number of data points", fill = "Source", color = "Source") +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 90)) +
-  theme(axis.text.x = element_text(size = 6)) +
-  theme(axis.text.x = element_text(margin = margin(b = 20))) +
-  theme(axis.text.y = element_text(margin = margin(l = 20)))
-ggsave("img/year_count.png")
+  scale_fill_manual(values = c(
+    "Bylot"     = "#DB4743FF",
+    "Herschel"  = "#7C873EFF",
+    "Wiltshire" = "#5495CFFF"
+  )) +
+  scale_color_manual(values = c(
+    "Bylot"     = "#DB4743FF",
+    "Herschel"  = "#7C873EFF",
+    "Wiltshire" = "#5495CFFF"
+  )) +
+  theme_minimal(base_size = 14) +
+  theme(
+    legend.position = "bottom",
+    text            = element_text(colour = "white"),
+    axis.text       = element_text(colour = "white"),
+    axis.text.x     = element_text(angle  = 90, size   = 6, margin = margin(b = 20)),
+    axis.text.y     = element_text(margin = margin(l = 20)),
+    panel.background = element_rect(fill = "#2D2D2D", colour = NA),
+    plot.background  = element_rect(fill = "#2D2D2D", colour = NA),
+    panel.grid       = element_line(colour = "#424242"),
+    legend.background = element_rect(fill = "#2D2D2D", colour = NA),
+    legend.key        = element_rect(fill = "#2D2D2D", colour = NA),
+    strip.text   = element_text(colour = "white", size = 14, margin = margin (b =15)),
+    plot.title   = element_text(margin = margin(b = 15)),
+    axis.title.x = element_text(margin = margin(t = 15)),
+    axis.title.y = element_text(margin = margin(r = 15)),
+    plot.margin  = margin(20, 20, 20, 20, unit = "pt")
+  )
+
+ggsave("img/year_count.png", width = 10, height = 4.5, dpi = 300)
 ```
 
 ```{r}
 month_count$month_name <- factor(month.abb[month_count$month], levels = month.abb)
-ggplot(month_count, aes(x = as.factor(month_name), y = count, color = source)) +
-  geom_point() +
-  scale_x_discrete() +
-  facet_wrap(~ ifelse(source %in% c("Bylot", "Herschel"), "Bylot/Herschel", "Wiltshire"), scales = "free_y") +
-  labs(x = "Month", y = "Number of data points", fill = "Source", color = "Source") +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 90)) +
-  theme(axis.text.x = element_text(size = 6)) +
-  theme(axis.text.x = element_text(margin = margin(b = 20))) +
-  theme(axis.text.y = element_text(margin = margin(l = 20)))
-ggsave("img/month_count.png")
+
+ggplot(month_count, aes(x = month_name, y = count, color = source)) +
+  geom_point(size = 4.5) +  # dots large enough to match the bar visual weight
+  facet_wrap(~ ifelse(source %in% c("Bylot", "Herschel"), "Bylot/Herschel", "Wiltshire"),
+             scales = "free_y") +
+  labs(
+    x = "Month",
+    y = "Number of data points",
+    color = "Source"
+  ) +
+  scale_color_manual(values = c(
+    "Bylot"     = "#DB4743FF",
+    "Herschel"  = "#7C873EFF",
+    "Wiltshire" = "#5495CFFF"
+  )) +
+  theme_minimal(base_size = 14) +
+  theme(
+    legend.position = "bottom",
+    text            = element_text(colour = "white"),
+    axis.text       = element_text(colour = "white"),
+    axis.text.x     = element_text(angle  = 90, size = 6, margin = margin(b = 20)),
+    axis.text.y     = element_text(margin = margin(l = 20)),
+    panel.background = element_rect(fill = "#2D2D2D", colour = NA),
+    plot.background  = element_rect(fill = "#2D2D2D", colour = NA),
+    panel.grid       = element_line(colour = "#424242"),
+    legend.background = element_rect(fill = "#2D2D2D", colour = NA),
+    legend.key        = element_rect(fill = "#2D2D2D", colour = NA),
+    strip.text        = element_text(colour = "white", size = 14, margin = margin(b = 15)),
+    plot.title        = element_text(margin = margin(b = 15)),
+    axis.title.x      = element_text(margin = margin(t = 15)),
+    axis.title.y      = element_text(margin = margin(r = 15)),
+    plot.margin       = margin(20, 20, 20, 20, unit = "pt")
+  )
+
+ggsave("img/month_count.png", width = 10, height = 4.5, dpi = 300)
 ```
 
 ## Download filtered data for the UK wader nesting season
@@ -257,10 +262,34 @@ library("ggplot2")
 bylot_tracks <- mt_track_lines(foxes_bylot_filtered)
 bylot_mcp <- st_convex_hull(bylot_tracks)
 
-ggplot(bylot_mcp, aes(fill = as.factor(individual_id))) +
-  geom_sf(alpha = 0.4) +
-  labs(x = "Longitude", y = "Latitude", fill = "Fox id")
-ggsave("img/home_range_bylot_wader.png")
+bylot_colors <- c("#DB4743FF","#5495CFFF")
+
+bylot_centroids <- st_centroid(bylot_mcp)
+
+ggplot() +
+  geom_sf(data = bylot_mcp, aes(color = individual_local_identifier), fill = NA, linewidth = 0.4) +
+  geom_sf(data = bylot_centroids, aes(color = individual_local_identifier), shape = 3, size = 2) +
+  scale_color_manual(values = bylot_colors) +
+  labs(x = "Longitude", y = "Latitude", color = "Fox ID") +
+  theme_minimal(base_size = 14) +
+  theme(
+    legend.position = "right",
+    text            = element_text(colour = "white"),
+    axis.text       = element_text(colour = "white"),
+    panel.background = element_rect(fill = "#2D2D2D", colour = NA),
+    plot.background  = element_rect(fill = "#2D2D2D", colour = NA),
+    panel.grid       = element_line(colour = "#424242"),
+    legend.background = element_rect(fill = "#2D2D2D", colour = NA),
+    legend.key        = element_rect(fill = "#2D2D2D", colour = NA),
+    strip.text        = element_text(colour = "white", size = 10),
+    plot.title        = element_text(margin = margin(b = 15)),
+    axis.title.x      = element_text(margin = margin(t = 15)),
+    axis.title.y      = element_text(margin = margin(r = 15)),
+    plot.margin       = margin(20, 20, 20, 20, unit = "pt")
+  )
+
+
+ggsave("img/home_range_bylot_wader.png", width = 10, height = 4.5, dpi = 300)
 ```
 
 ```{r}
@@ -271,10 +300,47 @@ ggsave("img/home_range_bylot_wader.png")
 
 wiltshire_tracks <- mt_track_lines(foxes_wiltshire_filtered)
 wiltshire_mcp <- st_convex_hull(wiltshire_tracks)
-ggplot(wiltshire_mcp, aes(fill = as.factor(individual_id))) +
-  geom_sf(alpha = 0.4) +
-  labs(x = "Longitude", y = "Latitude", fill = "Fox id")
-ggsave("img/home_range_wiltshire_wader.png")
+
+wiltshire_colors <- c(
+  "#FEF4D5FF",
+  "#5495CFFF",
+  "#DB4743FF",
+  "#7C873EFF",
+  "#F5AF4DFF",
+  "#50C878FF",
+  "#FF7F50FF",
+  "#9370DBFF",
+  "#FFD700FF",
+  "#6495EDFF",
+  "#FFB6C1FF",
+  "#40E0D0FF")
+
+
+wiltshire_centroids <- st_centroid(wiltshire_mcp)
+
+ggplot() +
+  geom_sf(data = wiltshire_mcp, aes(color = individual_local_identifier), fill = NA, linewidth = 0.4) +
+  geom_sf(data = wiltshire_centroids, aes(color = individual_local_identifier), shape = 3, size = 2) +
+  scale_color_manual(values = wiltshire_colors) +
+  labs(x = "Longitude", y = "Latitude", color = "Fox ID") +
+  theme_minimal(base_size = 14) +
+  theme(
+    legend.position = "right",
+    text            = element_text(colour = "white"),
+    axis.text       = element_text(colour = "white"),
+    panel.background = element_rect(fill = "#2D2D2D", colour = NA),
+    plot.background  = element_rect(fill = "#2D2D2D", colour = NA),
+    panel.grid       = element_line(colour = "#424242"),
+    legend.background = element_rect(fill = "#2D2D2D", colour = NA),
+    legend.key        = element_rect(fill = "#2D2D2D", colour = NA),
+    strip.text        = element_text(colour = "white", size = 10),
+    plot.title        = element_text(margin = margin(b = 15)),
+    axis.title.x      = element_text(margin = margin(t = 15)),
+    axis.title.y      = element_text(margin = margin(r = 15)),
+    plot.margin       = margin(20, 20, 20, 20, unit = "pt")
+  )
+
+ggsave("img/home_range_wiltshire_wader.png", width = 10, height = 4.5, dpi = 300)
 ```
 
 ```{r}
@@ -330,10 +396,32 @@ foxes_wiltshire_filtered_sampled_24h <- foxes_wiltshire_filtered |>
 
 wiltshire_tracks <- mt_track_lines(foxes_wiltshire_filtered_sampled_24h)
 wiltshire_mcp <- st_convex_hull(wiltshire_tracks)
-ggplot(wiltshire_mcp, aes(fill = as.factor(individual_id))) +
-  geom_sf(alpha = 0.4) +
-  labs(x = "Longitude", y = "Latitude", fill = "Fox id")
-ggsave("img/home_range_wiltshire_wader_sampled.png")
+
+
+# Plot
+ggplot() +
+  geom_sf(data = wiltshire_mcp, aes(color = individual_local_identifier), fill = NA, linewidth = 0.4) +
+  geom_sf(data = wiltshire_centroids, aes(color = individual_local_identifier), shape = 3, size = 2) +
+  scale_color_manual(values = wiltshire_colors) +
+  labs(x = "Longitude", y = "Latitude", color = "Fox ID") +
+  theme_minimal(base_size = 14) +
+  theme(
+    legend.position = "right",
+    text            = element_text(colour = "white"),
+    axis.text       = element_text(colour = "white"),
+    panel.background = element_rect(fill = "#2D2D2D", colour = NA),
+    plot.background  = element_rect(fill = "#2D2D2D", colour = NA),
+    panel.grid       = element_line(colour = "#424242"),
+    legend.background = element_rect(fill = "#2D2D2D", colour = NA),
+    legend.key        = element_rect(fill = "#2D2D2D", colour = NA),
+    strip.text        = element_text(colour = "white", size = 10),
+    plot.title        = element_text(margin = margin(b = 15)),
+    axis.title.x      = element_text(margin = margin(t = 15)),
+    axis.title.y      = element_text(margin = margin(r = 15)),
+    plot.margin       = margin(20, 20, 20, 20, unit = "pt")
+  )
+
+ggsave("img/home_range_wiltshire_wader_sampled.png", width = 10, height = 4.5, dpi = 300)
 ```
 
 ```{r}
