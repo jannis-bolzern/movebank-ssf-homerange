@@ -71,6 +71,102 @@ tmap_save(map, filename = "img/wiltshire_map.html")
 webshot("img/wiltshire_map.html", file = "img/wiltshire_map.png", vwidth = 800, vheight = 600)
 ```
 
+# Updated maps
+
+```{r}
+library(sf)
+library(ggplot2)
+library(ggspatial)
+library(maptiles)
+
+make_track_map <- function(lines_sf,
+                           bbox = NULL,
+                           buffer_dist = 0,
+                           tile_provider = "Esri.WorldTopoMap",
+                           zoom = NULL,
+                           line_color = "red",
+                           map_title = "Tracks") {
+  
+  # Transform to Web Mercator (3857) for plotting
+  lines_3857 <- st_transform(lines_sf, 3857)
+  
+  # If bbox not provided, create from data + buffer
+  if (is.null(bbox)) {
+    buf <- st_buffer(lines_sf, buffer_dist)
+    bbox <- st_bbox(buf)
+  } else {
+    # Convert numeric bbox to sfc object
+    bbox <- st_bbox(setNames(bbox, c("xmin", "ymin", "xmax", "ymax")), crs = 4326)
+  }
+  
+  # Convert bbox to 3857 for tile fetching
+  bbox_sfc <- st_as_sfc(bbox) %>% st_transform(3857)
+  bbox_merc <- st_bbox(bbox_sfc)
+  
+  # Get tiles (with error handling)
+  tile_raster <- tryCatch({
+    get_tiles(bbox_merc, provider = tile_provider, zoom = zoom, crop = TRUE)
+  }, error = function(e) {
+    message("Tile download failed: ", e$message)
+    NULL
+  })
+  
+  # Calculate aspect ratio (height/width)
+  x_range <- bbox_merc["xmax"] - bbox_merc["xmin"]
+  y_range <- bbox_merc["ymax"] - bbox_merc["ymin"]
+  plot_aspect <- y_range / x_range
+  
+  # Build plot
+  gg <- ggplot() +
+    {if(!is.null(tile_raster)) layer_spatial(tile_raster)} +
+    geom_sf(data = lines_3857, color = line_color, linewidth = 0.5) +
+    annotation_scale(location = "bl", width_hint = .25) +
+    annotation_north_arrow(location = "tl",
+                           which_north = "true",
+                           style = north_arrow_fancy_orienteering) +
+    coord_sf(xlim = c(bbox_merc["xmin"], bbox_merc["xmax"]),
+             ylim = c(bbox_merc["ymin"], bbox_merc["ymax"]),
+             expand = FALSE) +
+    labs(title = map_title, caption = tile_provider) +
+    theme(
+      legend.position = "right",
+      text = element_text(color = "white"),
+      axis.text = element_text(color = "white"),
+      panel.background = element_rect(fill = "#2D2D2D", color = NA),
+      plot.background = element_rect(fill = "#2D2D2D", color = NA),
+      panel.grid = element_blank(), 
+      axis.ticks = element_blank(),
+      legend.background = element_rect(fill = "#2D2D2D", color = NA),
+      legend.key = element_rect(fill = "#2D2D2D", color = NA),
+      strip.text = element_text(color = "white", size = 10),
+      plot.title = element_text(margin = margin(b = 15)),
+      axis.title.x = element_text(margin = margin(t = 15)),
+      axis.title.y = element_text(margin = margin(r = 15)),
+      plot.margin = margin(20, 20, 20, 20, unit = "pt")
+    ) 
+  
+  return(gg)
+}
+
+
+# Bylot Island
+bylot_bbox <- c(-82.3935,72.4252,-76.1245,74.1815)
+make_track_map(bylot_tracks, bbox = bylot_bbox, zoom = 7, map_title = "Bylot Island fox tracks")
+ggsave("img/bylot_map.png", width = 5, height = 5)
+
+# Herschel Island
+herschel_bbox <- c(-143.9052,68.6598,-137.6362,70.7787)
+make_track_map(herschel_tracks, bbox = herschel_bbox, zoom = 7, map_title = "Herschel Island fox tracks")
+ggsave("img/herschel_map.png", width = 5, height = 5)
+
+# Wiltshire
+wilt_bbox <- c(-2.162845,50.748204,-1.13013,51.128108)
+make_track_map(wilt_tracks, bbox = wilt_bbox, zoom = 10, map_title = "Wiltshire fox tracks")
+ggsave("img/wiltshire_map.png", width = 10, height = 6)
+
+```
+
+
 ## Produce the counts for data per month and per year breakdowns
 
 ```{r}
