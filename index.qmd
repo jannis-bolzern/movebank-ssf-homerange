@@ -12,8 +12,6 @@ execute:
   message: false
 lang: en
 bibliography: bibliography.bib
-keep-tex: true
-freeze: true
 ---
 
 # Abstract
@@ -29,7 +27,7 @@ Disturbance by humans has widespread impacts on the movements of animals, as con
 
 Different datasets are used for each research question. Relying on Movebank data, as described in @sec-movebank, presents additional challenges because data is used for purposes it was not originally collected for, and compared between different studies.
 
-# Material and Methods
+# Material and methods
 
 This section describes the datasets, the steps taken to prepare and process the different datasets in use, and the methodological approach.
 
@@ -224,6 +222,6 @@ We have performed spatial data analysis and statistics on externally contributed
 
 ## Use of Large Language Models and Generative AI
 
-Elke used @notebooklm for querying the papers cited in the references and @openai2025chatgpt for ggplot related queries.
+Elke used @notebooklm for querying the papers cited in the references, and @openai2025chatgpt for ggplot related queries.
 
 # References
