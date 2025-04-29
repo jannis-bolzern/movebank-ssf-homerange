@@ -71,31 +71,109 @@ calculate_monthly_home_ranges <- function(ts_start, num_months, study_id, licens
   }
   return(list(gg = gg, areas = flatten_array(areas)))
 }
+
+calculate_monthly_home_ranges <- function(ts_start, num_months, study_id, license_string_with_quotes, palette_colors) {
+  areas <- list()
+  mcp_list <- list()
+  ts_end <- add_with_rollback(ts_start, months(1))
+
+  for (i in 1:num_months) {
+    print(i)
+    tryCatch({
+      foxes <- movebank_download_study(
+        study_id = study_id,
+        'license-md5' = license_string_with_quotes,
+        timestamp_start = ts_start,
+        timestamp_end = ts_end
+      )
+      
+      tracks <- mt_track_lines(foxes)
+      mcp <- st_convex_hull(tracks)
+      areas[[i]] <- st_area(mcp)
+      mcp_list[[i]] <- mcp
+    }, error = function(e) {
+      print(e)
+    }, finally = {
+      ts_start <- ts_end
+      ts_end   <- add_with_rollback(ts_end, months(1))
+    })
+  }
+
+  # Combine all monthly MCPs into one sf
+  all_mcp <- do.call(rbind, mcp_list)
+
+  # Create final ggplot (outline only)
+  gg <- ggplot() +
+    geom_sf(data = all_mcp, aes(color = as.factor(individual_local_identifier)), fill = NA, linewidth = 0.6) +
+    scale_color_manual(values = palette_colors) +
+    labs(x = "Longitude", y = "Latitude", color = "Fox ID") +
+    theme_minimal(base_size = 14) +
+    theme(
+      legend.position = "right",
+      text            = element_text(colour = "white"),
+      axis.text       = element_text(colour = "white"),
+      panel.background = element_rect(fill = "#2D2D2D", colour = NA),
+      plot.background  = element_rect(fill = "#2D2D2D", colour = NA),
+      panel.grid       = element_line(colour = "#424242"),
+      legend.background = element_rect(fill = "#2D2D2D", colour = NA),
+      legend.key        = element_rect(fill = "#2D2D2D", colour = NA),
+      strip.text        = element_text(colour = "white", size = 10),
+      plot.title        = element_text(margin = margin(b = 15)),
+      axis.title.x      = element_text(margin = margin(t = 15)),
+      axis.title.y      = element_text(margin = margin(r = 15)),
+      plot.margin       = margin(20, 20, 20, 20, unit = "pt")
+    )
+
+  return(list(gg = gg, areas = flatten_array(areas)))
+}
 ```
+
+```{r}
+# Define colors for Bylot, Herschel, Wiltshire foxes
+bylot_colors <- c("#DB4743FF", "#5495CFFF")
+herschel_colors <- c("#F5AF4DFF", "#7C873EFF")
+wiltshire_colors <- viridis::viridis(35, option = "turbo")
+```
+
 
 ## Bylot
 
 ```{r}
-results_bylot <- calculate_monthly_home_ranges(as.POSIXct("2011-07-01 00:00:00"), 44, 1371322147, '9559cb1b1cca51e9f3fd69812e5e22dc')
+results_bylot <- calculate_monthly_home_ranges(
+  as.POSIXct("2011-07-01 00:00:00"), 44, 1371322147, '9559cb1b1cca51e9f3fd69812e5e22dc',
+  palette_colors = bylot_colors
+)
+
+ggsave("img/bylot_monthly.png", results_bylot$gg, width = 8, height = 5, dpi = 300)
+
 write_csv(data.frame(areas = results_bylot$areas), "data/output_bylot.csv")
-results_bylot$gg + labs(x = "Longitude", y = "Latitude", fill = "Fox id")
-ggsave("img/bylot_monthly.png")
+
 ```
 
 ## Herschel
 
 ```{r}
-results_herschel = calculate_monthly_home_ranges(as.POSIXct("2009-07-01 00:00:00"), 9, 1371529289, '436e8205d0c2973115e2024b146a6ad5')
+results_herschel <- calculate_monthly_home_ranges(
+  as.POSIXct("2009-07-01 00:00:00"), 9, 1371529289, '436e8205d0c2973115e2024b146a6ad5',
+  palette_colors = herschel_colors
+)
+
+ggsave("img/herschel_monthly.png", results_herschel$gg, width = 8, height = 3, dpi = 300)
+
 write_csv(data.frame(areas = results_herschel$areas), "data/output_herschel.csv")
-results_herschel$gg + labs(x = "Longitude", y = "Latitude", fill = "Fox id")
-ggsave("img/herschel_monthly.png")
+
 ```
 
 ## Wiltshire
 
 ```{r}
-results_wiltshire = calculate_monthly_home_ranges(as.POSIXct("2016-01-01 00:00:00"), 43, 3179890710, 'ffa36f79defe10eac9fe70f6502a17e0')
+results_wiltshire <- calculate_monthly_home_ranges(
+  as.POSIXct("2016-01-01 00:00:00"), 43, 3179890710, 'ffa36f79defe10eac9fe70f6502a17e0',
+  palette_colors = wiltshire_colors
+)
+
+ggsave("img/wiltshire_monthly.png", results_wiltshire$gg, width = 10, height = 7, dpi = 300)
+
 write_csv(data.frame(areas = results_wiltshire$areas), "data/output_wiltshire.csv")
-results_wiltshire$gg + labs(x = "Longitude", y = "Latitude", fill = "Fox id")
-ggsave("img/wiltshire_monthly.png")
+
 ```
