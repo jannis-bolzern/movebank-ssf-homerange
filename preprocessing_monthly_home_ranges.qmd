@@ -41,37 +41,6 @@ flatten_array <- function(areas) {
 #'
 #' @return A list with a ggplot object and an array of home range sizes
 #' @export
-calculate_monthly_home_ranges <- function(ts_start, num_months, study_id, license_string_with_quotes) {
-  areas <- list()
-  gg <- ggplot()
-  ts_end <- add_with_rollback(ts_start, months(1))
-  for (i in 1:num_months) {
-    print(i)
-    tryCatch({
-      foxes <- movebank_download_study(
-        study_id = study_id,
-        'license-md5'=license_string_with_quotes,
-        timestamp_start = ts_start,
-        timestamp_end = ts_end
-      ) 
-      
-      tracks <- mt_track_lines(foxes)
-      mcp <- st_convex_hull(tracks)
-      areas[[i]] <- st_area(mcp)
-      gg <- gg + geom_sf(data = mcp, aes(fill = as.factor(individual_id)), alpha = 0.4)
-    }, error = function(e) {
-      # There will be an error if there is no data for a month. This does happen
-      # in practice since some of the studies ran only for parts of the year.
-      # The error is expected and of no concern. We just want to skip the month.
-      print(e)
-    }, finally = {
-      ts_start = ts_end
-      ts_end <- add_with_rollback(ts_end, months(1))
-    })
-  }
-  return(list(gg = gg, areas = flatten_array(areas)))
-}
-
 calculate_monthly_home_ranges <- function(ts_start, num_months, study_id, license_string_with_quotes, palette_colors) {
   areas <- list()
   mcp_list <- list()
@@ -132,7 +101,7 @@ calculate_monthly_home_ranges <- function(ts_start, num_months, study_id, licens
 # Define colors for Bylot, Herschel, Wiltshire foxes
 bylot_colors <- c("#DB4743FF", "#5495CFFF")
 herschel_colors <- c("#F5AF4DFF", "#7C873EFF")
-wiltshire_colors <- viridis::viridis(35, option = "turbo")
+wiltshire_colors <- viridis::viridis(35, option = "plasma")
 ```
 
 
