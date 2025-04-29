@@ -49,7 +49,7 @@ make_track_map <- function(lines_sf,
                            buffer_dist = 0,
                            tile_provider = "Esri.WorldTopoMap",
                            zoom = NULL,
-                           line_color = "red",
+                           line_color = "#DB4743FF",
                            map_title = "Tracks") {
   
   lines_3857 <- st_transform(lines_sf, 3857)
