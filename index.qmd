@@ -249,15 +249,13 @@ The fox home range size results show enormous differences between rural and remo
 
 Note that there is one fox with an extraordinarily large home range in @fig-home-ranges-wiltshire, and the additional charts in @sec-additional-charts show several instances of large fox movements within a single month. @kobryn2023foxes report similar patterns with a small number of foxes covering much larger areas than others. They conclude that the data is genuine and demonstrates potential for extensive movement patterns in urban foxes, and state that in some studies such outliers are either removed or cannot be tracked because of hardware setup restrictions, therefore underestimating home ranges. 
 
-While technical aspects such as sampling intervals and home range estimator have significant influence on the calculation results, they play a secondary role in comparison to the difference in fox behavior, which enables the chosen approach of comparing data from heterogeneous sources.
-
-Another instance of data aspects having large effects on the results was observed for the statistical modelling. While we could fit a model for coyote data, this was not possible for the bobcat data. We suspect that the re-sampling required due to irregular sampling rates as shown in @fig-sampling-rates played a role.
+While technical aspects such as sampling intervals and home range estimator have significant influence on the calculation results, they play a secondary role in comparison to the difference in fox behavior, which enables the chosen approach of comparing data from heterogeneous sources. Another instance of data aspects having large effects on the results was observed in statistical modelling. While we could fit a model for coyote data, it was not feasible for the bobcat data. We suspect that the re-sampling required due to irregular sampling rates as shown in @fig-sampling-rates played a role.
 
 TBD habitats
 
 # Conclusion
 
-We have performed spatial data analysis and statistical modeling on externally contributed publicly available data to demonstrate that human activity influences animal behavior significantly. We could show that (1) fox home range sizes are much larger in remote areas, and that (2) coyotes prefer forests over built-up areas for habitat selection depending on human footprint. 
+We have performed spatial data analysis and statistical modeling on externally contributed publicly available data to demonstrate that human activity influences animal behavior significantly. We could show that (1) fox home range sizes are larger in remote areas, and that (2) coyotes prefer forests over built-up areas for habitat selection depending on human footprint. 
 
 # Appendix
 
@@ -268,8 +266,6 @@ We have performed spatial data analysis and statistical modeling on externally c
 ![Monthly home ranges for Bylot foxes](img/bylot_monthly.png){#fig-monthly-home-ranges-bylot width="60%"}
 
 ![Monthly home ranges for Herschel foxes](img/herschel_monthly.png){#fig-monthly-home-ranges-herschel width="60%"}
-
-
 
 ## Use of generative AI
 
