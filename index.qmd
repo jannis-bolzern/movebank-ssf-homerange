@@ -3,9 +3,8 @@ title: How does human activity affect the movement patterns of wild animals?
 subtitle: An analysis of selected datasets from the Movebank animal tracking database
 author: Jannis Bolzern and Elke Michlmayr
 format:
-  html: 
-    code-fold: true
-    theme: dark
+  html:
+    theme: darkly
   pdf: 
     number-sections: true
 execute:
@@ -75,7 +74,7 @@ Data from Wiltshire (see @fig-wiltshire-map) was collected between 2016 to 2019 
 Maps of Bylot and Herschel island, with high level view of animal GPS tracks (unfiltered).
 :::
 
-Data from Bylot (see @fig-bylot-map) and Herschel (see @fig-herschel-map) was collected all year round, at a much lower sampling rate of once per day at random afternoon times of the day. The collection period was June 2009 to Feb 2010 for Herschel and from 2011 to 2015 for Bylot, for two foxes each per island. @fig-datapoints-year provides an overview of the amount of data points available per year. There is much more data from Wiltshire because of the higher number of foxes and the higher sampling rate. Looking at the breakdowns by month as shown in @fig-datapoints-month reveals seasonal differences in the amount of data available.
+Data from Bylot (see @fig-bylot-map) and Herschel (see @fig-herschel-map) was collected all year round, at a much lower sampling rate of once per day at random afternoon times. The collection period was June 2009 to Feb 2010 for Herschel and from 2011 to 2015 for Bylot, for two foxes each per island. @fig-datapoints-year provides an overview of the amount of data points available per year. There is much more data from Wiltshire because of the higher number of foxes and the higher sampling rate. Looking at the breakdowns by month as shown in @fig-datapoints-month reveals seasonal differences in the amount of data available.
 
 ::: {#fig-data-points layout-ncol="2"}
 ![Per year](img/year_count.png){#fig-datapoints-year}
@@ -127,7 +126,7 @@ To model fine-scale habitat preferences, we used step-selection functions (SSFs)
 
 #### Step Generation and Covariates
 
-Coyote and bobcat GPS tracks from [Prugh et al. (2023)] were irregularly spaced (see @fig-bobcat-coyote-sampling) and were resampled for temporal consistency — coyotes to 4-hour intervals and bobcats to 8-hour intervals, both with a 10-minute tolerance - using the track_resample() function from the amt package by @signer2019animal. Steps were then generated using the amt steps_by_burst() and random_steps() functions. For each used step, ten random available steps were generated based on empirical step length (gamma distribution) and turning angle (von Mises distribution). Log-transformed step lengths were calculated for modeling to account for potential bias in the availability distribution.
+Coyote and bobcat GPS tracks from @prugh2023fear were irregularly spaced (see @fig-bobcat-coyote-sampling) and were resampled for temporal consistency — coyotes to 4-hour intervals and bobcats to 8-hour intervals, both with a 10-minute tolerance - using the track_resample() function from the amt package by @signer2019animal. Steps were then generated using the amt steps_by_burst() and random_steps() functions. For each used step, ten random available steps were generated based on empirical step length (gamma distribution) and turning angle (von Mises distribution). Log-transformed step lengths were calculated for modeling to account for potential bias in the availability distribution.
 
 Each observed step and its corresponding random steps were grouped into strata using a unique step ID, following a matched case-control design. Habitat covariates (land cover and standardized human footprint) were extracted for each step endpoint.
 
@@ -269,6 +268,6 @@ We have performed spatial data analysis and statistical modeling on externally c
 
 ## Use of generative AI
 
-Elke used @notebooklm for querying the papers cited, and @openai2025chatgpt for ggplot related queries. Jannis utilized GitHub Copilot (2025) for debugging and assisting in the creation of plots.
+Elke used @notebooklm for querying the papers cited, and @openai2025chatgpt for ggplot related queries. Jannis utilized GitHub Copilot (2025) for debugging and assisting in plot creation.
 
 # References
