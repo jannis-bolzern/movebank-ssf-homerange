@@ -227,6 +227,8 @@ bobcat_final <- prepare_ssf_data(bobcat_cov)
 
 # Save processed data
 saveRDS(coyote_final, "data/coyote_ssf_data.rds")
+saveRDS(bobcat_final, "data/bobcat_ssf_data.rds")
+
 
 # 2. Exploratory Data Analysis --------------------------------------------
 # Read processed data
