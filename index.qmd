@@ -5,6 +5,7 @@ author: Jannis Bolzern and Elke Michlmayr
 format:
   html: 
     code-fold: true
+    theme: dark
   pdf: 
     number-sections: true
 execute:
@@ -34,7 +35,7 @@ This section describes the datasets, the steps taken to prepare and process the 
 
 ## Datasets
 
-The Movebank database by @kays2022movebank enables researchers to publish animal tracking data for public use. Different Movebank datasets are used for each research question. Relying on externally contributed data presents additional challenges because data is used for purposes it was not originally collected for, and compared between different studies.
+The Movebank database by @kays2022movebank allows researchers to publish animal tracking data for public use. Different Movebank datasets are used for each research question. Relying on externally contributed data presents additional challenges because data is used for purposes it was not originally collected for, and compared between different studies.
 
 The following data is selected: Red fox data from @porteus2024movement for the outskirt areas of villages in Wiltshire, UK and from @lai2022red for the remote uninhabited islands Bylot and Herschel in Canada, and bobcat and coyote data from @prugh2023fear for remote areas with some rural structures in northeastern Washington, US. For the human footprint data, the global terrestrial human footprint data by @gassert2023operational is chosen. For land cover, satellite data described in @zanaga2022esa is employed.
 
@@ -98,7 +99,7 @@ Two animals from each dataset were completely excluded from the analysis because
 
 ![HFP-100 data with bobcat and coyote tracks](img/hfp.png){#fig-hfp width="%"}
 
-Although all GPS collars were programmed to record locations at four-hour intervals, the actual sampling was irregular and included numerous outliers (see @fig-sampling-rates). Sampling intervals for bobcats were particularly sparse and inconsistent compared to those of coyotes.
+Although all GPS collars were programmed to record locations at four-hour intervals, the actual sampling was irregular and included numerous outliers (see @fig-sampling-rates). Sampling intervals for bobcats were particularly sparse and inconsistent compared to those for coyotes.
 
 ::: {#fig-sampling-rates layout-ncol="2"}
 ![With outliers](img/bobcat_coyote_sampling_rates_outliers.png){#fig-bobcat-coyote-sampling-outliers}
@@ -114,7 +115,7 @@ We applied two main analytical approaches: (1) home range estimation for red fox
 
 ### Home range size assessment
 
-The red fox data is used for home range size assessment for rural and remote locations. Home range sizes are calculated using minimum convex polygons, which provides easily comparable estimates of the area used by each individual animal. As discussed in @sec-redfoxdata, the datasets for the two locations have different temporal scale. 
+Home range sizes are calculated using minimum convex polygons, which provides easily comparable estimates of the area used by each individual animal. As discussed in @sec-redfoxdata, the datasets for the two locations have different temporal scale. 
 
 @laube2011 have found that the choice of temporal scale has considerable effects on movement parameter calculations, in turn affecting home range results. How to make this data comparable? Problem #1 is that the sampling intervals are different. Problem #2 is that the data coverage varies by time of the year. Problem #3 is that there are highly different amounts of data. Selecting the means and parameters for the comparison involves complex choices that will influence the results. For #1, a possible approach to achieve similar sampling intervals would be to sample a random afternoon data point for each 24 hour window. However, this would include the implicit assumption that foxes will follow similar daily patterns in the different environments. For #2, a possible approach would be to compare the data for the same time of the year. But since the geographical locations are different, the seasonal weather conditions will differ for the same day of the year, likely leading to different animal behavior. For #3, aggregated comparisons can solve the issue, assuming there is enough data for the smaller data source.
 
