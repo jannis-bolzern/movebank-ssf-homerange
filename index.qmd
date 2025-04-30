@@ -35,9 +35,7 @@ This section describes the datasets, the steps taken to prepare and process the 
 
 ## Datasets
 
-The Movebank database @kays2022movebank allows researchers to publish animal tracking data for public use. Different Movebank datasets are used for each research question. Relying on externally contributed data presents additional challenges because data is used for purposes it was not originally collected for, and compared between different studies.
-
-The following data is selected: Red fox data for the outskirt areas of villages in Wiltshire, UK @porteus2024movement and for the remote uninhabited islands Bylot and Herschel in Canada @lai2022red, and bobcat and coyote data for remote areas with some rural structures in northeastern Washington, US @prugh2023fear. For the human footprint data, the global terrestrial human footprint @gassert2023operational is chosen. For land cover, satellite data @zanaga2022esa is employed.
+The Movebank database @kays2022movebank allows researchers to publish animal tracking data for public use. Relying on externally contributed data presents additional challenges because data is used for purposes it was not originally collected for, and compared between different studies. The following data is selected: Red fox data for the outskirt areas of villages in Wiltshire, UK @porteus2024movement and for the remote uninhabited islands Bylot and Herschel in Canada @lai2022red, and bobcat and coyote data for remote areas with some rural structures in northeastern Washington, US @prugh2023fear. Additional, the global terrestrial human footprint @gassert2023operational and satellite land cover data @zanaga2022esa are employed.
 
 ## Data preparation and processing
 
