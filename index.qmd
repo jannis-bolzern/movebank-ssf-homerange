@@ -26,8 +26,6 @@ Disturbance by humans has widespread impacts on the movements of animals, as con
 1.  Home range size implications: Do animals exhibit smaller home ranges in high human impact areas? This is examined by comparing red fox (*vulpes vulpes*) home ranges in low and high human impact areas.
 2.  Habitat selection in human-influenced landscapes: How do animals select habitats under varying levels of human presence? This is analysed based on bobcat (*lynx rufus*) and coyote (*canis latrans*) data from a national park area.
 
-Different datasets are used for each research question. Relying on Movebank data, as described in @sec-movebank, presents additional challenges because data is used for purposes it was not originally collected for, and compared between different studies.
-
 Together, these analyses allow us to evaluate both large-scale home range adjustments and fine-scale habitat preferences in response to human activity.
 
 # Data and methods
@@ -36,7 +34,9 @@ This section describes the datasets, the steps taken to prepare and process the 
 
 ## Datasets
 
-The Movebank database by @kays2022movebank enables researchers to publish animal tracking data for public use. The following data is selected: Red fox data from @porteus2024movement for the outskirt areas of villages in Wiltshire, UK and from @lai2022red for the remote uninhabited islands Bylot and Herschel in Canada, and bobcat and coyote data from @prugh2023fear for remote areas with some rural structures in northeastern Washington, US. For the human footprint data, the global terrestrial human footprint data by @gassert2023operational is chosen. For land cover, satellite data described in @zanaga2022esa is employed.
+The Movebank database by @kays2022movebank enables researchers to publish animal tracking data for public use. Different Movebank datasets are used for each research question. Relying on externally contributed data presents additional challenges because data is used for purposes it was not originally collected for, and compared between different studies.
+
+The following data is selected: Red fox data from @porteus2024movement for the outskirt areas of villages in Wiltshire, UK and from @lai2022red for the remote uninhabited islands Bylot and Herschel in Canada, and bobcat and coyote data from @prugh2023fear for remote areas with some rural structures in northeastern Washington, US. For the human footprint data, the global terrestrial human footprint data by @gassert2023operational is chosen. For land cover, satellite data described in @zanaga2022esa is employed.
 
 ## Data preparation and processing
 
