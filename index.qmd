@@ -255,7 +255,7 @@ Another instance of data aspects having large effects on the results was observe
 
 TBD habitats
 
-# Conclusion and outlook
+# Conclusion
 
 We have performed spatial data analysis and statistical modeling on externally contributed publicly available data to demonstrate that human activity influences animal behavior significantly. We could show that (1) fox home range sizes are much larger in remote areas, and that (2) coyotes prefer forests over built-up areas for habitat selection depending on human footprint. 
 
