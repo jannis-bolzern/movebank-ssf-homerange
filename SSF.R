@@ -288,10 +288,7 @@ contour_level <- quantile(dens$z, probs = 0.95)  # Get 95% density threshold
 ggplot(coyote_ssf_data, aes(x = human_footprint, y = log_sl_)) +
   geom_bin2d(aes(fill = after_stat(log(density))), bins = 50) +
   scale_fill_viridis_c(option = "D", limits = c(-14.9, -1)) +
-  stat_density_2d(aes(colour = after_stat(level)), 
-                  breaks = contour_level,
-                  colour = "red",
-                  linewidth = 0.75) +
+  stat_density_2d(colour = "red", breaks = c(0.05), n = 15, size = 1)+
   geom_vline(xintercept = 0, colour = "gray80", linewidth = 0.6) +
   geom_hline(yintercept = 0, colour = "gray80", linewidth = 0.6) +
   labs(x = "Human Footprint Index (0–50)", y = "Log Step Length",

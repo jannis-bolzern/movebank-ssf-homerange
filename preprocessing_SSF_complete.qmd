@@ -94,14 +94,14 @@ ggplot(trackSummarySamples,
   geom_boxplot(outlier.shape = NA, linewidth = 0.7) +
   scale_fill_manual(values  = c(Bobcat = "#723735")) +
   scale_color_manual(values = c(Bobcat = "#DB4743FF",  Coyote = "#5495CFFF")) +
-  labs(title = "GPS sampling interval by species (outliers hidden)",
-       x = NULL, y = "Sampling interval in hours") +
+  labs(x = NULL, y = "Sampling interval in hours") +
   coord_cartesian(ylim = c(0, 15)) +
   theme_publication_dark() +
   theme_publication_dark(legend_position = "none") +
   theme(panel.grid.major.x = element_blank())
 
-ggsave("img/bobcat_coyote_sampling_rates.png", width = 8, height = 5, dpi = 300)
+#GPS sampling interval by species (outliers hidden)
+ggsave("img/bobcat_coyote_sampling_rates.png", width = 6.5, height = 5, dpi = 300)
 
 ggplot(trackSummarySamples,
        aes(x = species, y = sr,
@@ -109,13 +109,13 @@ ggplot(trackSummarySamples,
            color = species)) +
   geom_boxplot(outlier.alpha = 0.5, width = 0.7, linewidth = 0.7) +                   
   scale_color_manual(values = c(Bobcat = "#DB4743FF",  Coyote = "#5495CFFF")) +
-  labs(title = "GPS sampling interval by species (outliers shown)",
-       x = NULL, y = "Sampling interval in hours") +
+  labs(x = NULL, y = "Sampling interval in hours") +
   coord_cartesian(ylim = c(0, 1000)) +
   theme_publication_dark(legend_position = "none") +
   theme(panel.grid.major.x = element_blank())
 
-ggsave("img/bobcat_coyote_sampling_rates_outliers.png", width = 8, height = 5, dpi = 300)
+#GPS sampling interval by species (outliers shown)
+ggsave("img/bobcat_coyote_sampling_rates_outliers.png", width = 6.5, height = 5, dpi = 300)
 
 # Split into species
 coyote <- filter(track, grepl("COY", id))
@@ -246,12 +246,12 @@ ggplot(coyote_ssf_data,
   geom_density_ridges(scale = 1.2) +
   scale_fill_manual(values = landuse_colors_sec) + 
   scale_color_manual(values = landuse_colors) +
-  labs(x = "Human Footprint Index (0–50)", y = "Land Cover Type",
-       title = "Human Footprint Distribution by Land Cover Type") +
+  labs(x = "Human Footprint Index (0–50)", y = "Land Cover Type") +
   theme_publication_dark(legend_position = "none") +
   theme(panel.grid.major.y = element_blank())
 
-ggsave("img/coyote_EDA_ridgeline.png", width = 8, height = 5, dpi = 300)
+#Human Footprint Distribution by Land Cover Type
+ggsave("img/coyote_EDA_ridgeline.png", width = 10, height = 5.5, dpi = 300)
 
 # 2.2 Boxplot (HFP across land cover classes) -----------------------------
 ggplot(coyote_ssf_data,
@@ -262,12 +262,12 @@ ggplot(coyote_ssf_data,
                width = 0.7, alpha = 1, linewidth = 0.5) +
   scale_fill_manual(values = landuse_colors_sec) + 
   scale_color_manual(values = landuse_colors) +
-  labs(x = "Land Cover Type", y = "Human Footprint Index (0–50)",
-       title = "Variation in Human Footprint across Land Cover Types") +
+  labs(x = "Land Cover Type", y = "Human Footprint Index (0–50)") +
   theme_publication_dark(legend_position = "none") +
   theme(panel.grid.major.x = element_blank())
 
-ggsave("img/coyote_EDA_boxplot.png", width = 8, height = 5, dpi = 300)
+#Variation in Human Footprint across Land Cover Types
+ggsave("img/coyote_EDA_boxplot.png", width = 10, height = 5.5, dpi = 300)
 
 # 2.3 Bi-variate density plot (HFP vs. log step length) -------------------
 dens <- kde2d(coyote_ssf_data$human_footprint, coyote_ssf_data$log_sl_, n = 100)
@@ -282,10 +282,10 @@ ggplot(coyote_ssf_data, aes(x = human_footprint, y = log_sl_)) +
                   linewidth = 0.75) +
   geom_vline(xintercept = 0, colour = "gray80", linewidth = 0.6) +
   geom_hline(yintercept = 0, colour = "gray80", linewidth = 0.6) +
-  labs(x = "Human Footprint Index (0–50)", y = "Log Step Length",
-       title = "Relationship between Movement and Human Footprint") +
+  labs(x = "Human Footprint Index (0–50)", y = "Log Step Length") +
   theme_publication_dark(legend_position = "right")
 
+#Relationship between Movement and Human Footprint
 ggsave("img/coyote_EDA_hexbin.png", width = 8, height = 5, dpi = 300)
 
 # 3. Coyote SSF Modeling --------------------------------------------------
