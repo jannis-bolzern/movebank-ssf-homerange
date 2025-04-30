@@ -199,7 +199,7 @@ We initially attempted SSF modeling for bobcats, but excluded them from the fina
 
 # Results
 
-### Fox homeranges
+## Fox home ranges
 
 The resulting fox home ranges for the UK wader nesting season time frame are shown in @fig-home-ranges-bylot and @fig-home-ranges-wiltshire. The median home range size for the remote foxes in Bylot (75.3 km<sup>2</sup>) is more than 65 times larger compared to the rural foxes in Wiltshire (1.1 km<sup>2</sup>). The home ranges for the sub-sampled Wiltshire data are shown in @fig-home-ranges-wiltshire-sampled24h. The median home range size is 0.56 km<sup>2</sup> for the sampled data, which is roughly half as much as for the full data.
 
@@ -217,7 +217,7 @@ Similar differences in order of magnitude between remote and rural fox home rang
 
 ![Box plot comparing monthly home ranges (outliers removed)](img/boxplot_monthly.png){#fig-home-ranges-boxplot width="55%"}
 
-### Habitat selection by coyotes
+## Habitat selection by coyotes
 
 We fitted a step-selection model (Poisson GLMM) with 666,248 steps from 29 coyotes. Fixed effects included land cover group, standardized human footprint (HFP), its quadratic term, and log step length. Random slopes were modeled per individual. Model validation indicated no overdispersion, plausible predictions, and acceptable collinearity among main effects (see Model Validation section). The full model took the form:
 
@@ -234,13 +234,13 @@ Figure X shows the estimated average effect of human footprint on relative use (
 
 According to @rykiel1996testing, model validation means demonstrating that a model is acceptable for its intended use. The purpose, criteria, and context of the model must be specified.
 
-### Fox homeranges
+## Fox home ranges
 
 For home range size comparison, two models were defined comprised of data, home range calculation based on minimum convex polygons, and median selection. The validation criteria required the amount of difference between the results to be significantly larger (i.e., by a factor of more than 10 times) than the effects on the results introduced by data properties. For that order of magnitude, @nilsen2008can found that the choice of home range estimator has a secondary impact compared to range size differences. Since the geographic location context was diverse, to exclude distortions in the coordinate system as a potential unwanted influence, the results for Bylot island were spot checked for three applicable coordinate systems: WGS84 geographic coordinate system (EPSG:4326), NAD 83 / Statistics Canada Lambert projection (EPSG:3347), and Universal Transverse Mercator (UTM) zone 17N (EPSG:2958). These were identified using the [CRS Explorer](https://crs-explorer.proj.org/). The differences in the median home rage size results (UK wader season) for the foxes in Bylot were minor: 75.3 km<sup>2</sup> for WGS84, 73.3 km<sup>2</sup> for EPSG:3347, and 75.8 km<sup>2</sup> for EPSG:2958.
 
-### Coyote habitat selection model
+## Coyote habitat selection model
 
-For the habitat selection, assessed model validity by inspecting fixed and random effect estimates, checking for overdispersion, evaluating collinearity among predictors, and plotting predicted values against observed use categories. No overdispersion was detected (dispersion ratio = 0.91; *p* = 1). Multicollinearity was low among main effects (VIF < 5); high variance inflation for interaction terms was expected due to model structure. Predicted relative use values were higher for used steps compared to available steps, indicating biologically plausible model behavior. Standard residual-based diagnostics were not feasible due to the conditional logistic nature of the step selection framework.
+For the habitat selection, model validity was assessed by inspecting fixed and random effect estimates, checking for overdispersion, evaluating collinearity among predictors, and plotting predicted values against observed use categories. No overdispersion was detected (dispersion ratio = 0.91; *p* = 1). Multicollinearity was low among main effects (VIF < 5); high variance inflation for interaction terms was expected due to model structure. Predicted relative use values were higher for used steps compared to available steps, indicating biologically plausible model behavior. Standard residual-based diagnostics were not feasible due to the conditional logistic nature of the step selection framework.
 
 # Discussion
 
