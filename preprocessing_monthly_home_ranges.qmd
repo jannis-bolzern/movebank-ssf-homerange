@@ -97,11 +97,60 @@ calculate_monthly_home_ranges <- function(ts_start, num_months, study_id, licens
 }
 ```
 
+# Define colors for plots
+
 ```{r}
-# Define colors for Bylot, Herschel, Wiltshire foxes
-bylot_colors <- c("#DB4743FF", "#5495CFFF")
-herschel_colors <- c("#F5AF4DFF", "#7C873EFF")
-wiltshire_colors <- viridis::viridis(35, option = "turbo")
+original_colors <- c(
+  "#8B0000FF",
+  "#B31A16FF",
+  "#DB4743FF",
+  "#F5AF4DFF",
+  "#FEF4D5FF",
+  "#7C873EFF",
+  "#5495CFFF",
+  "#2A5F8EFF",
+  "#1A3D5CFF" 
+)
+
+color_interpolate <- function(color1, color2, n) {
+  col1 <- col2rgb(color1)
+  col2 <- col2rgb(color2)
+  result <- character(n)
+  for (i in 1:n) {
+    r <- round(col1[1] + (col2[1] - col1[1]) * (i-1)/(n-1))
+    g <- round(col1[2] + (col2[2] - col1[2]) * (i-1)/(n-1))
+    b <- round(col1[3] + (col2[3] - col1[3]) * (i-1)/(n-1))
+    result[i] <- rgb(r, g, b, maxColorValue = 255)
+  }
+  return(result)
+}
+
+segment1 <- color_interpolate(original_colors[1], original_colors[2], 3)
+segment2 <- color_interpolate(original_colors[2], original_colors[3], 4)
+segment3 <- color_interpolate(original_colors[3], original_colors[4], 7)
+segment4 <- color_interpolate(original_colors[4], original_colors[5], 5)
+segment5 <- color_interpolate(original_colors[5], original_colors[6], 8)
+segment6 <- color_interpolate(original_colors[6], original_colors[7], 7)
+segment7 <- color_interpolate(original_colors[7], original_colors[8], 4)
+segment8 <- color_interpolate(original_colors[8], original_colors[9], 3)
+
+gradient_palette <- c(
+  segment1[1:2],
+  segment2[1:3],
+  segment3[1:6],
+  segment4[1:4],
+  segment5[1:8],
+  segment6[1:6],
+  segment7[1:3],
+  segment8
+)
+
+length(gradient_palette)
+
+bylot_colors <- c(original_colors[3], original_colors[7])
+herschel_colors <- c(original_colors[4], original_colors[6])
+wiltshire_colors <- gradient_palette
+
 ```
 
 
