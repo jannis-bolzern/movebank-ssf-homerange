@@ -195,3 +195,92 @@ ggsave("img/wiltshire_monthly.png", results_wiltshire$gg, width = 10, height = 7
 write_csv(data.frame(areas = results_wiltshire$areas), "data/output_wiltshire.csv")
 
 ```
+# Monthly boxplot
+
+```{r}
+#| label: red-fox-data-read-monthly-results
+#| include: false
+library("readr")
+library("dplyr")
+results_bylot <- read_delim("data/output_bylot.csv", delim = ";")
+# Remove outlier from a month with little data due to collection timeframes
+results_bylot <- results_bylot |> 
+  filter(areas > 1000)
+results_herschel <- read_delim("data/output_herschel.csv", delim = ";")
+results_wiltshire <- read_delim("data/output_wiltshire.csv", delim = ";")
+```
+
+```{r}
+#| label: red-fox-data-functions
+#| include: false
+remove_stats_outliers <- function(areas) {
+  stats <- boxplot.stats(areas)
+  outliers <- stats$out
+  return(areas[!areas %in% outliers])
+}
+convert_m2_to_km2 <- function(area) {
+  return(area * 0.000001)
+}
+```
+
+```{r}
+#| label: fig-home-ranges-boxplot
+#| fig-cap: "Box plot comparing monthly home ranges (outliers removed)"
+#| echo: false
+#| warning: false
+
+df <- data.frame(
+  area = c(
+    remove_stats_outliers(convert_m2_to_km2(results_bylot$areas)),
+    remove_stats_outliers(convert_m2_to_km2(results_herschel$areas)),
+    remove_stats_outliers(convert_m2_to_km2(results_wiltshire$areas))
+  ),
+  site = factor(
+    rep(c("Bylot", "Herschel", "Wiltshire"), 
+        times = c(
+          length(remove_stats_outliers(convert_m2_to_km2(results_bylot$areas))),
+          length(remove_stats_outliers(convert_m2_to_km2(results_herschel$areas))),
+          length(remove_stats_outliers(convert_m2_to_km2(results_wiltshire$areas)))
+        )),
+    levels = c("Bylot", "Herschel", "Wiltshire")
+  )
+)
+
+
+site_colors <- c(Bylot = "#DB4743FF", Herschel = "#5495CFFF", Wiltshire = "#AAAAAA")
+
+
+ggplot(df, aes(x = site, y = area, fill = site, color = site)) +
+  stat_boxplot(geom = "errorbar", width = 0.4, linewidth = 0.7) +
+  geom_boxplot(outlier.alpha = 1, outlier.size = 0.5, width = 0.7, alpha = 1, linewidth = 0.5) +
+  scale_y_log10(
+    breaks = c(0.05, 0.5, 5, 50, 500),
+    labels = c("0.05", "0.5", "5", "50", "500")
+  ) +
+  scale_fill_manual(name = "Source", values  = c(Bylot = "#723735",  Herschel = "#3c566e", Wiltshire = "#4c5133")) +
+  scale_color_manual(name = "Source", values = c(Bylot = "#DB4743FF",  Herschel = "#5495CFFF", Wiltshire = "#7C873EFF")) +
+  labs(
+    x = NULL,
+    y = expression(paste("Home range in ", km^2, " (log scale)"))
+  ) +
+  theme_minimal(base_size = 14) +
+    theme(
+      legend.position = "bottom",
+      text = element_text(color = "white"),
+      axis.text = element_text(color = "white"),
+      panel.background = element_rect(fill = "#2D2D2D", color = NA),
+      plot.background = element_rect(fill = "#2D2D2D", color = NA),
+      panel.grid = element_line(color = "#424242"), 
+      legend.background = element_rect(fill = "#2D2D2D", color = NA),
+      legend.key = element_rect(fill = "#2D2D2D", color = NA),
+      strip.text = element_text(color = "white", size = 10),
+      plot.title = element_text(margin = margin(b = 15)),
+      axis.title.x = element_text(margin = margin(t = 15)),
+      axis.title.y = element_text(margin = margin(r = 15)),
+      plot.margin = margin(20, 20, 20, 20, unit = "pt")
+    ) +
+  theme(panel.grid.major.x = element_blank())
+
+ggsave("img/boxplot_monthly.png", width = 8, height = 5, dpi = 300)
+
+```

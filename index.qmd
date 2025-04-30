@@ -17,7 +17,7 @@ freeze: auto
 
 # Abstract
 
-We investigate how human activity influences the movement patterns of wild animals. Using tracking data from red foxes, bobcats, and coyotes across rural and remote areas in England, Canada, and the US, we analyze home range sizes and habitat selection in relation to human footprint and land cover.
+We investigate how human activity influences the movement patterns of wild animals. Using tracking data from red foxes and coyotes across rural and remote areas in England, Canada, and the US, we analyze home range sizes and habitat selection in relation to human footprint and land cover.
 
 # Introduction
 
@@ -28,13 +28,15 @@ Disturbance by humans has widespread impacts on the movements of animals, as con
 
 Different datasets are used for each research question. Relying on Movebank data, as described in @sec-movebank, presents additional challenges because data is used for purposes it was not originally collected for, and compared between different studies.
 
+Together, these analyses allow us to evaluate both large-scale home range adjustments and fine-scale habitat preferences in response to human activity.
+
 # Material and methods
 
 This section describes the datasets, the steps taken to prepare and process the different datasets in use, and the methodological approach.
 
 ## Datasets
 
-The Movebank database by @kays2022movebank enables researchers to publish animal tracking data for public use. The following data is selected: Red fox data from @porteus2024movement for the outskirt areas of villages in Wiltshire, UK and from @lai2022red for the remote uninhabited islands Bylot and Herschel in Canada, and bobcat and coyote data from @prugh2023fear for remote areas with some rural structures in northern Washington, US. For the human footprint data, the global terrestrial human footprint data by @gassert2023operational is chosen. For land cover, satellite data described in @zanaga2022esa is employed.
+The Movebank database by @kays2022movebank enables researchers to publish animal tracking data for public use. The following data is selected: Red fox data from @porteus2024movement for the outskirt areas of villages in Wiltshire, UK and from @lai2022red for the remote uninhabited islands Bylot and Herschel in Canada, and bobcat and coyote data from @prugh2023fear for remote areas with some rural structures in northeastern Washington, US. For the human footprint data, the global terrestrial human footprint data by @gassert2023operational is chosen. For land cover, satellite data described in @zanaga2022esa is employed.
 
 ## Data preparation and processing
 
@@ -53,6 +55,8 @@ The global 100 meter resolution terrestrial human footprint data (HFP-100) is a 
 ### Land cover data
 
 The relevant European Space Agency (ESA) WorldCover 2021 data at 10 m resolution was downloaded via the Microsoft Planetary Computer [STAC API](https://planetarycomputer.microsoft.com/docs/quickstarts/reading-stac/) for simple programmatic access in R: [ESA download](https://elkeelke.github.io/MovebankProject/preprocessing_ESA_world_cover.html).
+
+
 
 ## Data exploration and analysis
 
@@ -124,6 +128,8 @@ To compare land cover choices, which translate into habitat characteristics, sev
 
 # Results
 
+### Fox homeranges
+
 The resulting fox home ranges for the UK wader nesting season time frame are shown in @fig-home-ranges-bylot and @fig-home-ranges-wiltshire. The median home range size for the remote foxes in Bylot (75.3 km<sup>2</sup>) is more than 65 times larger compared to the rural foxes in Wiltshire (1.1 km<sup>2</sup>). The home ranges for the sub-sampled Wiltshire data are shown in @fig-home-ranges-wiltshire-sampled24h. The median home range size is 0.56 km<sup>2</sup> for the sampled data, which is roughly half as much as for the full data.
 
 ![Home ranges for Bylot foxes (March 15th to June 15th, 2012)](img/home_range_bylot_wader.png){#fig-home-ranges-bylot width="50%"}
@@ -138,62 +144,29 @@ Home ranges for Wiltshire foxes (March 15th to June 15th, 2019)
 
 Similar differences in order of magnitude between remote and rural fox home ranges can also be observed for the monthly home range results shown as a box plot in @fig-home-ranges-boxplot. Note that outliers are removed, in particular the irregular data for Herschel (as seen in @fig-herschel-map). The accompanying monthly home range plots can be found in the Appendix in @fig-monthly-home-ranges-wiltshire, @fig-monthly-home-ranges-bylot, and @fig-monthly-home-ranges-herschel.
 
-```{r}
-#| label: red-fox-data-read-monthly-results
-#| include: false
-library("readr")
-library("dplyr")
-results_bylot <- read_delim("data/output_bylot.csv", delim = ";")
-# Remove outlier from a month with little data due to collection timeframes
-results_bylot <- results_bylot |> 
-  filter(areas > 1000)
-results_herschel <- read_delim("data/output_herschel.csv", delim = ";")
-results_wiltshire <- read_delim("data/output_wiltshire.csv", delim = ";")
-```
+![Box plot comparing monthly home ranges (outliers removed)](img/boxplot_monthly.png){#fig-home-ranges-boxplot width="55%"}
 
-```{r}
-#| label: red-fox-data-functions
-#| include: false
-remove_stats_outliers <- function(areas) {
-  stats <- boxplot.stats(areas)
-  outliers <- stats$out
-  return(areas[!areas %in% outliers])
-}
-convert_m2_to_km2 <- function(area) {
-  return(area * 0.000001)
-}
-```
+### Habitat selection by coyotes
 
-```{r}
-#| label: fig-home-ranges-boxplot
-#| fig-cap: "Box plot comparing monthly home ranges (outliers removed)"
-#| echo: false
-#| warning: false
-par(mar = c(5, 5, 5, 5)) # To prevent superscripted text being cut.
-boxplot(
-  remove_stats_outliers(convert_m2_to_km2(results_bylot$areas)), 
-  remove_stats_outliers(convert_m2_to_km2(results_herschel$areas)), 
-  remove_stats_outliers(convert_m2_to_km2(results_wiltshire$areas)), 
-  axes = FALSE,
-  xlab = "", 
-  log = "y",
-  ylab = expression(paste("Home range in ", km^2, " (log scale)")))
-axis(1, at = 1, labels = "Bylot")
-axis(1, at = 2, labels = "Herschel")
-axis(1, at = 3, labels = "Wiltshire")
-axis(2, at = c(0.05, 0.5, 5, 50, 500), labels = c("0.05", "0.5", "5", "50", "500"))
-box()
-```
+We fitted a step-selection model (Poisson GLMM) with 666,248 steps from 29 coyotes. Fixed effects included land cover group, standardized human footprint (HFP), its quadratic term, and log step length. Random slopes were modeled per individual. Model validation indicated no overdispersion, plausible predictions, and acceptable collinearity among main effects (see Model Validation section).
 
-TBD For habitat selection, deriving statistically significant results from the bobcat data was not possible. The results for the coyote data are shown in 
+(Full model equasion)
+
+The fixed effects table is shown in Table X. The main effect of human footprint was positive, but its quadratic term was negative, suggesting a hump-shaped selection pattern. Interactions between land cover and HFP indicated that selection response varied strongly among habitat types. Table Y summarizes the estimated marginal trends in both linear and quadratic form per land use group.
+
+Figure X shows the estimated average effect of human footprint on relative use (log scale) by land cover class. In forest and open habitats, coyotes showed a unimodal response to HFP, with strongest selection at intermediate levels. Relative selection strength (RSS) curves, shown in Figure Y, confirmed this pattern. Coyotes avoided high human footprint in most land cover types, with the steepest drop in selection in tree-covered areas.
 
 # Model validation
 
 According to @rykiel1996testing, model validation means demonstrating that a model is acceptable for its intended use. The purpose, criteria, and context of the model must be specified.
 
+### Fox homeranges
+
 For home range size comparison, two models were defined comprised of data, home range calculation based on minimum convex polygons, and median selection. The validation criteria required the amount of difference between the results to be significantly larger (i.e., by a factor of more than 10 times) than the effects on the results introduced by data properties. For that order of magnitude, @nilsen2008can found that the choice of home range estimator has a secondary impact compared to range size differences. Since the geographic location context was diverse, to exclude distortions in the coordinate system as a potential unwanted influence, the results for Bylot island were spot checked for three applicable coordinate systems: WGS84 geographic coordinate system (EPSG:4326), NAD 83 / Statistics Canada Lambert projection (EPSG:3347), and Universal Transverse Mercator (UTM) zone 17N (EPSG:2958). These were identified using the [CRS Explorer](https://crs-explorer.proj.org/). The differences in the median home rage size results (UK wader season) for the foxes in Bylot were minor: 75.3 km<sup>2</sup> for WGS84, 73.3 km<sup>2</sup> for EPSG:3347, and 75.8 km<sup>2</sup> for EPSG:2958.
 
-For the habitat selection, statistical modelling was employed to assess the likelihood of the given results happening by chance, and statistical model validation was performed to ensure a good fit. TBD add a plot.
+### Coyote habitat selection model
+
+For the habitat selection, assessed model validity by inspecting fixed and random effect estimates, checking for overdispersion, evaluating collinearity among predictors, and plotting predicted values against observed use categories. No overdispersion was detected (dispersion ratio = 0.91; p = 1). Multicollinearity was low among main effects (VIF < 5); high variance inflation for interaction terms was expected due to model structure. Predicted relative use values were higher for used steps compared to available steps, indicating biologically plausible model behavior. Standard residual-based diagnostics were not feasible due to the conditional logistic nature of the step selection framework.
 
 # Discussion
 
