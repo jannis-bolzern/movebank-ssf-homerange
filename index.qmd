@@ -5,6 +5,7 @@ author: Jannis Bolzern and Elke Michlmayr
 format:
   html:
     theme: darkly
+    csl: ieee.csl
   pdf: 
     number-sections: true
 execute:
@@ -21,7 +22,7 @@ We investigate how human activity influences the movement patterns of wild anima
 
 # Introduction
 
-Disturbance by humans has widespread impacts on the movements of animals, as confirmed by a large-scale meta study by @doherty2021human. In this paper, two related research questions are addressed:
+Disturbance by humans has widespread impacts on the movements of animals, as confirmed by a large-scale meta study @doherty2021human. In this paper, two related research questions are addressed:
 
 1.  Home range size implications: Do animals exhibit smaller home ranges in high human impact areas? This is examined by comparing red fox (*vulpes vulpes*) home ranges in low and high human impact areas.
 2.  Habitat selection in human-influenced landscapes: How do animals select habitats under varying levels of human presence? This is analysed based on bobcat (*lynx rufus*) and coyote (*canis latrans*) data from a national park area.
@@ -34,9 +35,9 @@ This section describes the datasets, the steps taken to prepare and process the 
 
 ## Datasets
 
-The Movebank database by @kays2022movebank allows researchers to publish animal tracking data for public use. Different Movebank datasets are used for each research question. Relying on externally contributed data presents additional challenges because data is used for purposes it was not originally collected for, and compared between different studies.
+The Movebank database @kays2022movebank allows researchers to publish animal tracking data for public use. Different Movebank datasets are used for each research question. Relying on externally contributed data presents additional challenges because data is used for purposes it was not originally collected for, and compared between different studies.
 
-The following data is selected: Red fox data from @porteus2024movement for the outskirt areas of villages in Wiltshire, UK and from @lai2022red for the remote uninhabited islands Bylot and Herschel in Canada, and bobcat and coyote data from @prugh2023fear for remote areas with some rural structures in northeastern Washington, US. For the human footprint data, the global terrestrial human footprint data by @gassert2023operational is chosen. For land cover, satellite data described in @zanaga2022esa is employed.
+The following data is selected: Red fox data for the outskirt areas of villages in Wiltshire, UK @porteus2024movement and for the remote uninhabited islands Bylot and Herschel in Canada @lai2022red, and bobcat and coyote data for remote areas with some rural structures in northeastern Washington, US @prugh2023fear. For the human footprint data, the global terrestrial human footprint @gassert2023operational is chosen. For land cover, satellite data @zanaga2022esa is employed.
 
 ## Data preparation and processing
 
@@ -44,13 +45,13 @@ This section describes data preparation and processing for all the datasets empl
 
 ### Movebank data {#sec-movebank}
 
-All Movebank datasets have the same schema. This simplifies data handling, enables code re-use, and requires the data contributors do perform preprocessing and data cleaning on their side to provide the data in an appropriate format. Libraries for data processing and trajectory handling in R are provided by @kranstauber2024move2 and @signer2019animal.
+All Movebank datasets have the same schema. This simplifies data handling, enables code re-use, and requires the data contributors do perform preprocessing and data cleaning on their side to provide the data in an appropriate format. Libraries for data processing and trajectory handling in R are provided @kranstauber2024move2 @signer2019animal.
 
 The R code for data download, preprocessing, and serialization of relevant data and charts can be found in: [Red fox: UK wader nesting season home ranges](https://elkeelke.github.io/MovebankProject/preprocessing_uk_wader_nesting_season_home_range.html), [Red fox: montly home ranges](https://elkeelke.github.io/MovebankProject/preprocessing_monthly_home_ranges.html), [Bobcat/coyote: data preparation and statistical modelling](https://elkeelke.github.io/MovebankProject/preprocessing_SSF_complete.html).
 
 ### Human footprint data
 
-The global 100 meter resolution terrestrial human footprint data (HFP-100) is a raster dataset using Mollweide projection as described by @lapaine2011mollweide. The 2020 version of the data was used. The relevant areas were downloaded using a 125 km buffer around the tracking points, and projected to the WGS84 coordinate system: [HFP-100 download](https://elkeelke.github.io/MovebankProject/preprocessing_HFP_subsetting.html).
+The global 100 meter resolution terrestrial human footprint data (HFP-100) is a raster dataset using Mollweide projection @lapaine2011mollweide. The 2020 version of the data was used. The relevant areas were downloaded using a 125 km buffer around the tracking points, and projected to the WGS84 coordinate system: [HFP-100 download](https://elkeelke.github.io/MovebankProject/preprocessing_HFP_subsetting.html).
 
 ### Land cover data
 
@@ -86,12 +87,6 @@ Amount of data per year and month
 
 ### Bobcat and coyote data
 
-@prugh2023fear provide data for 29 coyotes and 30 bobcats collected between June 2018 and June 2022. 
-
-
-
-Two animals from each dataset were completely excluded from the analysis because of data sparsity issues. There was partly faulty data for one bobcat, which was also excluded. The majority of the data was usable. 
-
 @fig-esa shows that the two species reside in two separated geographical areas and have interspersed home ranges. It also features a plot of the animal locations in the context of the extracted land cover data. @fig-hfp reveals the human footprint in the area, which is generally low except for some settlements and country roads.
 
 ![Bobcat and coyote locations in the context of the land cover data](img/land_cover.png){#fig-esa width="%"}
@@ -116,17 +111,17 @@ We applied two main analytical approaches: (1) home range estimation for red fox
 
 Home range sizes are calculated using minimum convex polygons, which provides easily comparable estimates of the area used by each individual animal. As discussed in @sec-redfoxdata, the datasets for the two locations have different temporal scale. 
 
-@laube2011 have found that the choice of temporal scale has considerable effects on movement parameter calculations, in turn affecting home range results. How to make this data comparable? Problem #1 is that the sampling intervals are different. Problem #2 is that the data coverage varies by time of the year. Problem #3 is that there are highly different amounts of data. Selecting the means and parameters for the comparison involves complex choices that will influence the results. For #1, a possible approach to achieve similar sampling intervals would be to sample a random afternoon data point for each 24 hour window. However, this would include the implicit assumption that foxes will follow similar daily patterns in the different environments. For #2, a possible approach would be to compare the data for the same time of the year. But since the geographical locations are different, the seasonal weather conditions will differ for the same day of the year, likely leading to different animal behavior. For #3, aggregated comparisons can solve the issue, assuming there is enough data for the smaller data source.
+The choice of temporal scale has considerable effects on movement parameter calculations @laube2011, in turn affecting home range results. How to make this data comparable? Problem #1 is that the sampling intervals are different. Problem #2 is that the data coverage varies by time of the year. Problem #3 is that there are highly different amounts of data. Selecting the means and parameters for the comparison involves complex choices that will influence the results. For #1, a possible approach to achieve similar sampling intervals would be to sample a random afternoon data point for each 24 hour window. However, this would include the implicit assumption that foxes will follow similar daily patterns in the different environments. For #2, a possible approach would be to compare the data for the same time of the year. But since the geographical locations are different, the seasonal weather conditions will differ for the same day of the year, likely leading to different animal behavior. For #3, aggregated comparisons can solve the issue, assuming there is enough data for the smaller data source.
 
 For data exploration the simplest possible imperfect approach is employed, which is to ignore the different sampling intervals for problem #1, to compare the data for the same time of the year for problem #2 even if animal behavior might be different, and to use exploratory data analysis to find out if a representative answer can be found given the amount of data present for problem #3. Note that this approach has obvious limits. Among them is that the Herschel data is not applicable, since it has minimal overlaps with the Wiltshire data (see @fig-datapoints-month). To explore the impact of sampling intervals for problem #1, the home ranges for the Wiltshire data are additionally calculated on downsampled data, where a random data point from every 24 hour period is selected. Finally, an analysis of monthly home ranges is conducted on all three datasets as an alternative solution to address problem #2.
 
 ### Habitat selection modeling
 
-To model fine-scale habitat preferences, we used step-selection functions (SSFs) as described by @fortin2005wolves. These compare environmental attributes at "used" locations to those at randomly sampled "available" locations along the animal’s movement path. This allows to quantify how animals respond to environmental covariates, such as human footprint and land cover. Selection patterns are then compared to assess how habitat preferences vary with human influence.
+To model fine-scale habitat preferences, we used step-selection functions (SSFs) @fortin2005wolves. These compare environmental attributes at "used" locations to those at randomly sampled "available" locations along the animal’s movement path. This allows to quantify how animals respond to environmental covariates, such as human footprint and land cover. Selection patterns are then compared to assess how habitat preferences vary with human influence.
 
 #### Step Generation and Covariates
 
-Coyote and bobcat GPS tracks from @prugh2023fear were irregularly spaced (see @fig-bobcat-coyote-sampling) and were resampled for temporal consistency — coyotes to 4-hour intervals and bobcats to 8-hour intervals, both with a 10-minute tolerance - using the track_resample() function from the amt package by @signer2019animal. Steps were then generated using the amt steps_by_burst() and random_steps() functions. For each used step, ten random available steps were generated based on empirical step length (gamma distribution) and turning angle (von Mises distribution). Log-transformed step lengths were calculated for modeling to account for potential bias in the availability distribution.
+Coyote and bobcat GPS tracks @prugh2023fear were irregularly spaced (see @fig-bobcat-coyote-sampling) and were resampled for temporal consistency — coyotes to 4-hour intervals and bobcats to 8-hour intervals, both with a 10-minute tolerance - using the track_resample() function from the amt package @signer2019animal. Steps were then generated using the amt steps_by_burst() and random_steps() functions. For each used step, ten random available steps were generated based on empirical step length (gamma distribution) and turning angle (von Mises distribution). Log-transformed step lengths were calculated for modeling to account for potential bias in the availability distribution.
 
 Each observed step and its corresponding random steps were grouped into strata using a unique step ID, following a matched case-control design. Habitat covariates (land cover and standardized human footprint) were extracted for each step endpoint.
 
@@ -152,7 +147,7 @@ To explore the relationship between movement behavior and human disturbance, we 
 
 #### Statistical model
 
-Step selection functions (SSFs) are commonly modeled using conditional logistic regression, which compares observed and available steps within matched strata (e.g., `survival::clogit`; see @manly2007resource). However, for datasets involving multiple individuals, this approach can be limiting in terms of flexibility. Muff et al. (2020) demonstrated that conditional logistic regression is likelihood-equivalent to a Poisson regression model with stratum-specific fixed intercepts. By treating these intercepts as random effects with a large fixed variance, the model can be reformulated as a generalized linear mixed-effects model (GLMM), allowing for the inclusion of random slopes to account for individual variation in habitat selection.
+Step selection functions (SSFs) are commonly modeled using conditional logistic regression, which compares observed and available steps within matched strata (e.g., `survival::clogit`; @manly2007resource). However, for datasets involving multiple individuals, this approach can be limiting in terms of flexibility. Muff et al. (2020) demonstrated that conditional logistic regression is likelihood-equivalent to a Poisson regression model with stratum-specific fixed intercepts. By treating these intercepts as random effects with a large fixed variance, the model can be reformulated as a generalized linear mixed-effects model (GLMM), allowing for the inclusion of random slopes to account for individual variation in habitat selection.
 
 Following this framework, we modeled habitat selection in relation to human impact using a Poisson GLMM with a log link, implemented via `glmmTMB::glmmTMB`. Stratum-specific intercepts (one per `step_id_`) were modeled as random effects with a fixed, large variance to approximate the `clogit` structure, enabling the inclusion of individual-level random slopes and better capturing heterogeneity in selection behavior.
 
@@ -232,11 +227,11 @@ Figure X shows the estimated average effect of human footprint on relative use (
 
 # Model validation
 
-According to @rykiel1996testing, model validation means demonstrating that a model is acceptable for its intended use. The purpose, criteria, and context of the model must be specified.
+Model validation means demonstrating that a model is acceptable for its intended use @rykiel1996testing. The purpose, criteria, and context of the model must be specified.
 
 ## Fox home ranges
 
-For home range sizes, two models comprised of data, home range calculation based on minimum convex polygons, and median selection were compared. The validation criteria required the difference between the results to be at least 10 times larger than the effects on the results introduced by data properties. For that order of magnitude, @nilsen2008can found that the choice of home range estimator has a secondary impact. Since geographic location contexts were diverse, to exclude distortions in the coordinate system as a potential influence, the results for Bylot island were spot checked for three applicable coordinate systems: WGS84 (EPSG:4326), NAD 83 (EPSG:3347), and UTM zone 17N (EPSG:2958). These were identified using the [CRS Explorer](https://crs-explorer.proj.org/). The differences in the median home range size results were minor: 75.3 km<sup>2</sup> for WGS84, 73.3 km<sup>2</sup> for NAD 83, and 75.8 km<sup>2</sup> for UTM zone 17N.
+For home range sizes, two models comprised of data, home range calculation based on minimum convex polygons, and median selection were compared. The validation criteria required the difference between the results to be at least 10 times larger than the effects on the results introduced by data properties. For that order of magnitude, the choice of home range estimator has a secondary impact @nilsen2008can. Since geographic location contexts were diverse, to exclude distortions in the coordinate system as a potential influence, the results for Bylot island were spot checked for three applicable coordinate systems: WGS84 (EPSG:4326), NAD 83 (EPSG:3347), and UTM zone 17N (EPSG:2958). These were identified using the [CRS Explorer](https://crs-explorer.proj.org/). The differences in the median home range size results were minor: 75.3 km<sup>2</sup> for WGS84, 73.3 km<sup>2</sup> for NAD 83, and 75.8 km<sup>2</sup> for UTM zone 17N.
 
 ## Coyote habitat selection model
 
@@ -246,7 +241,7 @@ For the habitat selection, model validity was assessed by inspecting fixed and r
 
 The fox home range size results show enormous differences between rural and remote areas. We conclude that human presence changes fox movement behavior patterns fundamentally. The opportunity to move undisturbed, and the availability of anthropogenic food sources are likely the most relevant factors but more data would be needed to have proof for the underlying reasons. One thing that is interesting to see is that the fox home range sizes for Bylot and Herschel foxes are similar, even if the island sizes differ by a factor of 100. 
 
-Note that there is one fox with an extraordinarily large home range in @fig-home-ranges-wiltshire, and the additional charts in @sec-additional-charts show several instances of large fox movements within a single month. @kobryn2023foxes report similar patterns with a small number of foxes covering much larger areas than others. They conclude that the data is genuine and demonstrates potential for extensive movement patterns in urban foxes, and state that in some studies such outliers are either removed or cannot be tracked because of hardware setup restrictions, therefore underestimating home ranges. 
+Note that there is one fox with an extraordinarily large home range in @fig-home-ranges-wiltshire, and the additional charts in @sec-additional-charts show several instances of large fox movements within a single month. Similar patterns with a small number of foxes covering much larger areas than others were found in @kobryn2023foxes, concluding that the data is genuine and demonstrates potential for extensive movement patterns in urban foxes. 
 
 While technical aspects such as sampling intervals and home range estimator have significant influence on the calculation results, they play a secondary role in comparison to the difference in fox behavior, which enables the chosen approach of comparing data from heterogeneous sources. Another instance of data aspects having large effects on the results was observed in statistical modelling. While we could fit a model for coyote data, it was not feasible for the bobcat data. We suspect that the re-sampling required due to irregular sampling rates as shown in @fig-sampling-rates played a role.
 
@@ -268,6 +263,6 @@ We have performed spatial data analysis and statistical modeling on externally c
 
 ## Use of generative AI
 
-Elke used @notebooklm for querying the papers cited, and @openai2025chatgpt for ggplot related queries. Jannis utilized GitHub Copilot (2025) for debugging and assisting in plot creation.
+Elke used NotebookLM for querying the papers cited, and ChatGPT for ggplot related queries. Jannis utilized GitHub Copilot for debugging and assisting in plot creation.
 
 # References
