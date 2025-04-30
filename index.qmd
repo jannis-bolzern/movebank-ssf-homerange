@@ -271,8 +271,8 @@ We have performed spatial data analysis and statistical modeling on externally c
 
 
 
-## Use of Large Language Models and Generative AI
+## Use of generative AI
 
-Elke used @notebooklm for querying the papers cited in the references, and @openai2025chatgpt for ggplot related queries. Jannis utilized GitHub Copilot (2025) for debugging and for assisting in the creation of plots.
+Elke used @notebooklm for querying the papers cited, and @openai2025chatgpt for ggplot related queries. Jannis utilized GitHub Copilot (2025) for debugging and assisting in the creation of plots.
 
 # References
