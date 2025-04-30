@@ -197,7 +197,7 @@ ggplot() +
   geom_sf(
     data = animal_sf,
     aes(color = `individual-taxon-canonical-name`),
-    size = 0.7,
+    size = 0.2,
     alpha = 1
   ) +
   scale_color_manual(values = c("Lynx rufus" = "gray10", "Canis latrans" = "gray30"), 
@@ -241,7 +241,7 @@ ggplot() +
     )
   )
       
-ggsave("img/esa_landcover_study_area_with_animals_adj.png",
+ggsave("img/land_cover.png",
          bg = "#2D2D2D",
          width = 10, height = 5.5,
          dpi = 300)
