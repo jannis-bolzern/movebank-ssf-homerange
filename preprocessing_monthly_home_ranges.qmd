@@ -261,7 +261,7 @@ ggplot(df, aes(x = site, y = area, fill = site, color = site)) +
   scale_color_manual(name = "Source", values = c(Bylot = "#DB4743FF",  Herschel = "#5495CFFF", Wiltshire = "#7C873EFF")) +
   labs(
     x = NULL,
-    y = expression(paste("Home range in ", km^2, " (log scale)"))
+    y = expression(paste("Home range in ", km^2, " (log)"))
   ) +
   theme_minimal(base_size = 14) +
     theme(
