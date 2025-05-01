@@ -34,7 +34,7 @@ theme_publication_dark <- function(base_size = 14, legend_position = "bottom") {
       text = element_text(color = "white"),
       axis.text = element_text(color = "white"),
       panel.background = element_rect(fill = "#222222", color = NA),
-      plot.background = element_rect(fill = "#222222", color = NA),
+      plot.background  = element_rect(fill = "#222222", colour = "#424242", linewidth = 0.75),
       panel.grid = element_line(color = "#424242"), 
       legend.background = element_rect(fill = "#222222", color = NA),
       legend.key = element_rect(fill = "#222222", color = NA),
@@ -333,10 +333,12 @@ check_collinearity(ssf_coyote)
 # Plot predicted vs. observed use
 coyote_ssf_data$predicted <- predict(ssf_coyote, type = "response")
 ggplot(coyote_ssf_data, aes(x = predicted, fill = as.factor(case_binary_))) +
-  geom_density(alpha = 0.5) +
+  geom_density(alpha = 0.5, color = NA) +
   scale_fill_manual(values = c("1" = "#5495CFFF", "0" = "gray80"), name = "Used") +
   theme_publication_dark(legend_position = "right") +
   labs(x = "Predicted Relative Use (exp(η))", y = "Density")
+
+ggsave("img/coyote_predicted_vs_used.png", width = 10, height = 5.5, dpi = 300)
 
 # 4. Bobcat SSF Modeling --------------------------------------------------
 # Read SSF ready data and filter

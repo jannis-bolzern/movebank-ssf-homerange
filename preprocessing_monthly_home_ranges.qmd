@@ -81,11 +81,11 @@ calculate_monthly_home_ranges <- function(ts_start, num_months, study_id, licens
       legend.position = "right",
       text            = element_text(colour = "white"),
       axis.text       = element_text(colour = "white"),
-      panel.background = element_rect(fill = "#2D2D2D", colour = NA),
-      plot.background  = element_rect(fill = "#2D2D2D", colour = NA),
+      panel.background = element_rect(fill = "#222222", colour = NA),
+      plot.background  = element_rect(fill = "#222222", colour = "#424242", linewidth = 0.75),
       panel.grid       = element_line(colour = "#424242"),
-      legend.background = element_rect(fill = "#2D2D2D", colour = NA),
-      legend.key        = element_rect(fill = "#2D2D2D", colour = NA),
+      legend.background = element_rect(fill = "#222222", colour = NA),
+      legend.key        = element_rect(fill = "#222222", colour = NA),
       strip.text        = element_text(colour = "white", size = 10),
       plot.title        = element_text(margin = margin(b = 15)),
       axis.title.x      = element_text(margin = margin(t = 15)),
@@ -162,7 +162,7 @@ results_bylot <- calculate_monthly_home_ranges(
   palette_colors = bylot_colors
 )
 
-ggsave("img/bylot_monthly.png", results_bylot$gg, width = 8, height = 5, dpi = 300)
+ggsave("img/bylot_monthly.png", results_bylot$gg, width = 10, height = 5.5, dpi = 300)
 
 write_csv(data.frame(areas = results_bylot$areas), "data/output_bylot.csv")
 
@@ -176,7 +176,7 @@ results_herschel <- calculate_monthly_home_ranges(
   palette_colors = herschel_colors
 )
 
-ggsave("img/herschel_monthly.png", results_herschel$gg, width = 8, height = 3, dpi = 300)
+ggsave("img/herschel_monthly.png", results_herschel$gg, width = 10, height = 4, dpi = 300)
 
 write_csv(data.frame(areas = results_herschel$areas), "data/output_herschel.csv")
 
@@ -268,11 +268,11 @@ ggplot(df, aes(x = site, y = area, fill = site, color = site)) +
       legend.position = "bottom",
       text = element_text(color = "white"),
       axis.text = element_text(color = "white"),
-      panel.background = element_rect(fill = "#2D2D2D", color = NA),
-      plot.background = element_rect(fill = "#2D2D2D", color = NA),
+      panel.background = element_rect(fill = "#222222", color = NA),
+      plot.background  = element_rect(fill = "#222222", colour = "#424242", linewidth = 0.75),
       panel.grid = element_line(color = "#424242"), 
-      legend.background = element_rect(fill = "#2D2D2D", color = NA),
-      legend.key = element_rect(fill = "#2D2D2D", color = NA),
+      legend.background = element_rect(fill = "#222222", color = NA),
+      legend.key = element_rect(fill = "#222222", color = NA),
       strip.text = element_text(color = "white", size = 10),
       plot.title = element_text(margin = margin(b = 15)),
       axis.title.x = element_text(margin = margin(t = 15)),
