@@ -179,6 +179,8 @@ We initially attempted SSF modeling for bobcats, but excluded them from the fina
 
 # Results
 
+This section describes the results.
+
 ## Fox home ranges
 
 The resulting fox home ranges for the UK wader nesting season time frame are shown in @fig-home-ranges-bylot and @fig-home-ranges-wiltshire. The median home range size for the remote foxes in Bylot (75.3 km<sup>2</sup>) is more than 65 times larger compared to the one for rural foxes in Wiltshire (1.1 km<sup>2</sup>). The home ranges for the sub-sampled Wiltshire data are shown in @fig-home-ranges-wiltshire-sampled24h. The median home range size is 0.56 km<sup>2</sup> for the sampled data, which is roughly half as much as for the full data.
@@ -224,7 +226,6 @@ Table: Estimated marginal **quadratic** trends of human footprint on coyote habi
 | Cropland     | -0.153            | 0.046| -0.243 – -0.064  | -3.35| 0.0008 |
 | BuiltUp      | -0.161            | 0.077| -0.312 – -0.011  | -2.11| 0.0351 |
 | Water        | -0.013            | 0.081| -0.172 – 0.146   | -0.16| 0.870  |
-
 
 The average marginal effect plot (Figure @fig-avg-eff) shows highest relative selection for TreeCover and Open habitats at low human footprint, with declining selection under increased human footprint. BuiltUp, Cropland, and Water habitats were consistently selected less, regardless of human footprint level.
 
