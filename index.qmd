@@ -75,7 +75,7 @@ Maps of Bylot and Herschel island, with high level view of animal GPS tracks (un
 
 Data from Bylot (see @fig-bylot-map) and Herschel (see @fig-herschel-map) was collected all year round, at a much lower sampling rate of once per day at random afternoon times. The collection period was June 2009 to Feb 2010 for Herschel and from 2011 to 2015 for Bylot, for two foxes each per island. @fig-datapoints-year provides an overview of the amount of data points available per year. There is much more data from Wiltshire because of the higher number of foxes and the higher sampling rate. Looking at the breakdowns by month as shown in @fig-datapoints-month reveals seasonal differences in the amount of data available.
 
-::: {#fig-data-points layout-ncol="2"}
+::: {#fig-data-points layout-ncol="1"}
 ![Per year](img/year_count.png){#fig-datapoints-year}
 
 ![Per month](img/month_count.png){#fig-datapoints-month}
@@ -87,9 +87,9 @@ Amount of data per year and month
 
 @fig-esa shows that the two species reside in two separated geographical areas and have interspersed home ranges. It also features a plot of the animal locations in the context of the extracted land cover data. @fig-hfp reveals the human footprint in the area, which is generally low except for some settlements and country roads.
 
-![Bobcat and coyote locations in the context of the land cover data](img/land_cover.png){#fig-esa width="%"}
+![Bobcat and coyote locations in the context of the land cover data](img/land_cover.png){#fig-esa}
 
-![HFP-100 data with bobcat and coyote tracks](img/hfp.png){#fig-hfp width="%"}
+![HFP-100 data with bobcat and coyote tracks](img/hfp.png){#fig-hfp}
 
 Although all GPS collars were programmed to record locations at four-hour intervals, the actual sampling was irregular and included numerous outliers (see @fig-sampling-rates). Sampling intervals for bobcats were particularly sparse and inconsistent compared to those for coyotes.
 
@@ -101,7 +101,7 @@ Although all GPS collars were programmed to record locations at four-hour interv
 Box plots of sampling rates for bobcat and coyote data
 :::
 
-## Methodology {#sec-methodology}
+## Analytical methods {#sec-methodology}
 
 We applied two analytical approaches: (1) home range estimation for red foxes and (2) habitat selection modeling using step-selection functions for coyotes.
 
@@ -125,7 +125,7 @@ Human footprint index (HFP) values were standardized across the dataset for mode
 
 | **New Class** | **Description**                                             | **Used Original Classes**                           |
 |---------------|-------------------------------------------------------------|-----------------------------------------------------|
-| TreeCover     | Areas dominated by trees with a cover of 10% or more        | Tree cover                                          |
+| TreeCover     | Areas dominated by trees with a cover of 10% or more        | Tree Cover                                          |
 | Open          | Open natural habitats or low-intensity agricultural areas   | Grassland, Bare/sparse vegetation, Moss and lichen  |
 | Cropland      | Areas used for intensive agricultural production            | Cropland                                            |
 | BuiltUp       | Urban and developed areas with infrastructure               | Built-up                                            |
@@ -153,7 +153,7 @@ The model can be expressed as:
 
 $$
 \log(\lambda_{ij}) =
-\beta_1 \cdot \text{LandUse}_{ij} +
+\beta_1 \cdot \text{LC}_{ij} +
 \beta_2 \cdot \text{HFP}_{ij} +
 \beta_3 \cdot \text{HFP}_{ij}^2 +
 \beta_4 \cdot \log(\text{StepLength}_{ij}) +
@@ -162,13 +162,14 @@ u_{i}
 $$
 
 where:
-- \( \lambda_{ij} \) is the expected relative selection strength for step \( j \) of individual \( i \),
-- \( \text{LandUse}_{ij} \) is the land cover class,
-- \( \text{HFP}_{ij} \) is the standardized human footprint value,
-- \( b_{0,step(i,j)} \) is a random intercept for each stratum (`step_id_`),
-- \( u_i \) represents individual-level random slopes.
 
-Interaction terms between land use and human footprint (both linear and quadratic) were also included but are omitted here for clarity.
+- $\lambda_{ij}$ is the expected relative selection strength for step $j$ of individual $i$,  
+- $\text{LC}_{ij}$ is the land cover class,  
+- $\text{HFP}_{ij}$ is the standardized human footprint value,  
+- $b_{0,\text{step}(i,j)}$ is a random intercept for each stratum (`step_id_`),  
+- $u_i$ represents individual-level random slopes.
+
+Interaction terms between land cover and human footprint (both linear and quadratic) were also included but are omitted here for clarity.
 
 Following model fitting, we used average marginal effects and relative selection strength (RSS) to visualize how habitat selection varied across the gradient of human footprint (HFP). These metrics were computed from the fitted model to provide an interpretable scale of selection intensity.
 
@@ -176,27 +177,15 @@ Following model fitting, we used average marginal effects and relative selection
 
 We initially attempted SSF modeling for bobcats, but excluded them from the final analysis due to insufficient sample sizes across land cover types and irregular sampling intervals. These issues led to poor model convergence and biologically implausible estimates. Only two land cover classes remained after filtering, limiting ecological interpretability. As a result, SSF analysis was conducted only for coyotes.
 
-
-
-
-
-![Variation in human footprint across and cover types](img/coyote_EDA_boxplot.png){#fig-coy-eda-box width="%"}
-
-
-
-
-
-
-
 # Results
 
 ## Fox home ranges
 
 The resulting fox home ranges for the UK wader nesting season time frame are shown in @fig-home-ranges-bylot and @fig-home-ranges-wiltshire. The median home range size for the remote foxes in Bylot (75.3 km<sup>2</sup>) is more than 65 times larger compared to the one for rural foxes in Wiltshire (1.1 km<sup>2</sup>). The home ranges for the sub-sampled Wiltshire data are shown in @fig-home-ranges-wiltshire-sampled24h. The median home range size is 0.56 km<sup>2</sup> for the sampled data, which is roughly half as much as for the full data.
 
-![Home ranges for Bylot foxes (March 15th to June 15th, 2012)](img/home_range_bylot_wader.png){#fig-home-ranges-bylot width="50%"}
+![Home ranges for Bylot foxes (March 15th to June 15th, 2012)](img/home_range_bylot_wader.png){#fig-home-ranges-bylot}
 
-::: {#fig-sampling layout-ncol="2"}
+::: {#fig-sampling layout-ncol="1"}
 ![10/60 minute sampling interval](img/home_range_wiltshire_wader.png){#fig-home-ranges-wiltshire}
 
 ![24 hour sampling interval](img/home_range_wiltshire_wader_sampled.png){#fig-home-ranges-wiltshire-sampled24h}
@@ -206,30 +195,55 @@ Home ranges for Wiltshire foxes (March 15th to June 15th, 2019)
 
 Similar differences in order of magnitude between remote and rural fox home ranges can also be observed for the monthly home range results shown as a box plot in @fig-home-ranges-boxplot. Note that outliers are removed, in particular the irregular data for Herschel (as seen in @fig-herschel-map). The accompanying monthly home range plots can be found in the Appendix in @fig-monthly-home-ranges-wiltshire, @fig-monthly-home-ranges-bylot, and @fig-monthly-home-ranges-herschel.
 
-![Box plot comparing monthly home ranges (outliers removed)](img/boxplot_monthly.png){#fig-home-ranges-boxplot width="55%"}
+![Box plot comparing monthly home ranges (outliers removed)](img/boxplot_monthly.png){#fig-home-ranges-boxplot}
 
-## Habitat selection by coyotes
+## Coyote habitat selection
 
-We fitted a step-selection model (Poisson GLMM) with 666,248 steps from 29 coyotes. Fixed effects included land cover group, standardized human footprint (HFP), its quadratic term, and log step length. Random slopes were modeled per individual. Model validation indicated no overdispersion, plausible predictions, and acceptable collinearity among main effects (see Model Validation section). The full model took the form:
+The final step selection function (SSF) model included 666,248 steps from 29 coyotes. The model converged successfully and revealed significant effects of human footprint and land cover interactions on habitat selection.
 
-(Full model equasion)
+Coyotes exhibited significant variation in habitat selection across land cover types and along the human footprint gradient (@tbl-coyote-linear and @tbl-coyote-quadratic). Linear selection trends were significantly positive in TreeCover ($\beta_1$ = +0.263, *p* = 0.0001) and Open ($\beta_1$ = +0.139, *p* = 0.042), indicating increased selection with increasing HFP at low to moderate levels. However, significant negative quadratic trends in these habitats (TreeCover: $\beta_2$ = -0.183, *p* < 0.0001; Open: $\beta_2$ = -0.181, *p* < 0.0001) suggested that selection peaked at intermediate HFP and declined at higher human footprint levels.
 
-The fixed effects table is shown in Table X. The main effect of human footprint was positive, but its quadratic term was negative, suggesting a hump-shaped selection pattern. Interactions between land cover and HFP indicated that selection response varied strongly among habitat types. Table Y summarizes the estimated marginal trends in both linear and quadratic form per land use group.
+Selection for Cropland and BuiltUp was weak and non-significant (*p* > 0.05). Water showed a significant negative linear trend ($\beta_1$ = -0.550, *p* = 0.036), indicating declining selection with increasing HFP.
 
-Figure X shows the estimated average effect of human footprint on relative use (log scale) by land cover class. In forest and open habitats, coyotes showed a unimodal response to HFP, with strongest selection at intermediate levels. Relative selection strength (RSS) curves, shown in Figure Y, confirmed this pattern. Coyotes avoided high human footprint in most land cover types, with the steepest drop in selection in tree-covered areas.
+Table: Estimated marginal **linear** trends of human footprint on coyote habitat selection by land cover type. Includes standard errors, 95% confidence intervals, *z*-ratios, and *p*-values. {#tbl-coyote-linear}
 
-![Average marginal effects across human footprint gradient](img/avg_effect.png){#fig-avg-effect width="%"}
-![Coyote habitat selection across the human footprint gradient](img/rss.png){#fig-rss width="%"}
+| Land Cover  | Linear Trend ($\beta_1$) | SE   | 95% CI            | *z*    | *p*    |
+|-------------|-----------------|------|------------------|------|------|
+| TreeCover    | +0.263          | 0.068| 0.130 – 0.397    | 3.87 | 0.0001 |
+| Open         | +0.139          | 0.068| 0.005 – 0.273    | 2.04 | 0.042  |
+| Cropland     | -0.063          | 0.113| -0.283 – 0.158   | -0.56| 0.577  |
+| BuiltUp      | -0.062          | 0.309| -0.667 – 0.544   | -0.20| 0.842  |
+| Water        | -0.550          | 0.263| -1.065 – -0.035  | -2.09| 0.036  |
 
-# Model validation
+Table: Estimated marginal **quadratic** trends of human footprint on coyote habitat selection by land cover type.  Includes standard errors, 95% confidence intervals, *z*-ratios, and *p*-values. {#tbl-coyote-quadratic}
+
+| Land Cover  | Quadratic Trend ($\beta_2$) | SE   | 95% CI            | *z*    | *p*    |
+|-------------|--------------------|------|------------------|------|------|
+| TreeCover    | -0.183            | 0.039| -0.260 – -0.106  | -4.68| <.0001 |
+| Open         | -0.181            | 0.039| -0.257 – -0.104  | -4.62| <.0001 |
+| Cropland     | -0.153            | 0.046| -0.243 – -0.064  | -3.35| 0.0008 |
+| BuiltUp      | -0.161            | 0.077| -0.312 – -0.011  | -2.11| 0.0351 |
+| Water        | -0.013            | 0.081| -0.172 – 0.146   | -0.16| 0.870  |
+
+
+The average marginal effect plot (Figure @fig-avg-eff) shows highest relative selection for TreeCover and Open habitats at low human footprint, with declining selection under increased human footprint. BuiltUp, Cropland, and Water habitats were consistently selected less, regardless of human footprint level.
+
+![Average marginal effects across human footprint gradient](img/avg_effect.png){#fig-avg-eff}
+
+Relative selection strength (RSS) curves (Figure @fig-rss) confirmed that coyotes preferred TreeCover and Open habitats under low human footprint conditions, with selection declining or leveling off at higher human disturbance.
+
+![Coyote habitat selection across the human footprint gradient](img/rss.png){#fig-rss}
+
+
+## Model validation
 
 Model validation means demonstrating that a model is acceptable for its intended use @rykiel1996testing. The purpose, criteria, and context of the model must be specified.
 
-## Fox home ranges
+### Fox home ranges
 
 For home range sizes, two models comprised of data, home range calculation based on minimum convex polygons, and median selection were compared. The validation criteria required the difference between the results to be at least 10 times larger than the effects on the results introduced by data properties. For that order of magnitude, the choice of home range estimator has a secondary impact @nilsen2008can. Since geographic location contexts were diverse, to exclude distortions in the coordinate system as a potential influence, the results for Bylot island were spot checked for three applicable coordinate systems: WGS84 (EPSG:4326), NAD 83 (EPSG:3347), and UTM zone 17N (EPSG:2958). These were identified using the [CRS Explorer](https://crs-explorer.proj.org/). The differences in the median home range size results were minor: 75.3 km<sup>2</sup> for WGS84, 73.3 km<sup>2</sup> for NAD 83, and 75.8 km<sup>2</sup> for UTM zone 17N.
 
-## Coyote habitat selection model
+### Coyote habitat selection
 
 For the habitat selection, model validity was assessed by inspecting fixed and random effect estimates, checking for overdispersion, evaluating collinearity among predictors, and plotting predicted values against observed use categories. No overdispersion was detected (dispersion ratio = 0.91; *p* = 1). Multicollinearity was low among main effects (VIF < 5); high variance inflation for interaction terms was expected due to model structure. Predicted relative use values were higher for used steps compared to available steps, indicating biologically plausible model behavior. Standard residual-based diagnostics were not feasible due to the conditional logistic nature of the step selection framework.
 
@@ -239,7 +253,11 @@ The fox home range size results show enormous differences between rural and remo
 
 While technical aspects such as sampling intervals and home range estimator have significant influence on the calculation results, they play a secondary role in comparison to the difference in fox behavior, which enables the chosen approach of comparing data from heterogeneous sources. Another instance of data aspects having large effects on the results was observed in statistical modelling. While we could fit a model for coyote data, it was not feasible for the bobcat data. We suspect that the re-sampling required due to irregular sampling rates as shown in @fig-sampling-rates played a role.
 
-TBD habitats
+
+
+Coyote habitat selection was driven by both land cover and the degree of human modification. Animals strongly favored forest and open habitats under low-to-moderate human footprint but reduced use of these habitats once disturbance exceeded an apparent threshold, indicating a trade-off between resource gain and risk. Cropland, built-up areas, and water were rarely selected, revealing broad avoidance of highly modified landscapes.
+
+Land-cover-specific relative selection strength (RSS) curves showed that human disturbance altered preferences differently among habitats—selection for forest declined more steeply with increasing footprint than did selection for open areas—echoing earlier work that forests function as crucial refuges in human-dominated settings (e.g., Riley et al. 2003). Model diagnostics confirmed that the SSF was well specified, with no over-dispersion or problematic collinearity. A comparable analysis for bobcats was infeasible because of sparse, uneven data, underscoring the limitations of opportunistic tracking datasets.
 
 # Conclusion
 
@@ -249,14 +267,16 @@ We have performed spatial data analysis and statistical modeling on externally c
 
 ## Additional charts {#sec-additional-charts} 
 
-![Monthly home ranges for Wiltshire foxes](img/wiltshire_monthly.png){#fig-monthly-home-ranges-wiltshire width="60%"}
+![Monthly home ranges for Wiltshire foxes](img/wiltshire_monthly.png){#fig-monthly-home-ranges-wiltshire}
 
-![Monthly home ranges for Bylot foxes](img/bylot_monthly.png){#fig-monthly-home-ranges-bylot width="60%"}
+![Monthly home ranges for Bylot foxes](img/bylot_monthly.png){#fig-monthly-home-ranges-bylot}
 
-![Monthly home ranges for Herschel foxes](img/herschel_monthly.png){#fig-monthly-home-ranges-herschel width="60%"}
+![Monthly home ranges for Herschel foxes](img/herschel_monthly.png){#fig-monthly-home-ranges-herschel}
+
+![Variation in human footprint across and cover types](img/coyote_EDA_boxplot.png){#fig-coy-eda-box}
 
 ## Use of generative AI
 
-Elke used NotebookLM for querying the papers cited, and ChatGPT for ggplot related queries. Jannis utilized GitHub Copilot for debugging and assisting in plot creation.
+Elke used NotebookLM for querying the papers cited, and ChatGPT for ggplot related queries. Jannis utilized GitHub Copilot for debugging Deepseek for assisting in plot creation.
 
 # References
