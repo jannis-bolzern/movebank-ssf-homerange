@@ -280,6 +280,6 @@ We have performed spatial data analysis and statistical modeling on externally c
 
 ## Use of generative AI
 
-Elke used NotebookLM for querying the papers cited, and ChatGPT for ggplot related queries. Jannis utilized GitHub Copilot for debugging Deepseek for assisting in plot creation.
+Elke used NotebookLM for querying the papers cited, and ChatGPT for ggplot related queries. Jannis utilized GitHub Copilot for debugging DeepSeekAI for assisting in plot creation.
 
 # References
