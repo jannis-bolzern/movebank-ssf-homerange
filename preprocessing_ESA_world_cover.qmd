@@ -192,7 +192,7 @@ ggplot() +
     ),
     labels = c("Tree Cover", "Open", "Cropland", "Built-up", "Water"),
     na.translate = FALSE,
-    name = "Land Cover Category  "
+    name = "Land cover category"
   ) +
   geom_sf(
     data = animal_sf,

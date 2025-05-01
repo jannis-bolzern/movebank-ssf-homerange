@@ -247,7 +247,7 @@ ggplot(coyote_ssf_data,
   geom_density_ridges(scale = 1.2) +
   scale_fill_manual(values = landuse_colors_sec) + 
   scale_color_manual(values = landuse_colors) +
-  labs(x = "Human Footprint Index (0–50)", y = "Land Cover Type") +
+  labs(x = "Human Footprint Index (0–50)", y = "Land cover type") +
   theme_publication_dark(legend_position = "none") +
   theme(panel.grid.major.y = element_blank())
 
@@ -263,7 +263,7 @@ ggplot(coyote_ssf_data,
                width = 0.7, alpha = 1, linewidth = 0.5) +
   scale_fill_manual(values = landuse_colors_sec) + 
   scale_color_manual(values = landuse_colors) +
-  labs(x = "Land Cover Type", y = "Human Footprint Index (0–50)") +
+  labs(x = "Land cover type", y = "Human Footprint Index (0–50)") +
   theme_publication_dark(legend_position = "none") +
   theme(panel.grid.major.x = element_blank())
 
@@ -281,7 +281,7 @@ ggplot(coyote_ssf_data, aes(x = human_footprint, y = log_sl_)) +
                   colour = "red", h = 2, linewidth = 0.75) +
   geom_vline(xintercept = 0, colour = "gray80", linewidth = 0.6) +
   geom_hline(yintercept = 0, colour = "gray80", linewidth = 0.6) +
-  labs(x = "Human Footprint Index (0–50)", y = "Log Step Length") +
+  labs(x = "Human Footprint Index (0–50)", y = "Log step length") +
   theme_publication_dark(legend_position = "right")
 
 #Relationship between Movement and Human Footprint
@@ -335,7 +335,7 @@ ggplot(coyote_ssf_data, aes(x = predicted, fill = as.factor(case_binary_))) +
   geom_density(alpha = 0.5, color = NA) +
   scale_fill_manual(values = c("1" = "#5495CFFF", "0" = "gray80"), name = "Used") +
   theme_publication_dark(legend_position = "right") +
-  labs(x = "Predicted Relative Use (exp(η))", y = "Density")
+  labs(x = "Predicted relative use (exp(η))", y = "Density")
 
 ggsave("img/coyote_predicted_vs_used.png", width = 10, height = 5.5, dpi = 300)
 
@@ -446,8 +446,8 @@ avg_eff_plot_hfp_landuse <- function(fittedResponse,
     scale_fill_manual(values   = landuse_colors) +
     labs(
       x = "Human Footprint Index (0–50)",
-      y = "Estimated Relative Use (log)",
-      title = "Average Marginal Effects across Human Footprint Gradient"
+      y = "Estimated relative use (log)",
+      title = "Average marginal effects across human footprint gradient"
     ) +
     theme_publication_dark(legend_position = "none")
   
@@ -536,8 +536,8 @@ calc_rss_hfp_landuse <- function(model, data,
     scale_fill_manual(values  = landuse_cols_sec) +
     labs(
       x = "Human Footprint Index (0–50)",
-      y = "Relative Selection Strength (RSS)",
-      title = "Coyote Habitat Selection across the Human Footprint Gradient",
+      y = "Relative selection strength (RSS)",
+      title = "Coyote habitat selection across the human footprint gradient",
       colour = "Land-cover", fill = "Land-cover"
     ) +
     theme_publication_dark(legend_position = "bottom")

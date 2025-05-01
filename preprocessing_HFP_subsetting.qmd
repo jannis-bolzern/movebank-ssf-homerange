@@ -90,7 +90,7 @@ ggplot() +
     data = hfp_wgs84,
     maxcell = 1e6
   ) +
-  scale_fill_gradient(low = "grey", high = "#FF6F61", na.value = "gray90", name = "Human footprint index") +
+  scale_fill_gradient(low = "grey", high = "#FF6F61", na.value = "gray90", name = "Human Footprint Index") +
   geom_sf(
     data = animal_sf,
     aes(color = `individual-taxon-canonical-name`),
