@@ -252,9 +252,13 @@ For the habitat selection, model validity was assessed by inspecting fixed and r
 
 # Discussion
 
+## Home range size assessment
+
 The fox home range size results show enormous differences between rural and remote areas. We conclude that human presence changes fox movement behavior patterns fundamentally. The opportunity to move undisturbed, and the availability of anthropogenic food sources are likely the most relevant factors. Interestingly, home range sizes for Bylot and Herschel foxes are similar, even if the island sizes differ by a factor of 100. Note that there is one fox with an extraordinarily large home range in @fig-home-ranges-wiltshire. The additional charts in @sec-additional-charts show several instances of large fox movements within a single month. Similar patterns with a small number of foxes covering much larger areas than others were found in @kobryn2023foxes, concluding that the data is genuine and demonstrates potential for extensive movement patterns in urban foxes. 
 
 While technical aspects such as sampling intervals and home range estimator have significant influence on the calculation results, they play a secondary role in comparison to the difference in fox behavior, which enables the chosen approach of comparing data from heterogeneous sources. 
+
+## Habitat selection
 
 Coyote habitat selection was driven by both land cover and the degree of human modification. Animals strongly favored forest and open habitats under low-to-moderate human footprint but reduced use of these habitats once disturbance exceeded an apparent threshold, indicating a trade-off between resource gain and risk. Cropland, built-up areas, and water were rarely selected, revealing broad avoidance of highly modified landscapes.
 
