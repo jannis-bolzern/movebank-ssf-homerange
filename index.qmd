@@ -201,7 +201,7 @@ The resulting fox home ranges for the UK wader nesting season time frame are sho
 ::: {#fig-sampling layout-ncol="2"}
 ![10/60 minute sampling interval](img/home_range_wiltshire_wader.png){#fig-home-ranges-wiltshire}
 
-![24 hour sampling interval)](img/home_range_wiltshire_wader_sampled.png){#fig-home-ranges-wiltshire-sampled24h}
+![24 hour sampling interval](img/home_range_wiltshire_wader_sampled.png){#fig-home-ranges-wiltshire-sampled24h}
 
 Home ranges for Wiltshire foxes (March 15th to June 15th, 2019)
 :::
