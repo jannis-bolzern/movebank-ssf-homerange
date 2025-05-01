@@ -141,7 +141,7 @@ To assess the distribution of human footprint across land cover types, we visual
 
 To explore the relationship between movement behavior and human disturbance, we visualized the joint distribution of the Human Footprint Index (HFP) and log-transformed step length using a hexbin density plot (see @fig-coy-eda-hex). Most steps occurred under conditions of low human footprint and were characterized by short to moderate movement distances. By including log-transformed step length as a covariate, the model accounts for underlying variation in movement intensity that could otherwise confound habitat selection estimates.
 
-![Relationship between movement and human footprint](img/coyote_EDA_hexbin.png){#fig-coy-eda-hex}
+![Relationship between movement and human footprint](img/coyote_EDA_hexbin.png){#fig-coy-eda-hex width="75%" fig-align="center"}
 
 #### Statistical model
 
