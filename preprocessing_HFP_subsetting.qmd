@@ -191,7 +191,7 @@ ggplot() +
   )
       
 ggsave("img/hfp.png",
-         bg = "#2D2D2D",
+         bg = "#222222",
          width = 10, height = 5.5,
          dpi = 300)
 
