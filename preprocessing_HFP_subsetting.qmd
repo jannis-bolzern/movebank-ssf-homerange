@@ -76,43 +76,6 @@ writeRaster(
 )
 ```
 
-# Create a zoomed in chart for the paper with animal tracks overlay
-```{r}
-# From https://www.movebank.org/cms/webapp?gwt_fragment=page%3Dstudies%2Cpath%3Dstudy2636372210
-tracking_data <- read_delim("data/bobcat_coyotes_wa_gps.csv")
-animal_sf <- tracking_data |>
-  st_as_sf(
-    coords = c("location-long", "location-lat"),
-    crs = 4326  # WGS84
-  )
-ggplot() +
-  tidyterra::geom_spatraster(
-    data = hfp_wgs84,
-    maxcell = 1e6
-  ) +
-  scale_fill_gradient(low = "grey", high = "#FF6F61", na.value = "gray90", name = "Human Footprint Index") +
-  geom_sf(
-    data = animal_sf,
-    aes(color = `individual-taxon-canonical-name`),
-    size = 0.1,
-    alpha = 0.7
-  ) +
-  scale_color_manual(values = c("Canis latrans" = "black", "Lynx rufus" = "white"), 
-                     name = "Species") +
-  coord_sf(
-    xlim = c(-120.7, -117.1),
-    ylim = c(47, 49),
-    expand = FALSE
-  ) +
-  theme(
-    legend.background = element_rect(fill = "gray90", color = "black"),
-  ) +
-  guides(
-    color = guide_legend(override.aes = list(size = 4)),
-  )
-ggsave("img/hfp.png")
-```
-
 # Adjusted plot for correctly scaled HFP and consistent theme
 ```{r}
 tracking_data <- read_delim("data/bobcat_coyotes_wa_gps.csv")
@@ -191,9 +154,9 @@ ggplot() +
   )
       
 ggsave("img/hfp.png",
-         bg = "#222222",
-         width = 10, height = 5.5,
-         dpi = 300)
+       bg = "#222222",
+       width = 10, height = 6.6,
+       dpi = 300)
 
 ```
 

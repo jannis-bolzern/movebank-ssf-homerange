@@ -243,7 +243,7 @@ ggplot() +
       
 ggsave("img/land_cover.png",
          bg = "#222222",
-         width = 10, height = 5.5,
+         width = 10, height = 6.73,
          dpi = 300)
 
 ```

@@ -5,6 +5,11 @@ author: Jannis Bolzern and Elke Michlmayr
 format:
   html:
     theme: darkly
+    css: custom.css
+    toc: true
+    toc-title: "Navigation"
+    toc-depth: 3
+    toc-location: left
     csl: ieee.csl
   pdf: 
     number-sections: true
@@ -205,9 +210,35 @@ Similar differences in order of magnitude between remote and rural fox home rang
 
 The final step selection function (SSF) model included 666,248 steps from 29 coyotes. The model converged successfully and revealed significant effects of human footprint and land cover interactions on habitat selection.
 
-Coyotes exhibited significant variation in habitat selection across land cover types and along the human footprint gradient (@tbl-coyote-linear and @tbl-coyote-quadratic). Linear selection trends were significantly positive in TreeCover ($\beta_1$ = +0.263, *p* = 0.0001) and Open ($\beta_1$ = +0.139, *p* = 0.042), indicating increased selection with increasing HFP at low to moderate levels. However, significant negative quadratic trends in these habitats (TreeCover: $\beta_2$ = -0.183, *p* < 0.0001; Open: $\beta_2$ = -0.181, *p* < 0.0001) suggested that selection peaked at intermediate HFP and declined at higher human footprint levels.
+Coyotes exhibited significant variation in habitat selection across land cover types and along the human footprint gradient (@tbl-emtrends-linear and @tbl-emtrends-quadratic). Linear selection trends were significantly positive in TreeCover ($\beta_1$ = +0.263, *p* = 0.0001) and Open ($\beta_1$ = +0.139, *p* = 0.042), indicating increased selection with increasing HFP at low to moderate levels. However, significant negative quadratic trends in these habitats (TreeCover: $\beta_2$ = -0.183, *p* < 0.0001; Open: $\beta_2$ = -0.181, *p* < 0.0001) suggested that selection peaked at intermediate HFP and declined at higher human footprint levels.
 
 Selection for Cropland and BuiltUp was weak and non-significant (*p* > 0.05). Water showed a significant negative linear trend ($\beta_1$ = -0.550, *p* = 0.036), indicating declining selection with increasing HFP.
+
+
+::: {#tbl-emtrends layout-ncol=1}
+|**Land Cover**|**Linear Trend ($\beta_1$)**|**SE**|    **95% CI**    |***z***|***p***|
+|:-------------|---------------------------:|-----:|:----------------:|------:|------:|
+| TreeCover    | +0.263                     | 0.068| 0.130 – 0.397    | 3.87  | 0.0001|
+| Open         | +0.139                     | 0.068| 0.005 – 0.273    | 2.04  | 0.042 |
+| Cropland     | -0.063                     | 0.113| -0.283 – 0.158   | -0.56 | 0.577 |
+| BuiltUp      | -0.062                     | 0.309| -0.667 – 0.544   | -0.20 | 0.842 |
+| Water        | -0.550                     | 0.263| -1.065 – -0.035  | -2.09 | 0.036 |
+
+: Estimated marginal linear trends. {#tbl-emtrends-linear}
+
+|**Land Cover**|**Quadratic Trend ($\beta_2$)**|**SE**|    **95% CI**   |***z***|***p***|
+|:-------------|------------------------------:|-----:|:---------------:|------:|------:|
+| TreeCover    | -0.183                        | 0.039| -0.260 – -0.106 | -4.68 | <.0001|
+| Open         | -0.181                        | 0.039| -0.257 – -0.104 | -4.62 | <.0001|
+| Cropland     | -0.153                        | 0.046| -0.243 – -0.064 | -3.35 | 0.0008|
+| BuiltUp      | -0.161                        | 0.077| -0.312 – -0.011 | -2.11 | 0.0351|
+| Water        | -0.013                        | 0.081| -0.172 – 0.146  | -0.16 | 0.870 |
+
+: Estimated marginal quadratic trends. {#tbl-emtrends-quadratic}
+
+Estimated marginal trends of human footprint on coyote habitat selection by land cover type. Includes linear (a) and quadratic (b) trends, with standard errors, 95% confidence intervals, *z*-ratios, and *p*-values.
+:::
+
 
 Table: Estimated marginal **linear** trends of human footprint on coyote habitat selection by land cover type. Includes standard errors, 95% confidence intervals, *z*-ratios, and *p*-values. {#tbl-coyote-linear}
 
@@ -229,13 +260,14 @@ Table: Estimated marginal **quadratic** trends of human footprint on coyote habi
 | BuiltUp      | -0.161            | 0.077| -0.312 – -0.011  | -2.11| 0.0351 |
 | Water        | -0.013            | 0.081| -0.172 – 0.146   | -0.16| 0.870  |
 
+
 The average marginal effect plot (Figure @fig-avg-eff) shows highest relative selection for TreeCover and Open habitats at low human footprint, with declining selection under increased human footprint. BuiltUp, Cropland, and Water habitats were consistently selected less, regardless of human footprint level.
 
-![Average marginal effects across human footprint gradient](img/avg_effect.png){#fig-avg-eff}
+![Average marginal effects across human footprint gradient](img/avg_effect.png){#fig-avg-eff width="100%"}
 
 Relative selection strength (RSS) curves (Figure @fig-rss) confirmed that coyotes preferred TreeCover and Open habitats under low human footprint conditions, with selection declining or leveling off at higher human disturbance.
 
-![Coyote habitat selection across the human footprint gradient](img/rss.png){#fig-rss}
+![Coyote habitat selection across the human footprint gradient](img/rss.png){#fig-rss width="100%"}
 
 
 ## Model validation
@@ -272,18 +304,18 @@ We have performed spatial data analysis and statistical modeling on externally c
 
 ## Additional charts {#sec-additional-charts} 
 
-![Monthly home ranges for Wiltshire foxes](img/wiltshire_monthly.png){#fig-monthly-home-ranges-wiltshire}
+![Monthly home ranges for Wiltshire foxes](img/wiltshire_monthly.png){#fig-monthly-home-ranges-wiltshire width="100%"}
 
-![Monthly home ranges for Bylot foxes](img/bylot_monthly.png){#fig-monthly-home-ranges-bylot}
+![Monthly home ranges for Bylot foxes](img/bylot_monthly.png){#fig-monthly-home-ranges-bylot width="100%"}
 
-![Monthly home ranges for Herschel foxes](img/herschel_monthly.png){#fig-monthly-home-ranges-herschel}
+![Monthly home ranges for Herschel foxes](img/herschel_monthly.png){#fig-monthly-home-ranges-herschel width="100%"}
 
-![Variation in human footprint across and cover types](img/coyote_EDA_boxplot.png){#fig-coy-eda-box}
+![Variation in human footprint across and cover types](img/coyote_EDA_boxplot.png){#fig-coy-eda-box width="100%"}
 
-![Predicted relative use by observed use category](img/coyote_predicted_vs_used.png){#fig-pred-vs-used}
+![Predicted relative use by observed use category](img/coyote_predicted_vs_used.png){#fig-pred-vs-used width="100%"}
 
 ## Use of generative AI
 
-Elke used NotebookLM for querying the papers cited, and ChatGPT for ggplot related queries. Jannis utilized GitHub Copilot for debugging DeepSeekAI for assisting in plot creation.
+Elke used NotebookLM for querying the papers cited, and ChatGPT for ggplot related queries. Jannis utilized GitHub Copilot for debugging and for assisting in plot creation.
 
 # References
