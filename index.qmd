@@ -253,11 +253,9 @@ The fox home range size results show enormous differences between rural and remo
 
 While technical aspects such as sampling intervals and home range estimator have significant influence on the calculation results, they play a secondary role in comparison to the difference in fox behavior, which enables the chosen approach of comparing data from heterogeneous sources. Another instance of data aspects having large effects on the results was observed in statistical modelling. While we could fit a model for coyote data, it was not feasible for the bobcat data. We suspect that the re-sampling required due to irregular sampling rates as shown in @fig-sampling-rates played a role.
 
-
-
 Coyote habitat selection was driven by both land cover and the degree of human modification. Animals strongly favored forest and open habitats under low-to-moderate human footprint but reduced use of these habitats once disturbance exceeded an apparent threshold, indicating a trade-off between resource gain and risk. Cropland, built-up areas, and water were rarely selected, revealing broad avoidance of highly modified landscapes.
 
-Land-cover-specific relative selection strength (RSS) curves showed that human disturbance altered preferences differently among habitats—selection for forest declined more steeply with increasing footprint than did selection for open areas—echoing earlier work that forests function as crucial refuges in human-dominated settings (e.g., Riley et al. 2003). Model diagnostics confirmed that the SSF was well specified, with no over-dispersion or problematic collinearity. A comparable analysis for bobcats was infeasible because of sparse, uneven data, underscoring the limitations of opportunistic tracking datasets.
+Land-cover-specific relative selection strength (RSS) curves showed that human disturbance altered preferences differently among habitats—selection for forest declined more steeply with increasing footprint than did selection for open areas—echoing earlier work that forests function as crucial refuges in human-dominated settings (e.g., @riley2003effects). Model diagnostics confirmed that the SSF was well specified, with no over-dispersion or problematic collinearity. A comparable analysis for bobcats was infeasible because of sparse, uneven data, underscoring the limitations of opportunistic tracking datasets.
 
 # Conclusion
 
