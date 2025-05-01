@@ -119,13 +119,13 @@ Land cover was reclassified into five ecologically meaningful categories to impr
 
 Table: Reclassification of ESA WorldCover classes into five ecologically meaningful categories. {#tbl-landcover-reclass}
 
-| **Class** | **Description**                                             | **Used original classes**                           |
-|---------------|-------------------------------------------------------------|-----------------------------------------------------|
-| TreeCover     | Areas dominated by trees with a cover of 10% or more        | Tree Cover                                          |
-| Open          | Open natural habitats or low-intensity agricultural areas   | Grassland, Bare/sparse vegetation, Moss and lichen  |
-| Cropland      | Areas used for intensive agricultural production            | Cropland                                            |
-| BuiltUp       | Urban and developed areas with infrastructure               | Built-up                                            |
-| Water         | Aquatic and semi-aquatic environments                       | Permanent water bodies, Herbaceous wetland          |
+|**New class**| **Description**                                          | **Used original classes**                           |
+|:------------|:---------------------------------------------------------|:----------------------------------------------------|
+| TreeCover   | Areas dominated by trees with a cover of 10% or more     | Tree Cover                                          |
+| Open        | Open natural habitats or low-intensity agricultural areas| Grassland, Bare / sparse vegetation, Moss and lichen|
+| Cropland    | Areas used for intensive agricultural production         | Cropland                                            |
+| BuiltUp     | Urban and developed areas with infrastructure            | Built-up                                            |
+| Water       | Aquatic and semi-aquatic environments                    | Permanent water bodies, Herbaceous wetland          |
 
 Refer to the [ESA WorldCover user manual](https://worldcover2021.esa.int/data/docs/WorldCover_PUM_V2.0.pdf) for detailed original class definitions.
 
@@ -205,7 +205,7 @@ Selection for Cropland and BuiltUp was weak and non-significant (*p* > 0.05). Wa
 
 
 ::: {#tbl-emtrends layout-ncol=1}
-|**Land Cover**|**Linear Trend ($\beta_1$)**|**SE**|    **95% CI**    |***z***|***p***|
+|**Land cover**|**Linear trend ($\beta_1$)**|**SE**|    **95% CI**    |***z***|***p***|
 |:-------------|---------------------------:|-----:|:----------------:|------:|------:|
 | TreeCover    | +0.263                     | 0.068| 0.130 – 0.397    | 3.87  | 0.0001|
 | Open         | +0.139                     | 0.068| 0.005 – 0.273    | 2.04  | 0.042 |
@@ -215,7 +215,7 @@ Selection for Cropland and BuiltUp was weak and non-significant (*p* > 0.05). Wa
 
 : Estimated marginal linear trends. {#tbl-emtrends-linear}
 
-|**Land Cover**|**Quadratic Trend ($\beta_2$)**|**SE**|    **95% CI**   |***z***|***p***|
+|Land cover   |Quadratic trend ($\beta_2$)     |SE    |    95% CI       |*z*    |    *p*|
 |:-------------|------------------------------:|-----:|:---------------:|------:|------:|
 | TreeCover    | -0.183                        | 0.039| -0.260 – -0.106 | -4.68 | <.0001|
 | Open         | -0.181                        | 0.039| -0.257 – -0.104 | -4.62 | <.0001|
@@ -225,29 +225,9 @@ Selection for Cropland and BuiltUp was weak and non-significant (*p* > 0.05). Wa
 
 : Estimated marginal quadratic trends. {#tbl-emtrends-quadratic}
 
-Estimated marginal trends of human footprint on coyote habitat selection by land cover type. Includes linear (a) and quadratic (b) trends, with standard errors, 95% confidence intervals, *z*-ratios, and *p*-values.
+Estimated marginal trends of human footprint on coyote habitat selection by land cover type.
+Includes linear (a) and quadratic (b) trends, with standard errors, 95% confidence intervals, *z*-ratios, and *p*-values.
 :::
-
-
-Table: Estimated marginal **linear** trends of human footprint on coyote habitat selection by land cover type. Includes standard errors, 95% confidence intervals, *z*-ratios, and *p*-values. {#tbl-coyote-linear}
-
-| **Land Cover**  | **Linear Trend ($\beta_1$)** | **SE**   | **95% CI** | ***z***  | ***p***  |
-|-------------|-----------------|------|------------------|------|------|
-| TreeCover    | +0.263          | 0.068| 0.130 – 0.397    | 3.87 | 0.0001 |
-| Open         | +0.139          | 0.068| 0.005 – 0.273    | 2.04 | 0.042  |
-| Cropland     | -0.063          | 0.113| -0.283 – 0.158   | -0.56| 0.577  |
-| BuiltUp      | -0.062          | 0.309| -0.667 – 0.544   | -0.20| 0.842  |
-| Water        | -0.550          | 0.263| -1.065 – -0.035  | -2.09| 0.036  |
-
-Table: Estimated marginal **quadratic** trends of human footprint on coyote habitat selection by land cover type.  Includes standard errors, 95% confidence intervals, *z*-ratios, and *p*-values. {#tbl-coyote-quadratic}
-
-| **Land Cover**  | **Quadratic Trend ($\beta_2$)** | **SE**| **95% CI**| ***z***| ***p***|
-|-------------|--------------------|------|------------------|------|------|
-| TreeCover    | -0.183            | 0.039| -0.260 – -0.106  | -4.68| <.0001 |
-| Open         | -0.181            | 0.039| -0.257 – -0.104  | -4.62| <.0001 |
-| Cropland     | -0.153            | 0.046| -0.243 – -0.064  | -3.35| 0.0008 |
-| BuiltUp      | -0.161            | 0.077| -0.312 – -0.011  | -2.11| 0.0351 |
-| Water        | -0.013            | 0.081| -0.172 – 0.146   | -0.16| 0.870  |
 
 
 The average marginal effect plot (Figure @fig-avg-eff) shows highest relative selection for TreeCover and Open habitats at low human footprint, with declining selection under increased human footprint. BuiltUp, Cropland, and Water habitats were consistently selected less, regardless of human footprint level.

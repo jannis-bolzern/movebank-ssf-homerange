@@ -1,10 +1,7 @@
-/* Inline code */
-code {
-  background-color: #424242;
-  color: #FFFFFF;
-  padding: 2px 4px;
-  border-radius: 4px;
-  font-family: monospace;
+/* Inline code styling */
+body code {
+  background-color: #424242 !important;
+  color: #FFFFFF !important;
 }
 
 /* All links: normal state */
