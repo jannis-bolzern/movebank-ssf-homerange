@@ -237,7 +237,7 @@ For the habitat selection, model validity was assessed by inspecting fixed and r
 
 # Discussion
 
-The fox home range size results show enormous differences between rural and remote areas. We conclude that human presence changes fox movement behavior patterns fundamentally. The opportunity to move undisturbed, and the availability of anthropogenic food sources are likely the most relevant factors, but more data would be needed to have proof for the underlying reasons. One thing that is interesting to see is that the fox home range sizes for Bylot and Herschel foxes are similar, even if the island sizes differ by a factor of 100. 
+The fox home range size results show enormous differences between rural and remote areas. We conclude that human presence changes fox movement behavior patterns fundamentally. The opportunity to move undisturbed, and the availability of anthropogenic food sources are likely the most relevant factors, but more data would be needed to have proof for the underlying reasons. Interestingly home range sizes for Bylot and Herschel foxes are similar, even if the island sizes differ by a factor of 100. 
 
 Note that there is one fox with an extraordinarily large home range in @fig-home-ranges-wiltshire, and the additional charts in @sec-additional-charts show several instances of large fox movements within a single month. Similar patterns with a small number of foxes covering much larger areas than others were found in @kobryn2023foxes, concluding that the data is genuine and demonstrates potential for extensive movement patterns in urban foxes. 
 
