@@ -91,65 +91,6 @@ writeRaster(
 )
 ```
 
-# Create a zoomed in chart for the paper with animal tracks overlay
-```{r}
-# Class labels (ESA WorldCover 2021)
-class_labels <- c(
-  "10" = "Tree cover",
-  "20" = "Shrubland",
-  "30" = "Grassland",
-  "40" = "Cropland",
-  "50" = "Built-up",
-  "60" = "Bare/sparse vegetation",
-  "70" = "Snow and ice",
-  "80" = "Permanent water bodies",
-  "90" = "Herbaceous wetland",
-  "95" = "Mangroves",
-  "100" = "Moss and lichen"
-)
-
-# Convert to factors for plotting
-land_cover <- as.factor(land_cover)
-
-# Create plot
-ggplot() +
-  tidyterra::geom_spatraster(
-    data = land_cover,
-    maxcell = 1e6
-  ) +
-  scale_fill_manual(
-    values = c(
-      "10" = "#006400", "20" = "#FFBB22", "30" = "#00CF75",
-      "40" = "#D2B48C", "50" = "#FA0000", "60" = "#B4B4B4",
-      "70" = "#FFFF4C", "80" = "#0064C8", "90" = "#0096A0",
-      "95" = "#00CF75", "100" = "#FAE6A0"
-    ),
-    labels = class_labels,
-    na.translate = FALSE,
-    name = "Land cover class"
-  ) +
-  geom_sf(
-    data = animal_sf,
-    aes(color = `individual-taxon-canonical-name`),
-    size = 0.1,
-    alpha = 0.7
-  ) +
-  scale_color_manual(values = c("Canis latrans" = "black", "Lynx rufus" = "white"), 
-                     name = "Species") +
-  coord_sf(
-    xlim = c(-120.7, -117.1),
-    ylim = c(47, 49),
-    expand = FALSE
-  ) +  
-  theme(
-    legend.background = element_rect(fill = "gray90", color = "black"),
-  ) +
-  guides(
-    color = guide_legend(override.aes = list(size = 4)),
-  )
-ggsave("img/esa_landcover_study_area_with_animals.png")
-```
-
 # Adjusted plot using the same land use grouping as is used in analysis
 ```{r}
 # Load the raster data

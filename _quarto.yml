@@ -1,3 +1,23 @@
 project:
   type: website
   output-dir: docs
+
+website:
+  title: "How does human activity affect the movement patterns of wild animals?"
+  sidebar:
+    style: "floating"
+    search: true
+    contents:
+      - index.qmd
+
+format:
+  html:
+    theme: darkly
+    css: custom.css
+    toc: true
+    toc-title: "Navigation"
+    toc-depth: 4
+    toc-location: left
+    csl: ieee.csl
+  pdf: 
+    number-sections: true
