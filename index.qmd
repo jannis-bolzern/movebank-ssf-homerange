@@ -118,13 +118,11 @@ We estimated home range sizes using minimum convex polygons (MCP), providing sta
 
 These discrepancies introduce potential biases in home range estimation @laube2011. To mitigate these effects, we employed three strategies:
 
-1. We limited analyses to the same seasonal period (March 15th – June 15th) across datasets to control for seasonal variation.
+1. We limited analyses to the same seasonal period (March 15th – June 15th) across datasets to control for seasonal variation. Due to limited data from Herschel Island (@fig-datapoints-month) for that timeframe, we focused comparative analyses on the Wiltshire and Bylot datasets.
 
 2. We generated a downsampled Wiltshire dataset by selecting a random daily location per individual, matching the lower sampling frequency of the Arctic datasets.
 
 3. We computed monthly home ranges for all datasets to explore temporal variation.
-
-Due to limited data from Herschel Island (@fig-datapoints-month), meaningful comparison with Wiltshire was not feasible. Therefore, we focused comparative analyses on the Wiltshire and Bylot datasets.
 
 <!--Home range sizes were calculated using minimum convex polygons, which provides easily comparable estimates of the area used by each individual animal. As discussed in @sec-redfoxdata, the datasets for the two locations have different temporal scale. The choice of temporal scale has considerable effects on movement parameter calculations @laube2011, in turn affecting home range results. How to make this data comparable? Problem #1 is that the sampling intervals are different. Problem #2 is that the data coverage varies by time of the year. Problem #3 is that there are highly different amounts of data. Selecting the means and parameters for the comparison involves complex choices that will influence the results. For #1, a possible approach to achieve similar sampling intervals would be to sample a random afternoon data point for each 24 hour window. However, this would include the implicit assumption that foxes will follow similar daily patterns in the different environments. For #2, a possible approach would be to compare the data for the same time of the year. But since the geographical locations are different, the seasonal weather conditions will differ for the same day of the year, likely leading to different animal behavior. For #3, aggregated comparisons can solve the issue, assuming there is enough data for the smaller data source.
 
