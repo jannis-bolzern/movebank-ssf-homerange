@@ -320,9 +320,6 @@ wiltshire_centroids <- st_centroid(wiltshire_mcp)
 
 ggplot() +
   geom_sf(data = wiltshire_mcp, aes(color = individual_local_identifier), fill = NA, linewidth = 0.4) +
-  geom_sf_text(data = wiltshire_centroids,
-               aes(label = paste0(round(area_m2, 1), " km²")),
-               color = "white", size = 3) +
   geom_sf(data = wiltshire_centroids, aes(color = individual_local_identifier), shape = 3, size = 2) +
   scale_color_manual(values = wiltshire_colors) +
   labs(x = "Longitude", y = "Latitude", color = "Fox ID") +
@@ -491,6 +488,17 @@ ggplot(home_range_df, aes(x = Location, y = Area_km2, color = Location, fill = L
 ```
 
 ```{r}
+# Convert to km²
+bylot_area_km2 <- as.numeric(st_area(bylot_mcp)) * 1e-6
+wiltshire_area_km2 <- as.numeric(st_area(wiltshire_mcp)) * 1e-6
+
+# Add identifiers
+bylot_df <- tibble(region = "Bylot", fox_id = bylot_mcp$individual_local_identifier, area_km2 = bylot_area_km2)
+wiltshire_df <- tibble(region = "Wiltshire", fox_id = wiltshire_mcp$individual_local_identifier, area_km2 = wiltshire_area_km2)
+
+# Combine into one
+home_range_areas <- bind_rows(bylot_df, wiltshire_df)
+
 map_data <- tibble(
   region = c("Bylot", "Wiltshire"),
   lon = c(-76.5, -1.6),
