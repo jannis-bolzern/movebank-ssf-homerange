@@ -164,13 +164,13 @@ ggplot(year_count, aes(x = factor(year), y = count, color = source, fill = sourc
   labs(x = "Year", y = "Number of data points", fill = "Source", color = "Source") +
   scale_fill_manual(values = c(
     "Bylot"     = "#DB4743FF",
-    "Herschel"  = "#7C873EFF",
-    "Wiltshire" = "#5495CFFF"
+    "Herschel"  = "#5495CFFF",
+    "Wiltshire" = "#7C873EFF"
   )) +
   scale_color_manual(values = c(
     "Bylot"     = "#DB4743FF",
-    "Herschel"  = "#7C873EFF",
-    "Wiltshire" = "#5495CFFF"
+    "Herschel"  = "#5495CFFF",
+    "Wiltshire" = "#7C873EFF"
   )) +
   theme_minimal(base_size = 14) +
   theme(
@@ -208,8 +208,8 @@ ggplot(month_count, aes(x = month_name, y = count, color = source)) +
   ) +
   scale_color_manual(values = c(
     "Bylot"     = "#DB4743FF",
-    "Herschel"  = "#7C873EFF",
-    "Wiltshire" = "#5495CFFF"
+    "Herschel"  = "#5495CFFF",
+    "Wiltshire" = "#7C873EFF"
   )) +
   theme_minimal(base_size = 14) +
   theme(

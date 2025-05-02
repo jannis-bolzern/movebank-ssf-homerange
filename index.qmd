@@ -32,18 +32,21 @@ Together, these analyses allow us to evaluate both large-scale home range adjust
 
 <!--The Movebank database @kays2022movebank allows researchers to publish animal tracking data for public use. Relying on externally contributed data presents challenges because data is used for purposes it was not originally collected for, and compared between studies. We selected red fox data for outskirt areas in Wiltshire, UK @porteus2024movement and for uninhabited islands in Canada @lai2022red, and bobcat and coyote data for remote areas in northeastern Washington, US @prugh2023fear. Additional, the global terrestrial human footprint @gassert2023operational and satellite land cover data @zanaga2022esa were employed.-->
 
-We analyzed four animal tracking datasets obtained from the Movebank database @kays2022movebank, including red fox (*Vulpes vulpes*) tracks from Wiltshire, UK @porteus2024movement, Bylot Island, Canada, and Herschel Island, Canada @lai2022red, as well as bobcat (*Lynx rufus*) and coyote (*Canis latrans*) tracks from northeastern Washington, USA @prugh2023fear. The tracking data varied in temporal resolution and geographic context, with sample sizes and data characteristics summarized in Table X.
+We analyzed four animal tracking datasets obtained from the Movebank database @kays2022movebank, including red fox (*Vulpes vulpes*) tracks from Wiltshire, UK @porteus2024movement, Bylot Island, Canada, and Herschel Island, Canada @lai2022red, as well as bobcat (*Lynx rufus*) and coyote (*Canis latrans*) tracks from northeastern Washington, USA @prugh2023fear. The tracking data varied in temporal resolution and geographic context, with sample sizes and data characteristics summarized in @tbl-datasets.
 
-| Dataset    | Species        | Location        | Year(s)     | N animals | Sampling interval       | Total fixes |
-|------------|----------------|----------------|-------------|-----------|-----------------------|-------------|
-| Wiltshire  | Red fox        | Wiltshire, UK   | 2016–2019   | 35        | 10–60 min              | 146072       |
-| Bylot      | Red fox        | Bylot Island    | 2011–2015   | 2         | 1/day (afternoon)      | 2086         |
-| Herschel   | Red fox        | Herschel Island | 2009–2010   | 2         | 1/day (afternoon)      | 223         |
-| Washington | Coyote         | NE Washington   | 2014–2015   | 34 (coyotes), 36 (bobcats)| 4-hour programmed      | 121706       |
+Table: Summary of animal tracking datasets used in the analysis. {#tbl-datasets}
+
+| Dataset    | Species   | Years      | Individuals | Sampling interval     | Total fixes |
+|:-----------|:----------|:-----------|:------------|:----------------------|:------------|
+| Wiltshire  | Red fox   | 2016–2019  | 35          | 10–60 min             | 146072      |
+| Bylot      | Red fox   | 2011–2015  | 2           | 1/day (afternoon)     | 2086        |
+| Herschel   | Red fox   | 2009–2010  | 2           | 1/day (afternoon)     | 223         |
+| Washington | Coyote    | 2014–2015  | 34          | 4-hour programmed     | 72893       |
+| Washington | Bobcat    | 2014–2015  | 36          | 4-hour programmed     | 48813       |
 
 In addition to movement data, we used global covariate datasets: the 2020 global terrestrial Human Footprint Index (HFP-100) at 100 m resolution [@gassert2023operational], and the ESA WorldCover 2021 land cover dataset at 10 m resolution [@zanaga2022esa].
 
-Detailed descriptions of data preprocessing, filtering, and acquisition procedures are provided in the Supplementary Material @sec-sup-mat.
+Detailed descriptions of data preprocessing, filtering, and acquisition procedures are provided in the [Supplementary Material](#sec-sup-mat).
 
 <!--## Data preparation and processing
 
@@ -65,19 +68,19 @@ The relevant European Space Agency (ESA) WorldCover 2021 data at 10 m resolution
 
 ### Red fox {#sec-redfoxdata}
 
-Data from Wiltshire (@fig-wiltshire-map) was collected between 2016 to 2019 during the UK wader nesting season, which was defined to be March 15th to June 15th, for 35 foxes in total. It was sampled at 10 and 60 minute rates. The research team controlled the sampling rate remotely to save battery at times the data was considered less interesting.
+Data from Wiltshire (@fig-wiltshire-map) were collected between 2016 to 2019 during the UK wader nesting season, defined as March 15th to June 15th, for a total of 35 foxes. Locations were recorded every 10 to 60 minutes, with the sampling rate remotely reduced during periods deemed less informative to conserve battery.
 
 ![High level view of animal GPS tracks in Wiltshire](img/wiltshire_map.png){#fig-wiltshire-map width="100%" .lightbox}
 
 ::: {#fig-tracks layout-ncol="2" width="100%" .lightbox}
 ![Bylot island (11.067 km<sup>2</sup>)](img/bylot_map.png){#fig-bylot-map .lightbox}
 
-![Herschel island (116 km<sup>2</sup>), some tracks irregular](img/herschel_map.png){#fig-herschel-map .lightbox}
+![Herschel island (116 km<sup>2</sup>)](img/herschel_map.png){#fig-herschel-map .lightbox}
 
-Maps of Bylot and Herschel island, with high level view of animal GPS tracks (unfiltered).
+Maps of Bylot and Herschel island, with high level view of animal GPS tracks.
 :::
 
-Data from Bylot (@fig-bylot-map) and Herschel (@fig-herschel-map) was collected all year round, at a much lower sampling rate of once per day at random afternoon times. The collection period was June 2009 to Feb 2010 for Herschel and from 2011 to 2015 for Bylot, for two foxes each per island. @fig-datapoints-year provides an overview of the amount of data points available per year. There is much more data from Wiltshire because of the higher number of foxes and the higher sampling rate. Looking at the breakdowns by month as shown in @fig-datapoints-month reveals seasonal differences in the amount of data available.
+Data from Bylot (@fig-bylot-map) and Herschel (@fig-herschel-map) were collected year-round, at a lower sampling rate of once per day at random afternoon times. Data collection spanned 2009–2010 for Herschel and 2011–2015 for Bylot, with two foxes monitored per island. @fig-datapoints-year shows annual data availability, highlighting the much larger dataset from Wiltshire due to more animals and higher sampling frequency. Monthly patterns @fig-datapoints-month reveal seasonal differences in data availability.
 
 ::: {#fig-data-points layout-ncol="1"}
 ![Per year](img/year_count.png){#fig-datapoints-year width="100%" .lightbox}
@@ -89,13 +92,13 @@ Amount of data per year and month
 
 ### Bobcat and coyote
 
-@fig-esa shows that the two species reside in two separated geographical areas and have interspersed home ranges. It also features a plot of the animal locations in the context of the extracted land cover data. @fig-hfp reveals the human footprint in the area, which is generally low except for some settlements and country roads.
+Coyote and bobcat GPS were collected in northeastern Washington between 2014 and 2015, with collars programmed to record locations every four hours. The two species occupied two distinct geographic areas with overlapping but species-specific home ranges @fig-esa, shown in relation to land cover data. Human footprint was generally low across the study area, except for localized settlements and roads @fig-hfp.
 
 ![Bobcat and coyote locations in the context of the land cover data](img/land_cover.png){#fig-esa width="100%" .lightbox}
 
-![HFP-100 data with bobcat and coyote tracks](img/hfp.png){#fig-hfp width="100%" .lightbox}
+![Bobcat and coyote locations overlaid on human footprint index (0 = wilderness; 50 = highly urbanized)](img/hfp.png){#fig-hfp width="100%" .lightbox}
 
-Although all GPS collars were programmed to record locations at four-hour intervals, the actual sampling was irregular and included numerous outliers (@fig-sampling-rates). Sampling intervals for bobcats were particularly sparse and inconsistent compared to those for coyotes.
+Although collars were programmed for regular sampling, actual intervals were irregular, with substantial variation, especially among bobcats. Sampling interval distributions are shown in @fig-sampling-rates.
 
 ::: {#fig-sampling-rates layout-ncol="2"}
 ![With outliers](img/bobcat_coyote_sampling_rates_outliers.png){#fig-bobcat-coyote-sampling-outliers .lightbox}
@@ -111,15 +114,27 @@ We applied two analytical approaches: (1) home range estimation for red foxes an
 
 ### Home range size assessment
 
-Home range sizes were calculated using minimum convex polygons, which provides easily comparable estimates of the area used by each individual animal. As discussed in @sec-redfoxdata, the datasets for the two locations have different temporal scale. The choice of temporal scale has considerable effects on movement parameter calculations @laube2011, in turn affecting home range results. How to make this data comparable? Problem #1 is that the sampling intervals are different. Problem #2 is that the data coverage varies by time of the year. Problem #3 is that there are highly different amounts of data. Selecting the means and parameters for the comparison involves complex choices that will influence the results. For #1, a possible approach to achieve similar sampling intervals would be to sample a random afternoon data point for each 24 hour window. However, this would include the implicit assumption that foxes will follow similar daily patterns in the different environments. For #2, a possible approach would be to compare the data for the same time of the year. But since the geographical locations are different, the seasonal weather conditions will differ for the same day of the year, likely leading to different animal behavior. For #3, aggregated comparisons can solve the issue, assuming there is enough data for the smaller data source.
+We estimated home range sizes using minimum convex polygons (MCP), providing standardized, comparable measures of space use across individuals. However, differences in temporal scale between the datasets posed challenges for comparability. The Wiltshire data were sampled at 10–60 minute intervals, while the Bylot and Herschel datasets were sampled once daily. Additionally, data coverage varied across seasons and years, and sample sizes differed substantially.
 
-For data exploration the simplest possible imperfect approach was employed, which was to ignore the different sampling intervals for problem #1, to compare the data for the same time of the year for problem #2 even if animal behavior might be different, and to use exploratory data analysis to find out if a representative answer can be found given the amount of data present for problem #3. Note that this approach has obvious limits. Among them is that the Herschel data is not applicable, since it has minimal overlaps with the Wiltshire data (@fig-datapoints-month). To explore the impact of sampling intervals for problem #1, the home ranges for the Wiltshire data were additionally calculated on downsampled data, where a random data point from every 24 hour period was selected. Finally, an analysis of monthly home ranges was conducted on all three datasets as an alternative solution to address problem #2.
+These discrepancies introduce potential biases in home range estimation @laube2011. To mitigate these effects, we employed three strategies:
+
+1. We limited analyses to the same seasonal period (March 15th – June 15th) across datasets to control for seasonal variation.
+
+2. We generated a downsampled Wiltshire dataset by selecting a random daily location per individual, matching the lower sampling frequency of the Arctic datasets.
+
+3. We computed monthly home ranges for all datasets to explore temporal variation.
+
+Due to limited data from Herschel Island (@fig-datapoints-month), meaningful comparison with Wiltshire was not feasible. Therefore, we focused comparative analyses on the Wiltshire and Bylot datasets.
+
+<!--Home range sizes were calculated using minimum convex polygons, which provides easily comparable estimates of the area used by each individual animal. As discussed in @sec-redfoxdata, the datasets for the two locations have different temporal scale. The choice of temporal scale has considerable effects on movement parameter calculations @laube2011, in turn affecting home range results. How to make this data comparable? Problem #1 is that the sampling intervals are different. Problem #2 is that the data coverage varies by time of the year. Problem #3 is that there are highly different amounts of data. Selecting the means and parameters for the comparison involves complex choices that will influence the results. For #1, a possible approach to achieve similar sampling intervals would be to sample a random afternoon data point for each 24 hour window. However, this would include the implicit assumption that foxes will follow similar daily patterns in the different environments. For #2, a possible approach would be to compare the data for the same time of the year. But since the geographical locations are different, the seasonal weather conditions will differ for the same day of the year, likely leading to different animal behavior. For #3, aggregated comparisons can solve the issue, assuming there is enough data for the smaller data source.
+
+For data exploration the simplest possible imperfect approach was employed, which was to ignore the different sampling intervals for problem #1, to compare the data for the same time of the year for problem #2 even if animal behavior might be different, and to use exploratory data analysis to find out if a representative answer can be found given the amount of data present for problem #3. Note that this approach has obvious limits. Among them is that the Herschel data is not applicable, since it has minimal overlaps with the Wiltshire data (@fig-datapoints-month). To explore the impact of sampling intervals for problem #1, the home ranges for the Wiltshire data were additionally calculated on downsampled data, where a random data point from every 24 hour period was selected. Finally, an analysis of monthly home ranges was conducted on all three datasets as an alternative solution to address problem #2.-->
 
 ### Habitat selection modeling
 
 To model fine-scale habitat preferences, we used step-selection functions (SSFs) @fortin2005wolves. These compare environmental attributes at "used" locations to those at randomly sampled "available" locations along the animal’s movement path. This allows to quantify how animals respond to environmental covariates, such as human footprint and land cover. Selection patterns are then compared to assess how habitat preferences vary with human influence.
 
-#### Step Generation and Covariates
+#### Step Generation and Covariates {#sec-step-cov}
 
 Coyote and bobcat GPS tracks @prugh2023fear were irregularly spaced (@fig-bobcat-coyote-sampling) and were resampled for temporal consistency — coyotes to 4-hour intervals and bobcats to 8-hour intervals, both with a 10-minute tolerance - using the `amt::track_resample` function @signer2019animal. Steps were then generated using the `amt::steps_by_burst` and `amt::random_steps` functions. For each used step, ten random available steps were generated based on empirical step length (gamma distribution) and turning angle (Von Mises distribution). Log-transformed step lengths were calculated for modeling to account for potential bias in the availability distribution.
 
@@ -129,13 +144,13 @@ Land cover was reclassified into five ecologically meaningful categories to impr
 
 Table: Reclassification of ESA WorldCover classes into five ecologically meaningful categories. {#tbl-landcover-reclass}
 
-|**New class**| **Description**                                          | **Used original classes**                           |
-|:------------|:---------------------------------------------------------|:----------------------------------------------------|
-| TreeCover   | Areas dominated by trees with a cover of 10% or more     | Tree Cover                                          |
-| Open        | Open natural habitats or low-intensity agricultural areas| Grassland, Bare / sparse vegetation, Moss and lichen|
-| Cropland    | Areas used for intensive agricultural production         | Cropland                                            |
-| BuiltUp     | Urban and developed areas with infrastructure            | Built-up                                            |
-| Water       | Aquatic and semi-aquatic environments                    | Permanent water bodies, Herbaceous wetland          |
+|**New class**| **Description**                        | **Used original classes**                         |
+|:------------|:---------------------------------------|:--------------------------------------------------|
+| TreeCover   | Tree-dominated areas (>10% cover)      | Tree Cover                                        |
+| Open        | Open natural or low-intensity land use | Grassland, Bare/sparse vegetation, Moss & lichen  |
+| Cropland    | Intensive agricultural areas           | Cropland                                          |
+| BuiltUp     | Developed areas with infrastructure    | Built-up                                          |
+| Water       | Aquatic & semi-aquatic environments    | Permanent water bodies, Herbaceous wetland        |
 
 Refer to the [ESA WorldCover user manual](https://worldcover2021.esa.int/data/docs/WorldCover_PUM_V2.0.pdf) for detailed original class definitions.
 
@@ -298,11 +313,11 @@ We have performed spatial data analysis and statistical modeling on externally c
 
 All R code and preprocessing steps are publicly available:
 
-- Red fox: UK wader nesting season home ranges: [link](https://elkeelke.github.io/MovebankProject/preprocessing_uk_wader_nesting_season_home_range.html)
-- Red fox: monthly home ranges: [link](https://elkeelke.github.io/MovebankProject/preprocessing_monthly_home_ranges.html)
-- Bobcat/coyote: data preparation and statistical modelling: [link](https://elkeelke.github.io/MovebankProject/preprocessing_SSF_complete.html)
-- Human Footprint Index data preparation: [link](https://elkeelke.github.io/MovebankProject/preprocessing_HFP_subsetting.html)
-- ESA WorldCover data preparation: [link](https://elkeelke.github.io/MovebankProject/preprocessing_ESA_world_cover.html)
+- [Red fox: UK wader nesting season home ranges](https://elkeelke.github.io/MovebankProject/preprocessing_uk_wader_nesting_season_home_range.html)
+- [Red fox: monthly home ranges](https://elkeelke.github.io/MovebankProject/preprocessing_monthly_home_ranges.html)
+- [Bobcat/coyote: data preparation and statistical modelling](https://elkeelke.github.io/MovebankProject/preprocessing_SSF_complete.html)
+- [Human Footprint Index data preparation](https://elkeelke.github.io/MovebankProject/preprocessing_HFP_subsetting.html)
+- [ESA WorldCover data preparation](https://elkeelke.github.io/MovebankProject/preprocessing_ESA_world_cover.html)
 
 ## Use of generative AI
 
