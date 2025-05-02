@@ -18,7 +18,8 @@ We investigate how human activity influences the movement patterns of wild anima
 
 Disturbance by humans has widespread impacts on the movements of animals, as confirmed by a large-scale meta study @doherty2021human. In this paper, two related research questions are addressed:
 
-1.  Home range size implications: Do animals exhibit smaller home ranges in high human impact areas? This is examined by comparing red fox (*vulpes vulpes*) home ranges in low and high human impact areas.
+1.  Home range size implications: Do animals exhibit smaller home ranges in high human impact areas?\
+This is examined by comparing red fox (*vulpes vulpes*) home ranges in low and high human impact areas.
 2.  Habitat selection in human-influenced landscapes: How do animals select habitats under varying levels of human presence? This is analysed based on bobcat (*lynx rufus*) and coyote (*canis latrans*) data from a national park area.
 
 Together, these analyses allow us to evaluate both large-scale home range adjustments and fine-scale habitat preferences in response to human activity.
@@ -32,8 +33,6 @@ This section describes the datasets, the steps taken to prepare and process the 
 The Movebank database @kays2022movebank allows researchers to publish animal tracking data for public use. Relying on externally contributed data presents challenges because data is used for purposes it was not originally collected for, and compared between studies. We selected red fox data for outskirt areas in Wiltshire, UK @porteus2024movement and for uninhabited islands in Canada @lai2022red, and bobcat and coyote data for remote areas in northeastern Washington, US @prugh2023fear. Additional, the global terrestrial human footprint @gassert2023operational and satellite land cover data @zanaga2022esa were employed.
 
 ## Data preparation and processing
-
-This section describes data preparation and processing for all the datasets employed.
 
 ### Movebank {#sec-movebank}
 
@@ -50,8 +49,6 @@ The global 100 meter resolution terrestrial human footprint data (HFP-100) is ra
 The relevant European Space Agency (ESA) WorldCover 2021 data at 10 m resolution was downloaded via the Microsoft Planetary Computer [STAC API](https://planetarycomputer.microsoft.com/docs/quickstarts/reading-stac/): [ESA download](https://elkeelke.github.io/MovebankProject/preprocessing_ESA_world_cover.html).
 
 ## Data exploration and analysis
-
-This section describes the data exploration steps taken.
 
 ### Red fox {#sec-redfoxdata}
 
@@ -135,13 +132,13 @@ To assess the distribution of human footprint across land cover types, we visual
 
 To explore the relationship between movement behavior and human disturbance, we visualized the joint distribution of the Human Footprint Index (HFP) and log-transformed step length using a hexbin density plot (see @fig-coy-eda-hex). Most steps occurred under conditions of low human footprint and were characterized by short to moderate movement distances. By including log-transformed step length as a covariate, the model accounts for underlying variation in movement intensity that could otherwise confound habitat selection estimates.
 
-![Relationship between movement and human footprint](img/coyote_EDA_hexbin.png){#fig-coy-eda-hex width="75%" fig-align="center"}
+![Relationship between movement and human footprint](img/coyote_EDA_hexbin.png){#fig-coy-eda-hex width="100%"}
 
 #### Statistical model
 
 Step selection functions (SSFs) are commonly modeled using conditional logistic regression, which compares observed and available steps within matched strata (e.g., `survival::clogit`; @manly2007resource). However, for datasets involving multiple individuals, this approach can be limiting in terms of flexibility. Since conditional logistic regression is likelihood-equivalent to a Poisson regression model with stratum-specific fixed intercepts, these can be treated as random effects with a large fixed variance @muff2020accounting. By treating these intercepts as random effects with a large fixed variance, the model can be reformulated as a generalized linear mixed-effects model (GLMM), allowing for the inclusion of random slopes to account for individual variation in habitat selection.
 
-Following this framework, we modeled habitat selection in relation to human impact using a Poisson GLMM with a log link, implemented via `glmmTMB::glmmTMB`. Stratum-specific intercepts (one per `step_id_`) were modeled as random effects with a fixed, large variance to approximate the `clogit` structure, enabling the inclusion of individual-level random slopes and better capturing heterogeneity in selection behavior.
+Following this framework, we modeled habitat selection in relation to human impact using a Poisson GLMM with a log link, implemented via `glmmTMB::glmmTMB`. Stratum-specific intercepts (one per `step_id_`) were modeled as random effects with a fixed, large variance to approximate the conditional logistic structure, enabling the inclusion of individual-level random slopes and better capturing heterogeneity in selection behavior.
 
 The fixed effects included a two-way interaction between land cover class and both the linear and quadratic terms of standardized human footprint, as well as the natural logarithm of step length (`log_sl_`) to control for movement bias. Human footprint index (HFP) values were standardized before modeling. 
 
@@ -152,7 +149,7 @@ $$
 \beta_1 \cdot \text{LC}_{ij} +
 \beta_2 \cdot \text{HFP}_{ij} +
 \beta_3 \cdot \text{HFP}_{ij}^2 +
-\beta_4 \cdot \log(\text{StepLength}_{ij}) +
+\beta_4 \cdot \log(\text{SL}_{ij}) +
 b_{0,step(i,j)} +
 u_{i}
 $$
@@ -161,13 +158,14 @@ where:
 
 - $\lambda_{ij}$ is the expected relative selection strength for step $j$ of individual $i$,  
 - $\text{LC}_{ij}$ is the land cover class,  
-- $\text{HFP}_{ij}$ is the standardized human footprint value,  
+- $\text{HFP}_{ij}$ is the standardized human footprint value,
+- $\text{SL}_{ij}$ is the step length,
 - $b_{0,\text{step}(i,j)}$ is a random intercept for each stratum (`step_id_`),  
 - $u_i$ represents individual-level random slopes.
 
 Interaction terms between land cover and human footprint (both linear and quadratic) were also included but are omitted here for clarity.
 
-Following model fitting, we used average marginal effects and relative selection strength (RSS) to visualize how habitat selection varied across the gradient of human footprint (HFP). These metrics were computed from the fitted model to provide an interpretable scale of selection intensity.
+Following model fitting, we used average marginal effects and relative selection strength (RSS) to visualize how habitat selection varied across the human footprint gradient. These metrics were computed from the fitted model to provide an interpretable measure of selection intensity.
 
 #### Bobcat data exclusion
 
@@ -175,18 +173,16 @@ We initially attempted SSF modeling for bobcats, but excluded them from the fina
 
 # Results
 
-This section describes the results.
-
 ## Fox home ranges
 
 The resulting fox home ranges for the UK wader nesting season time frame are shown in @fig-home-ranges-bylot and @fig-home-ranges-wiltshire. The median home range size for the remote foxes in Bylot (75.3 km<sup>2</sup>) is more than 65 times larger compared to the one for rural foxes in Wiltshire (1.1 km<sup>2</sup>). The home ranges for the sub-sampled Wiltshire data are shown in @fig-home-ranges-wiltshire-sampled24h. The median home range size is 0.56 km<sup>2</sup> for the sampled data, which is roughly half as much as for the full data.
 
-![Home ranges for Bylot foxes (March 15th to June 15th, 2012)](img/home_range_bylot_wader.png){#fig-home-ranges-bylot}
+![Home ranges for Bylot foxes (March 15th to June 15th, 2012)](img/home_range_bylot_wader.png){#fig-home-ranges-bylot width="100%" .lightbox}
 
-::: {#fig-sampling layout-ncol="1"}
-![10/60 minute sampling interval](img/home_range_wiltshire_wader.png){#fig-home-ranges-wiltshire}
+::: {#fig-sampling layout-ncol="2"}
+![10/60 minute sampling interval](img/home_range_wiltshire_wader.png){#fig-home-ranges-wiltshire .lightbox}
 
-![24 hour sampling interval](img/home_range_wiltshire_wader_sampled.png){#fig-home-ranges-wiltshire-sampled24h}
+![24 hour sampling interval](img/home_range_wiltshire_wader_sampled.png){#fig-home-ranges-wiltshire-sampled24h .lightbox}
 
 Home ranges for Wiltshire foxes (March 15th to June 15th, 2019)
 :::
@@ -205,7 +201,7 @@ Selection for Cropland and BuiltUp was weak and non-significant (*p* > 0.05). Wa
 
 
 ::: {#tbl-emtrends layout-ncol=1}
-|**Land cover**|**Linear trend ($\beta_1$)**|**SE**|    **95% CI**    |***z***|***p***|
+|Land cover    |Linear trend ($\beta_1$)    |SE    |    95% CI        |*z*    |*p*    |
 |:-------------|---------------------------:|-----:|:----------------:|------:|------:|
 | TreeCover    | +0.263                     | 0.068| 0.130 – 0.397    | 3.87  | 0.0001|
 | Open         | +0.139                     | 0.068| 0.005 – 0.273    | 2.04  | 0.042 |
@@ -215,8 +211,8 @@ Selection for Cropland and BuiltUp was weak and non-significant (*p* > 0.05). Wa
 
 : Estimated marginal linear trends. {#tbl-emtrends-linear}
 
-|Land cover   |Quadratic trend ($\beta_2$)     |SE    |    95% CI       |*z*    |    *p*|
-|:-------------|------------------------------:|-----:|:---------------:|------:|------:|
+|Land cover    |Quadratic trend ($\beta_2$)    |SE    |    95% CI       |*z*    |    *p*|
+|:-------------|------------------------------:|-----:|----------------:|------:|------:|
 | TreeCover    | -0.183                        | 0.039| -0.260 – -0.106 | -4.68 | <.0001|
 | Open         | -0.181                        | 0.039| -0.257 – -0.104 | -4.62 | <.0001|
 | Cropland     | -0.153                        | 0.046| -0.243 – -0.064 | -3.35 | 0.0008|
@@ -230,13 +226,13 @@ Includes linear (a) and quadratic (b) trends, with standard errors, 95% confiden
 :::
 
 
-The average marginal effect plot (Figure @fig-avg-eff) shows highest relative selection for TreeCover and Open habitats at low human footprint, with declining selection under increased human footprint. BuiltUp, Cropland, and Water habitats were consistently selected less, regardless of human footprint level.
+The average marginal effect plot (Figure @fig-avg-eff) shows highest relative selection for TreeCover and Open habitats at low to moderate human footprint, with declining selection under increased human footprint. BuiltUp, Cropland, and Water habitats were consistently selected less, regardless of human footprint level.
 
-![Average marginal effects across human footprint gradient](img/avg_effect.png){#fig-avg-eff width="100%"}
+![Average marginal effects (± 95% confidence intervals) of human footprint on coyote habitat selection across land cover types. Plots quantify the relative change in log selection probability across the range of human footprint, while averaging over other covariates. Positive values indicate above-average selection, negative values indicate below-average selection. Vertical dashed lines indicate estimated human footprint values at peak selection.](img/avg_effect.png){#fig-avg-eff width="100%"}
 
 Relative selection strength (RSS) curves (Figure @fig-rss) confirmed that coyotes preferred TreeCover and Open habitats under low human footprint conditions, with selection declining or leveling off at higher human disturbance.
 
-![Coyote habitat selection across the human footprint gradient](img/rss.png){#fig-rss width="100%"}
+![Relative selection strength (± 95% confidence intervals) for coyotes across the human footprint gradient by land cover type. RSS was quantified relative to the minimum observed human footprint (corresponding to least human disturbance). Values >1 indicate selection, values <1 indicate avoidance.](img/rss.png){#fig-rss width="100%"}
 
 
 ## Model validation
@@ -281,7 +277,7 @@ We have performed spatial data analysis and statistical modeling on externally c
 
 ![Variation in human footprint across and cover types](img/coyote_EDA_boxplot.png){#fig-coy-eda-box width="100%"}
 
-![Predicted relative use by observed use category](img/coyote_predicted_vs_used.png){#fig-pred-vs-used width="100%"}
+![Density plot showing predicted relative use from the SSF model for used and available steps](img/coyote_predicted_vs_used.png){#fig-pred-vs-used width="100%"}
 
 ## Use of generative AI
 

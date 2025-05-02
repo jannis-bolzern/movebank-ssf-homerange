@@ -34,7 +34,7 @@ theme_publication_dark <- function(base_size = 14, legend_position = "bottom") {
       text = element_text(color = "white"),
       axis.text = element_text(color = "white"),
       panel.background = element_rect(fill = "#222222", color = NA),
-      plot.background  = element_rect(fill = "#222222", colour = "#424242", linewidth = 0.75),
+      plot.background  = element_rect(fill = "#222222", colour = NA),
       panel.grid = element_line(color = "#424242"), 
       legend.background = element_rect(fill = "#222222", color = NA),
       legend.key = element_rect(fill = "#222222", color = NA),
@@ -247,7 +247,7 @@ ggplot(coyote_ssf_data,
   geom_density_ridges(scale = 1.2) +
   scale_fill_manual(values = landuse_colors_sec) + 
   scale_color_manual(values = landuse_colors) +
-  labs(x = "Human Footprint Index (0–50)", y = "Land cover type") +
+  labs(x = "Human footprint index (0–50)", y = "Land cover type") +
   theme_publication_dark(legend_position = "none") +
   theme(panel.grid.major.y = element_blank())
 
@@ -263,7 +263,7 @@ ggplot(coyote_ssf_data,
                width = 0.7, alpha = 1, linewidth = 0.5) +
   scale_fill_manual(values = landuse_colors_sec) + 
   scale_color_manual(values = landuse_colors) +
-  labs(x = "Land cover type", y = "Human Footprint Index (0–50)") +
+  labs(x = "Land cover type", y = "Human footprint index (0–50)") +
   theme_publication_dark(legend_position = "none") +
   theme(panel.grid.major.x = element_blank())
 
@@ -275,17 +275,17 @@ dens <- kde2d(coyote_ssf_data$human_footprint, coyote_ssf_data$log_sl_, n = 100)
 contour_level <- quantile(dens$z, probs = 0.95)  # Get 95% density threshold
 
 ggplot(coyote_ssf_data, aes(x = human_footprint, y = log_sl_)) +
-  geom_bin2d(aes(fill = after_stat(log(density))), bins = 50) +
+  geom_bin2d(aes(fill = after_stat(log(density))), bins = 70) +
   scale_fill_viridis_c(option = "D", limits = c(-14.9, -1)) +
   stat_density_2d(aes(colour = after_stat(level)), breaks = contour_level,
                   colour = "red", h = 2, linewidth = 0.75) +
   geom_vline(xintercept = 0, colour = "gray80", linewidth = 0.6) +
   geom_hline(yintercept = 0, colour = "gray80", linewidth = 0.6) +
-  labs(x = "Human Footprint Index (0–50)", y = "Log step length") +
+  labs(x = "Human footprint index (0–50)", y = "Log step length") +
   theme_publication_dark(legend_position = "right")
 
 #Relationship between Movement and Human Footprint
-ggsave("img/coyote_EDA_hexbin.png", width = 8, height = 5, dpi = 300)
+ggsave("img/coyote_EDA_hexbin.png", width = 10, height = 6, dpi = 300)
 
 # 3. Coyote SSF Modeling --------------------------------------------------
 # Read SSF ready data and filter
@@ -331,9 +331,16 @@ check_collinearity(ssf_coyote)
 
 # Plot predicted vs. observed use
 coyote_ssf_data$predicted <- predict(ssf_coyote, type = "response")
-ggplot(coyote_ssf_data, aes(x = predicted, fill = as.factor(case_binary_))) +
-  geom_density(alpha = 0.5, color = NA) +
-  scale_fill_manual(values = c("1" = "#5495CFFF", "0" = "gray80"), name = "Used") +
+ggplot(coyote_ssf_data, aes(x = predicted, fill = as.factor(case_binary_), color = as.factor(case_binary_))) +
+  geom_density(alpha = 0.5) +
+  scale_fill_manual(
+    values = c("1" = "#DB4743FF", "0" = "#FEF4D5FF"),
+    name = "Step type",
+    labels = c("1" = "Used", "0" = "Available")) +
+  scale_color_manual(
+    values = c("1" = "#DB4743FF", "0" = "#FEF4D5FF"),
+    name = "Step type",
+    labels = c("1" = "Used", "0" = "Available")) +
   theme_publication_dark(legend_position = "right") +
   labs(x = "Predicted relative use (exp(η))", y = "Density")
 
@@ -445,9 +452,8 @@ avg_eff_plot_hfp_landuse <- function(fittedResponse,
     scale_colour_manual(values = landuse_colors) +
     scale_fill_manual(values   = landuse_colors) +
     labs(
-      x = "Human Footprint Index (0–50)",
+      x = "Human footprint index (0–50)",
       y = "Estimated relative use (log)",
-      title = "Average marginal effects across human footprint gradient"
     ) +
     theme_publication_dark(legend_position = "none")
   
@@ -535,10 +541,9 @@ calc_rss_hfp_landuse <- function(model, data,
     scale_colour_manual(values = landuse_cols) +
     scale_fill_manual(values  = landuse_cols_sec) +
     labs(
-      x = "Human Footprint Index (0–50)",
+      x = "Human footprint index (0–50)",
       y = "Relative selection strength (RSS)",
-      title = "Coyote habitat selection across the human footprint gradient",
-      colour = "Land-cover", fill = "Land-cover"
+      colour = "Land cover type", fill = "Land cover type"
     ) +
     theme_publication_dark(legend_position = "bottom")
   

@@ -82,7 +82,7 @@ calculate_monthly_home_ranges <- function(ts_start, num_months, study_id, licens
       text            = element_text(colour = "white"),
       axis.text       = element_text(colour = "white"),
       panel.background = element_rect(fill = "#222222", colour = NA),
-      plot.background  = element_rect(fill = "#222222", colour = "#424242", linewidth = 0.75),
+      plot.background  = element_rect(fill = "#222222", colour = NA),
       panel.grid       = element_line(colour = "#424242"),
       legend.background = element_rect(fill = "#222222", colour = NA),
       legend.key        = element_rect(fill = "#222222", colour = NA),
@@ -269,7 +269,7 @@ ggplot(df, aes(x = site, y = area, fill = site, color = site)) +
       text = element_text(color = "white"),
       axis.text = element_text(color = "white"),
       panel.background = element_rect(fill = "#222222", color = NA),
-      plot.background  = element_rect(fill = "#222222", colour = "#424242", linewidth = 0.75),
+      plot.background  = element_rect(fill = "#222222", colour = NA),
       panel.grid = element_line(color = "#424242"), 
       legend.background = element_rect(fill = "#222222", color = NA),
       legend.key = element_rect(fill = "#222222", color = NA),
@@ -281,6 +281,6 @@ ggplot(df, aes(x = site, y = area, fill = site, color = site)) +
     ) +
   theme(panel.grid.major.x = element_blank())
 
-ggsave("img/boxplot_monthly.png", width = 8, height = 5, dpi = 300)
+ggsave("img/boxplot_monthly.png", width = 8, height = 6, dpi = 300)
 
 ```

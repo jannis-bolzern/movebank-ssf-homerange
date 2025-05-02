@@ -158,7 +158,7 @@ ggplot() +
     text = element_text(color = "white"),
     axis.text = element_text(color = "white"),
     panel.background = element_rect(fill = "#222222", color = NA),
-    plot.background  = element_rect(fill = "#222222", colour = "#424242", linewidth = 0.75),
+    plot.background  = element_rect(fill = "#222222", colour = NA),
     panel.grid = element_blank(), 
     axis.ticks = element_blank(),
     legend.background = element_rect(fill = "#222222", color = NA),

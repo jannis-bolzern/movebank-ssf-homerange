@@ -91,7 +91,7 @@ make_track_map <- function(lines_sf,
       text = element_text(color = "white"),
       axis.text = element_text(color = "white"),
       panel.background = element_rect(fill = "#222222", color = NA),
-      plot.background  = element_rect(fill = "#222222", colour = "#424242", linewidth = 0.75),
+      plot.background  = element_rect(fill = "#222222", colour = NA),
       panel.grid = element_blank(), 
       axis.ticks = element_blank(),
       legend.background = element_rect(fill = "#222222", color = NA),
@@ -119,7 +119,7 @@ ggsave("img/herschel_map.png", width = 5, height = 5)
 # Wiltshire
 wilt_bbox <- c(-2.162845,50.748204,-1.13013,51.128108)
 make_track_map(wilt_tracks, bbox = wilt_bbox, zoom = 10, map_title = "Wiltshire fox tracks")
-ggsave("img/wiltshire_map.png", width = 10, height = 6)
+ggsave("img/wiltshire_map.png", width = 10, height = 6.5)
 
 ```
 
@@ -180,7 +180,7 @@ ggplot(year_count, aes(x = factor(year), y = count, color = source, fill = sourc
     axis.text.x     = element_text(angle  = 90, size   = 6, margin = margin(b = 20)),
     axis.text.y     = element_text(margin = margin(l = 20)),
     panel.background = element_rect(fill = "#222222", colour = NA),
-    plot.background  = element_rect(fill = "#222222", colour = "#424242", linewidth = 0.75),
+    plot.background  = element_rect(fill = "#222222", colour = NA),
     panel.grid       = element_line(colour = "#424242"),
     legend.background = element_rect(fill = "#222222", colour = NA),
     legend.key        = element_rect(fill = "#222222", colour = NA),
@@ -219,7 +219,7 @@ ggplot(month_count, aes(x = month_name, y = count, color = source)) +
     axis.text.x     = element_text(angle  = 90, size = 6, margin = margin(b = 20)),
     axis.text.y     = element_text(margin = margin(l = 20)),
     panel.background = element_rect(fill = "#222222", colour = NA),
-    plot.background  = element_rect(fill = "#222222", colour = "#424242", linewidth = 0.75),
+    plot.background  = element_rect(fill = "#222222", colour = NA),
     panel.grid       = element_line(colour = "#424242"),
     legend.background = element_rect(fill = "#222222", colour = NA),
     legend.key        = element_rect(fill = "#222222", colour = NA),
@@ -277,7 +277,7 @@ ggplot() +
     text            = element_text(colour = "white"),
     axis.text       = element_text(colour = "white"),
     panel.background = element_rect(fill = "#222222", colour = NA),
-    plot.background  = element_rect(fill = "#222222", colour = "#424242", linewidth = 0.75),
+    plot.background  = element_rect(fill = "#222222", colour = NA),
     panel.grid       = element_line(colour = "#424242"),
     legend.background = element_rect(fill = "#222222", colour = NA),
     legend.key        = element_rect(fill = "#222222", colour = NA),
@@ -289,7 +289,7 @@ ggplot() +
   )
 
 
-ggsave("img/home_range_bylot_wader.png", width = 10, height = 4.5, dpi = 300)
+ggsave("img/home_range_bylot_wader.png", width = 10, height = 6, dpi = 300)
 ```
 
 ```{r}
@@ -320,6 +320,9 @@ wiltshire_centroids <- st_centroid(wiltshire_mcp)
 
 ggplot() +
   geom_sf(data = wiltshire_mcp, aes(color = individual_local_identifier), fill = NA, linewidth = 0.4) +
+  geom_sf_text(data = wiltshire_centroids,
+               aes(label = paste0(round(area_m2, 1), " km²")),
+               color = "white", size = 3) +
   geom_sf(data = wiltshire_centroids, aes(color = individual_local_identifier), shape = 3, size = 2) +
   scale_color_manual(values = wiltshire_colors) +
   labs(x = "Longitude", y = "Latitude", color = "Fox ID") +
@@ -329,7 +332,7 @@ ggplot() +
     text            = element_text(colour = "white"),
     axis.text       = element_text(colour = "white"),
     panel.background = element_rect(fill = "#222222", colour = NA),
-    plot.background  = element_rect(fill = "#222222", colour = "#424242", linewidth = 0.75),
+    plot.background  = element_rect(fill = "#222222", colour = NA),
     panel.grid       = element_line(colour = "#424242"),
     legend.background = element_rect(fill = "#222222", colour = NA),
     legend.key        = element_rect(fill = "#222222", colour = NA),
@@ -410,7 +413,7 @@ ggplot() +
     text            = element_text(colour = "white"),
     axis.text       = element_text(colour = "white"),
     panel.background = element_rect(fill = "#222222", colour = NA),
-    plot.background  = element_rect(fill = "#222222", colour = "#424242", linewidth = 0.75),
+    plot.background  = element_rect(fill = "#222222", colour = NA),
     panel.grid       = element_line(colour = "#424242"),
     legend.background = element_rect(fill = "#222222", colour = NA),
     legend.key        = element_rect(fill = "#222222", colour = NA),
@@ -430,5 +433,88 @@ ggsave("img/home_range_wiltshire_wader_sampled.png", width = 10, height = 4.5, d
 wiltshire_area <- st_area(wiltshire_mcp)
 wiltshire_median <- median(wiltshire_area)
 print(wiltshire_median)
+```
+
+
+```{r}
+library(ggplot2)
+library(sf)
+
+# Compute areas (km²)
+bylot_area <- st_area(bylot_mcp) |> as.numeric() / 1e6
+wiltshire_area <- st_area(wiltshire_mcp) |> as.numeric() / 1e6
+
+# Create dataframe
+home_range_df <- data.frame(
+  Area_km2 = c(bylot_area, wiltshire_area),
+  Location = c(rep("Bylot", length(bylot_area)),
+               rep("Wiltshire (24h)", length(wiltshire_area)))
+)
+
+# Identify extreme outlier (largest Wiltshire area)
+outlier_value <- max(home_range_df$Area_km2[home_range_df$Location == "Wiltshire (24h)"])
+outlier_index <- which(home_range_df$Area_km2 == outlier_value)
+
+# Plot
+ggplot(home_range_df, aes(x = Location, y = Area_km2, color = Location, fill = Location)) +
+  geom_boxplot(outlier.shape = NA, alpha = 0.2, linewidth = 1.2) +
+  geom_point(shape = 21, size = 3, fill = "white", color = "black", stroke = 0.8, 
+             position = position_jitter(width = 0.3, height = 0)) +
+  geom_text(data = home_range_df[outlier_index, ],
+            aes(label = paste0(round(Area_km2, 1), " km²")),
+            vjust = 1.5, color = "white", size = 3.5) +
+  scale_color_manual(values = c("Bylot" = "#DB4743FF", "Wiltshire (24h)" = "#5495CFFF")) +
+  scale_fill_manual(values = c("Bylot" = "#DB4743FF", "Wiltshire (24h)" = "#5495CFFF")) +
+  labs(
+    x = NULL,
+    y = "Home Range Size (km²)",
+    color = "Location",
+    fill = "Location"
+  ) +
+  theme_minimal(base_size = 14) +
+  theme(
+    legend.position = "bottom",
+    text = element_text(color = "white"),
+    axis.text = element_text(color = "white"),
+    panel.background = element_rect(fill = "#222222", color = NA),
+    plot.background = element_rect(fill = "#222222", color = NA),
+    panel.grid = element_line(color = "#424242"),
+    legend.background = element_rect(fill = "#222222", color = NA),
+    legend.key = element_rect(fill = "#222222", color = NA),
+    strip.text = element_text(color = "white", size = 10),
+    plot.title = element_text(margin = margin(b = 15)),
+    axis.title.x = element_text(margin = margin(t = 15)),
+    axis.title.y = element_text(margin = margin(r = 15)),
+    plot.margin = margin(20, 20, 20, 20, unit = "pt")
+  )
+
+```
+
+```{r}
+map_data <- tibble(
+  region = c("Bylot", "Wiltshire"),
+  lon = c(-76.5, -1.6),
+  lat = c(73.2, 51.2),
+  median_area = c(
+    median(home_range_areas$area_km2[home_range_areas$region == "Bylot"]),
+    median(home_range_areas$area_km2[home_range_areas$region == "Wiltshire"])
+  )
+)
+
+ggplot(map_data, aes(x = lon, y = lat)) +
+  borders("world", fill = "#2d2d2d", color = "#424242") +
+  geom_point(aes(size = median_area), color = "#DB4743FF", alpha = 0.7) +
+  scale_size_area(max_size = 20) +
+  coord_fixed() +
+  labs(x = "Longitude", y = "Latitude", size = "Median Area (km²)") +
+  theme_minimal(base_size = 14) +
+  theme(
+    text = element_text(color = "white"),
+    axis.text = element_text(color = "white"),
+    panel.background = element_rect(fill = "#222222", color = NA),
+    plot.background = element_rect(fill = "#222222", color = NA),
+    panel.grid = element_line(color = "#424242")
+  )
+
 ```
 
