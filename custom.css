@@ -25,3 +25,10 @@ img {
   border: 1px solid #424242;
   border-radius: 4px;
 }
+
+/* Sidebar hihlight color */
+.sidebar nav[role=doc-toc] ul>li>a.active,
+.sidebar nav[role=doc-toc] ul>li>ul>li>a.active {
+    border-left: 1px solid #00A67D !important;
+    color: #00A67D !important;
+}
