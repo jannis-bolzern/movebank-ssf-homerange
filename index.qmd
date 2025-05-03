@@ -70,7 +70,7 @@ The relevant European Space Agency (ESA) WorldCover 2021 data at 10 m resolution
 
 Data from Wiltshire (@fig-wiltshire-map) were collected between 2016 to 2019 during the UK wader nesting season, defined as March 15th to June 15th, for a total of 35 foxes. Locations were recorded every 10 to 60 minutes, with the sampling rate remotely reduced during periods deemed less informative to conserve battery.
 
-![High level view of animal GPS tracks in Wiltshire](img/wiltshire_map.png){#fig-wiltshire-map width="100%" .lightbox}
+![High level view of animal GPS tracks in Wiltshire.](img/wiltshire_map.png){#fig-wiltshire-map width="100%" .lightbox}
 
 ::: {#fig-tracks layout-ncol="2" width="100%" .lightbox}
 ![Bylot island (11.067 km<sup>2</sup>)](img/bylot_map.png){#fig-bylot-map .lightbox}
@@ -87,16 +87,16 @@ Data from Bylot (@fig-bylot-map) and Herschel (@fig-herschel-map) were collected
 
 ![Per month](img/month_count.png){#fig-datapoints-month width="100%" .lightbox}
 
-Amount of data per year and month
+Amount of data per year and month.
 :::
 
 ### Bobcat and coyote
 
 Coyote and bobcat GPS were collected in northeastern Washington between 2014 and 2015, with collars programmed to record locations every four hours. The two species occupied two distinct geographic areas with overlapping but species-specific home ranges @fig-esa, shown in relation to land cover data. Human footprint was generally low across the study area, except for localized settlements and roads @fig-hfp.
 
-![Bobcat and coyote locations in the context of the land cover data](img/land_cover.png){#fig-esa width="100%" .lightbox}
+![Bobcat and coyote locations in the context of the land cover data.](img/land_cover.png){#fig-esa width="100%" .lightbox}
 
-![Bobcat and coyote locations overlaid on human footprint index (0 = wilderness; 50 = highly urbanized)](img/hfp.png){#fig-hfp width="100%" .lightbox}
+![Bobcat and coyote locations overlaid on human footprint index (0 = wilderness; 50 = highly urbanized).](img/hfp.png){#fig-hfp width="100%" .lightbox}
 
 Although collars were programmed for regular sampling, actual intervals were irregular, with substantial variation, especially among bobcats. Sampling interval distributions are shown in @fig-sampling-rates.
 
@@ -105,7 +105,7 @@ Although collars were programmed for regular sampling, actual intervals were irr
 
 ![With outliers removed](img/bobcat_coyote_sampling_rates.png){#fig-bobcat-coyote-sampling .lightbox}
 
-Box plots of sampling rates for bobcat and coyote data
+Box plots of sampling rates for bobcat and coyote data.
 :::
 
 ## Analytical methods {#sec-methodology}
@@ -154,11 +154,11 @@ Refer to the [ESA WorldCover user manual](https://worldcover2021.esa.int/data/do
 
 To assess the distribution of human footprint across land cover types, we visualized the HFP values at used locations using a ridgeline density plot (@fig-coy-eda-ridge). The figure illustrates that TreeCover was generally associated with lower human footprint, while BuiltUp and Cropland had higher HFP values, supporting the relevance of the interaction terms in our model. As a complementary visualization to the ridgeline plot, we include a boxplot in the Appendix showing the spread of human footprint values across land cover types (@fig-coy-eda-box).
 
-![Human footprint distribution by land cover type](img/coyote_EDA_ridgeline.png){#fig-coy-eda-ridge width="100%" .lightbox}
+![Ridgeline density plot of human footprint index across land cover types at used locations.](img/coyote_EDA_ridgeline.png){#fig-coy-eda-ridge width="100%" .lightbox}
 
 To explore the relationship between movement behavior and human disturbance, we visualized the joint distribution of the Human Footprint Index (HFP) and log-transformed step length using a hexbin density plot (@fig-coy-eda-hex). Most steps occurred under conditions of low human footprint and were characterized by short to moderate movement distances. By including log-transformed step length as a covariate, the model accounts for underlying variation in movement intensity that could otherwise confound habitat selection estimates.
 
-![Relationship between human footprint and movement. The red line marks the 95% density contour, encompassing 95% of observed steps.](img/coyote_EDA_hexbin.png){#fig-coy-eda-hex width="100%" .lightbox}
+![Joint distribution of human footprint index and log-transformed step length for coyotes, with the red contour marking the 95% density region.](img/coyote_EDA_hexbin.png){#fig-coy-eda-hex width="100%" .lightbox}
 
 #### Statistical model
 
@@ -201,16 +201,11 @@ We initially attempted SSF modeling for bobcats, but excluded them from the fina
 
 ## Fox home ranges
 
-Fox home ranges during the time period corresponding to the UK wader nesting season are visualized as proportional circles in @fig-home-ranges-map, providing a comparative overview of individual range sizes across Bylot and Wiltshire. Individual home range areas are further summarized in @fig-home-range-sizes, where each point represents one animal’s estimated range size. The median home range in Bylot (75.3 km²) was over 65 times larger than in Wiltshire (1.1 km²). When subsampling the Wiltshire data to a 24-hour interval, the median home range decreased to 0.56 km².
+Fox home ranges during the time period corresponding to the UK wader nesting season are visualized as proportional circles in @fig-home-ranges-map, providing a comparative overview of median range sizes across Bylot and Wiltshire. Individual home range areas are further summarized in @fig-home-range-sizes, where each point represents one animal’s estimated range size. The median home range in Bylot (75.3 km²) was over 65 times larger than in Wiltshire (1.1 km²). When subsampling the Wiltshire data to a 24-hour interval, the median home range decreased to 0.56 km².
 
-![Individual home range sizes of foxes in Bylot and Wiltshire (24h subsample). Each point represents an individua’s home range size (km²); dashed lines indicate the median per location; outlier labeled.](img/home_range_bylot_vs_wiltshire.png)
+![Geographic comparison of median red fox home range sizes in Bylot and Wiltshire.](img/median_home_range_geo.png){#fig-home-ranges-map}
 
-
-
-
-
-
-
+![Home range sizes of foxes in Bylot and Wiltshire (full and 24h subsample). Each point represents an individua’s home range size (km²); dashed lines indicate the median per location; outliers labeled.](img/home_range_bylot_vs_wiltshire.png){#fig-home-range-sizes}
 
 <!--The resulting fox home ranges for the UK wader nesting season time frame are shown in @fig-home-ranges-bylot and @fig-home-ranges-wiltshire. The median home range size for the remote foxes in Bylot (75.3 km<sup>2</sup>) is more than 65 times larger compared to the one for rural foxes in Wiltshire (1.1 km<sup>2</sup>). The home ranges for the sub-sampled Wiltshire data are shown in @fig-home-ranges-wiltshire-sampled24h. The median home range size is 0.56 km<sup>2</sup> for the sampled data, which is roughly half as much as for the full data.
 
@@ -224,7 +219,7 @@ Fox home ranges during the time period corresponding to the UK wader nesting sea
 Home ranges for Wiltshire foxes (March 15th to June 15th, 2019)
 :::-->
 
-Similar differences in order of magnitude between remote and rural fox home ranges can also be observed for the monthly home range results shown as a box plot in @fig-home-ranges-boxplot. Note that outliers are removed, in particular the irregular data for Herschel (as seen in @fig-herschel-map). The accompanying monthly home range plots can be found in the Appendix in @fig-monthly-home-ranges-wiltshire, @fig-monthly-home-ranges-bylot, and @fig-monthly-home-ranges-herschel.
+Similar differences in order of magnitude between remote and rural fox home ranges can also be observed for the monthly home range results @fig-home-ranges-boxplot. Note that outliers are removed, in particular the irregular data for Herschel (as seen in @fig-herschel-map). <!--The accompanying monthly home range plots can be found in the Appendix in @fig-monthly-home-ranges-wiltshire, @fig-monthly-home-ranges-bylot, and @fig-monthly-home-ranges-herschel.-->
 
 ![Box plot comparing monthly home ranges (outliers removed).](img/boxplot_monthly.png){#fig-home-ranges-boxplot width="100%" .lightbox}
 
@@ -265,11 +260,11 @@ Includes linear (a) and quadratic (b) trends, with standard errors, 95% confiden
 
 The average marginal effect plot (@fig-avg-eff) shows highest relative selection for TreeCover and Open habitats at low to moderate human footprint, with declining selection under increased human footprint. BuiltUp, Cropland, and Water habitats were consistently selected less, regardless of human footprint level.
 
-![Average marginal effects (± 95% confidence intervals) of human footprint on coyote habitat selection across land cover types. Plots quantify the relative change in log selection probability across the range of human footprint, while averaging over other covariates. Positive values indicate above-average selection, negative values indicate below-average selection. Vertical dashed lines indicate estimated human footprint values at peak selection.](img/avg_effect.png){#fig-avg-eff width="100%" .lightbox}
+![Average marginal effect (± 95% confidence interval) of human footprint on coyote habitat selection across land cover types. Plots quantify the relative change in log selection probability across the range of human footprint, while averaging over other covariates. Positive values indicate above-average selection, negative values indicate below-average selection. Vertical dashed lines indicate estimated human footprint values at peak selection.](img/avg_effect.png){#fig-avg-eff width="100%" .lightbox}
 
 Relative selection strength (RSS) curves (@fig-rss) confirmed that coyotes preferred TreeCover and Open habitats under low human footprint conditions, with selection declining or leveling off at higher human disturbance.
 
-![Relative selection strength (± 95% confidence intervals) for coyotes across the human footprint gradient by land cover type. RSS was quantified relative to the minimum observed human footprint (corresponding to least human disturbance). Values >1 indicate selection, values <1 indicate avoidance.](img/rss.png){#fig-rss width="100%" .lightbox}
+![Relative selection strength (± 95% confidence interval) for coyotes across the human footprint gradient by land cover type. RSS was quantified relative to the minimum observed human footprint (corresponding to least human disturbance). Values >1 indicate selection, values <1 indicate avoidance.](img/rss.png){#fig-rss width="100%" .lightbox}
 
 
 ## Model validation
@@ -308,15 +303,16 @@ We have performed spatial data analysis and statistical modeling on externally c
 
 ## Additional charts {#sec-additional-charts} 
 
-![Monthly home ranges for Wiltshire foxes](img/wiltshire_monthly.png){#fig-monthly-home-ranges-wiltshire width="100%" .lightbox}
+<!--
+![Monthly home ranges for Wiltshire foxes.](img/wiltshire_monthly.png){#fig-monthly-home-ranges-wiltshire width="100%" .lightbox}
 
-![Monthly home ranges for Bylot foxes](img/bylot_monthly.png){#fig-monthly-home-ranges-bylot width="100%" .lightbox}
+![Monthly home ranges for Bylot foxes.](img/bylot_monthly.png){#fig-monthly-home-ranges-bylot width="100%" .lightbox}
 
-![Monthly home ranges for Herschel foxes](img/herschel_monthly.png){#fig-monthly-home-ranges-herschel width="100%" .lightbox}
+![Monthly home ranges for Herschel foxes.](img/herschel_monthly.png){#fig-monthly-home-ranges-herschel width="100%" .lightbox}
+-->
+![Human footprint index across land cover types at used locations.](img/coyote_EDA_boxplot.png){#fig-coy-eda-box width="100%" .lightbox}
 
-![Variation in human footprint across and cover types](img/coyote_EDA_boxplot.png){#fig-coy-eda-box width="100%" .lightbox}
-
-![Density plot showing predicted relative use from the SSF model for used and available steps](img/coyote_predicted_vs_used.png){#fig-pred-vs-used width="100%" .lightbox}
+![Density plot showing predicted relative use from the SSF model for used and available steps.](img/coyote_predicted_vs_used.png){#fig-pred-vs-used width="100%" .lightbox}
 
 ## Supplementary Material {#sec-sup-mat}
 
