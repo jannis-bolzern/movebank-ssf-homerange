@@ -26,11 +26,7 @@ Together, these analyses allow us to evaluate both large-scale home range adjust
 
 # Data and methods
 
-<!--This section describes the datasets, the steps taken to prepare and process the different datasets in use, and the methodological approach.-->
-
 ## Datasets
-
-<!--The Movebank database @kays2022movebank allows researchers to publish animal tracking data for public use. Relying on externally contributed data presents challenges because data is used for purposes it was not originally collected for, and compared between studies. We selected red fox data for outskirt areas in Wiltshire, UK @porteus2024movement and for uninhabited islands in Canada @lai2022red, and bobcat and coyote data for remote areas in northeastern Washington, US @prugh2023fear. Additional, the global terrestrial human footprint @gassert2023operational and satellite land cover data @zanaga2022esa were employed.-->
 
 We analyzed four animal tracking datasets obtained from the Movebank database @kays2022movebank, including red fox (*Vulpes vulpes*) tracks from Wiltshire, UK @porteus2024movement, Bylot Island, Canada, and Herschel Island, Canada @lai2022red, as well as bobcat (*Lynx rufus*) and coyote (*Canis latrans*) tracks from northeastern Washington, USA @prugh2023fear. The tracking data varied in temporal resolution and geographic context, with sample sizes and data characteristics summarized in @tbl-datasets.
 
@@ -47,22 +43,6 @@ Table: Summary of animal tracking datasets used in the analysis. {#tbl-datasets}
 In addition to movement data, we used global covariate datasets: the 2020 global terrestrial Human Footprint Index (HFP-100) at 100 m resolution [@gassert2023operational], and the ESA WorldCover 2021 land cover dataset at 10 m resolution [@zanaga2022esa].
 
 Detailed descriptions of data preprocessing, filtering, and acquisition procedures are provided in the [Supplementary Material](#sec-sup-mat).
-
-<!--## Data preparation and processing
-
-### Movebank {#sec-movebank}
-
-All Movebank datasets have the same schema. This simplifies enables code re-use, and requires data contributors do perform preprocessing on their side to provide the data in an appropriate format. Libraries for data processing and trajectory handling in R are provided @kranstauber2024move2 @signer2019animal.
-
-The R code for data download, preprocessing, and serialization of data and charts can be found in: [Red fox: UK wader nesting season home ranges](https://elkeelke.github.io/MovebankProject/preprocessing_uk_wader_nesting_season_home_range.html), [Red fox: montly home ranges](https://elkeelke.github.io/MovebankProject/preprocessing_monthly_home_ranges.html), [Bobcat/coyote: data preparation and statistical modelling](https://elkeelke.github.io/MovebankProject/preprocessing_SSF_complete.html).
-
-### Human footprint
-
-The global 100 meter resolution terrestrial human footprint data (HFP-100) is raster data using Mollweide projection @lapaine2011mollweide. The 2020 version of the data was downloaded for Washington, and projected to the WGS84 coordinate system: [HFP-100 download](https://elkeelke.github.io/MovebankProject/preprocessing_HFP_subsetting.html).
-
-### Land cover
-
-The relevant European Space Agency (ESA) WorldCover 2021 data at 10 m resolution was downloaded via the Microsoft Planetary Computer [STAC API](https://planetarycomputer.microsoft.com/docs/quickstarts/reading-stac/): [ESA download](https://elkeelke.github.io/MovebankProject/preprocessing_ESA_world_cover.html).-->
 
 ## Exploratory data assessment
 
@@ -123,10 +103,6 @@ These discrepancies introduce potential biases in home range estimation @laube20
 2. We generated a downsampled Wiltshire dataset by selecting a random daily location per individual, matching the lower sampling frequency of the Arctic datasets.
 
 3. We computed monthly home ranges for all datasets to explore temporal variation.
-
-<!--Home range sizes were calculated using minimum convex polygons, which provides easily comparable estimates of the area used by each individual animal. As discussed in @sec-redfoxdata, the datasets for the two locations have different temporal scale. The choice of temporal scale has considerable effects on movement parameter calculations @laube2011, in turn affecting home range results. How to make this data comparable? Problem #1 is that the sampling intervals are different. Problem #2 is that the data coverage varies by time of the year. Problem #3 is that there are highly different amounts of data. Selecting the means and parameters for the comparison involves complex choices that will influence the results. For #1, a possible approach to achieve similar sampling intervals would be to sample a random afternoon data point for each 24 hour window. However, this would include the implicit assumption that foxes will follow similar daily patterns in the different environments. For #2, a possible approach would be to compare the data for the same time of the year. But since the geographical locations are different, the seasonal weather conditions will differ for the same day of the year, likely leading to different animal behavior. For #3, aggregated comparisons can solve the issue, assuming there is enough data for the smaller data source.
-
-For data exploration the simplest possible imperfect approach was employed, which was to ignore the different sampling intervals for problem #1, to compare the data for the same time of the year for problem #2 even if animal behavior might be different, and to use exploratory data analysis to find out if a representative answer can be found given the amount of data present for problem #3. Note that this approach has obvious limits. Among them is that the Herschel data is not applicable, since it has minimal overlaps with the Wiltshire data (@fig-datapoints-month). To explore the impact of sampling intervals for problem #1, the home ranges for the Wiltshire data were additionally calculated on downsampled data, where a random data point from every 24 hour period was selected. Finally, an analysis of monthly home ranges was conducted on all three datasets as an alternative solution to address problem #2.-->
 
 ### Habitat selection modeling
 
@@ -207,19 +183,7 @@ Fox home ranges during the time period corresponding to the UK wader nesting sea
 
 ![Home range sizes of foxes in Bylot and Wiltshire (full and 24h subsample). Each point represents an individua’s home range size (km²); dashed lines indicate the median per location; outliers labeled.](img/home_range_bylot_vs_wiltshire.png){#fig-home-range-sizes  width="100%" .lightbox}
 
-<!--The resulting fox home ranges for the UK wader nesting season time frame are shown in @fig-home-ranges-bylot and @fig-home-ranges-wiltshire. The median home range size for the remote foxes in Bylot (75.3 km<sup>2</sup>) is more than 65 times larger compared to the one for rural foxes in Wiltshire (1.1 km<sup>2</sup>). The home ranges for the sub-sampled Wiltshire data are shown in @fig-home-ranges-wiltshire-sampled24h. The median home range size is 0.56 km<sup>2</sup> for the sampled data, which is roughly half as much as for the full data.
-
-![Home ranges for Bylot foxes (March 15th to June 15th, 2012)](img/home_range_bylot_wader.png){#fig-home-ranges-bylot width="100%" .lightbox}
-
-::: {#fig-sampling layout-ncol="2"}
-![10/60 minute sampling interval](img/home_range_wiltshire_wader.png){#fig-home-ranges-wiltshire .lightbox}
-
-![24 hour sampling interval](img/home_range_wiltshire_wader_sampled.png){#fig-home-ranges-wiltshire-sampled24h .lightbox}
-
-Home ranges for Wiltshire foxes (March 15th to June 15th, 2019)
-:::-->
-
-Similar differences in order of magnitude between remote and rural fox home ranges can also be observed for the monthly home range results @fig-home-ranges-boxplot. Outliers are removed, in particular the irregular data for Herschel (as seen in @fig-herschel-map). <!--The accompanying monthly home range plots can be found in the Appendix in @fig-monthly-home-ranges-wiltshire, @fig-monthly-home-ranges-bylot, and @fig-monthly-home-ranges-herschel.-->
+Similar differences in order of magnitude between remote and rural fox home ranges can also be observed for the monthly home range results @fig-home-ranges-boxplot. Outliers are removed, in particular the irregular data for Herschel (as seen in @fig-herschel-map).
 
 ![Box plot comparing monthly home ranges (outliers removed).](img/boxplot_monthly.png){#fig-home-ranges-boxplot width="100%" .lightbox}
 
@@ -230,7 +194,6 @@ The final step selection function (SSF) model included 666,248 steps from 29 coy
 Coyotes exhibited significant variation in habitat selection across land cover types and along the human footprint gradient (@tbl-emtrends). Linear selection trends were significantly positive in TreeCover ($\beta_1$ = +0.263, *p* = 0.0001) and Open ($\beta_1$ = +0.139, *p* = 0.042), indicating increased selection with increasing HFP at low to moderate levels. However, significant negative quadratic trends in these habitats (TreeCover: $\beta_2$ = -0.183, *p* < 0.0001; Open: $\beta_2$ = -0.181, *p* < 0.0001) suggested that selection peaked at intermediate HFP and declined at higher human footprint levels.
 
 Selection for Cropland and BuiltUp was weak and non-significant (*p* > 0.05). Water showed a significant negative linear trend ($\beta_1$ = -0.550, *p* = 0.036), indicating declining selection with increasing HFP.
-
 
 ::: {#tbl-emtrends layout-ncol=1}
 |Land cover    |Linear trend ($\beta_1$)    |SE    |     95% CI       |*z*    |*p*    |
@@ -256,7 +219,6 @@ Selection for Cropland and BuiltUp was weak and non-significant (*p* > 0.05). Wa
 Estimated marginal trends of human footprint on coyote habitat selection by land cover type. Includes linear (a) and quadratic (b) trends, with standard errors, 95% confidence intervals, *z*-ratios, and *p*-values.
 :::
 
-
 The average marginal effect plot (@fig-avg-eff) shows highest relative selection for TreeCover and Open habitats at low to moderate human footprint, with declining selection under increased human footprint. BuiltUp, Cropland, and Water habitats were consistently selected less, regardless of human footprint level.
 
 ![Average marginal effect (± 95% confidence interval) of human footprint on coyote habitat selection across land cover types. Plots quantify the relative change in log selection probability across the range of human footprint, while averaging over other covariates. Positive values indicate above-average selection, negative values indicate below-average selection. Vertical dashed lines indicate estimated human footprint values at peak selection.](img/avg_effect.png){#fig-avg-eff width="100%" .lightbox}
@@ -265,16 +227,11 @@ Relative selection strength (RSS) curves (@fig-rss) confirmed that coyotes prefe
 
 ![Relative selection strength (± 95% confidence interval) for coyotes across the human footprint gradient by land cover type. RSS was quantified relative to the minimum observed human footprint (corresponding to least human disturbance). Values >1 indicate selection, values <1 indicate avoidance.](img/rss.png){#fig-rss width="100%" .lightbox}
 
-
 ## Model validation
-
-<!--Model validation means demonstrating that a model is acceptable for its intended use @rykiel1996testing. The purpose, criteria, and context of the model must be specified.-->
 
 ### Fox home ranges
 
 To validate the home range estimation, we evaluated the influence of coordinate system choice and data properties on the results. Specifically, we compared median home range sizes calculated using minimum convex polygons (MCP) across three coordinate systems: WGS84 (EPSG:4326), NAD83 (EPSG:3347), and UTM Zone 17N (EPSG:2958), identified using the CRS Explorer. The differences in median home range area were small (75.3 km² for WGS84, 73.3 km² for NAD83, and 75.8 km² for UTM Zone 17N), suggesting minimal distortion effects. Our validation criterion required that any coordinate system effect be an order of magnitude smaller than observed ecological differences (≥10x smaller) @nilsen2008can. Given this threshold was met, we considered the choice of coordinate system to have negligible impact on home range estimates.
-
-<!--For home range sizes, two models comprised of data, home range calculation based on minimum convex polygons, and median selection were compared. The validation criteria required the difference between the results to be at least 10 times larger than the effects on the results introduced by data properties. For that order of magnitude, the choice of home range estimator has a secondary impact @nilsen2008can. Since geographic location contexts were diverse, to exclude distortions in the coordinate system as a potential influence, the results for Bylot island were spot checked for three applicable coordinate systems: WGS84 (EPSG:4326), NAD 83 (EPSG:3347), and UTM zone 17N (EPSG:2958). These were identified using the [CRS Explorer](https://crs-explorer.proj.org/). The differences in the median home range size results were minor: 75.3 km<sup>2</sup> for WGS84, 73.3 km<sup>2</sup> for NAD 83, and 75.8 km<sup>2</sup> for UTM zone 17N.-->
 
 ### Coyote habitat selection
 
@@ -304,13 +261,6 @@ We have performed spatial data analysis and statistical modeling on externally c
 
 ## Additional charts {#sec-additional-charts} 
 
-<!--
-![Monthly home ranges for Wiltshire foxes.](img/wiltshire_monthly.png){#fig-monthly-home-ranges-wiltshire width="100%" .lightbox}
-
-![Monthly home ranges for Bylot foxes.](img/bylot_monthly.png){#fig-monthly-home-ranges-bylot width="100%" .lightbox}
-
-![Monthly home ranges for Herschel foxes.](img/herschel_monthly.png){#fig-monthly-home-ranges-herschel width="100%" .lightbox}
--->
 ![Human footprint index across land cover types at used locations.](img/coyote_EDA_boxplot.png){#fig-coy-eda-box width="100%" .lightbox}
 
 ![Density plot showing predicted relative use from the SSF model for used and available steps.](img/coyote_predicted_vs_used.png){#fig-pred-vs-used width="100%" .lightbox}
