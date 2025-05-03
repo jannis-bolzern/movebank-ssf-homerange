@@ -265,7 +265,7 @@ ggplot(df, aes(x = site, y = area, fill = site, color = site)) +
   ) +
   theme_minimal(base_size = 14) +
     theme(
-      legend.position = "bottom",
+      legend.position = "none",
       text = element_text(color = "white"),
       axis.text = element_text(color = "white"),
       panel.background = element_rect(fill = "#222222", color = NA),
@@ -281,6 +281,6 @@ ggplot(df, aes(x = site, y = area, fill = site, color = site)) +
     ) +
   theme(panel.grid.major.x = element_blank())
 
-ggsave("img/boxplot_monthly.png", width = 8, height = 6, dpi = 300)
+ggsave("img/boxplot_monthly.png", width = 8, height = 5.5, dpi = 300)
 
 ```

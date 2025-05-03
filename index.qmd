@@ -203,9 +203,9 @@ We initially attempted SSF modeling for bobcats, but excluded them from the fina
 
 Fox home ranges during the time period corresponding to the UK wader nesting season are visualized as proportional circles in @fig-home-ranges-map, providing a comparative overview of median range sizes across Bylot and Wiltshire. Individual home range areas are further summarized in @fig-home-range-sizes, where each point represents one animal’s estimated range size. The median home range in Bylot (75.3 km²) was over 65 times larger than in Wiltshire (1.1 km²). When subsampling the Wiltshire data to a 24-hour interval, the median home range decreased to 0.56 km².
 
-![Geographic comparison of median red fox home range sizes in Bylot and Wiltshire.](img/median_home_range_geo.png){#fig-home-ranges-map}
+![Geographic comparison of median red fox home range sizes in Bylot and Wiltshire.](img/median_home_range_geo.png){#fig-home-ranges-map  width="100%" .lightbox}
 
-![Home range sizes of foxes in Bylot and Wiltshire (full and 24h subsample). Each point represents an individua’s home range size (km²); dashed lines indicate the median per location; outliers labeled.](img/home_range_bylot_vs_wiltshire.png){#fig-home-range-sizes}
+![Home range sizes of foxes in Bylot and Wiltshire (full and 24h subsample). Each point represents an individua’s home range size (km²); dashed lines indicate the median per location; outliers labeled.](img/home_range_bylot_vs_wiltshire.png){#fig-home-range-sizes  width="100%" .lightbox}
 
 <!--The resulting fox home ranges for the UK wader nesting season time frame are shown in @fig-home-ranges-bylot and @fig-home-ranges-wiltshire. The median home range size for the remote foxes in Bylot (75.3 km<sup>2</sup>) is more than 65 times larger compared to the one for rural foxes in Wiltshire (1.1 km<sup>2</sup>). The home ranges for the sub-sampled Wiltshire data are shown in @fig-home-ranges-wiltshire-sampled24h. The median home range size is 0.56 km<sup>2</sup> for the sampled data, which is roughly half as much as for the full data.
 
@@ -219,7 +219,7 @@ Fox home ranges during the time period corresponding to the UK wader nesting sea
 Home ranges for Wiltshire foxes (March 15th to June 15th, 2019)
 :::-->
 
-Similar differences in order of magnitude between remote and rural fox home ranges can also be observed for the monthly home range results @fig-home-ranges-boxplot. Note that outliers are removed, in particular the irregular data for Herschel (as seen in @fig-herschel-map). <!--The accompanying monthly home range plots can be found in the Appendix in @fig-monthly-home-ranges-wiltshire, @fig-monthly-home-ranges-bylot, and @fig-monthly-home-ranges-herschel.-->
+Similar differences in order of magnitude between remote and rural fox home ranges can also be observed for the monthly home range results @fig-home-ranges-boxplot. Outliers are removed, in particular the irregular data for Herschel (as seen in @fig-herschel-map). <!--The accompanying monthly home range plots can be found in the Appendix in @fig-monthly-home-ranges-wiltshire, @fig-monthly-home-ranges-bylot, and @fig-monthly-home-ranges-herschel.-->
 
 ![Box plot comparing monthly home ranges (outliers removed).](img/boxplot_monthly.png){#fig-home-ranges-boxplot width="100%" .lightbox}
 
@@ -227,7 +227,7 @@ Similar differences in order of magnitude between remote and rural fox home rang
 
 The final step selection function (SSF) model included 666,248 steps from 29 coyotes. The model converged successfully and revealed significant effects of human footprint and land cover interactions on habitat selection.
 
-Coyotes exhibited significant variation in habitat selection across land cover types and along the human footprint gradient (@tbl-emtrends-linear and @tbl-emtrends-quadratic). Linear selection trends were significantly positive in TreeCover ($\beta_1$ = +0.263, *p* = 0.0001) and Open ($\beta_1$ = +0.139, *p* = 0.042), indicating increased selection with increasing HFP at low to moderate levels. However, significant negative quadratic trends in these habitats (TreeCover: $\beta_2$ = -0.183, *p* < 0.0001; Open: $\beta_2$ = -0.181, *p* < 0.0001) suggested that selection peaked at intermediate HFP and declined at higher human footprint levels.
+Coyotes exhibited significant variation in habitat selection across land cover types and along the human footprint gradient (@tbl-emtrends). Linear selection trends were significantly positive in TreeCover ($\beta_1$ = +0.263, *p* = 0.0001) and Open ($\beta_1$ = +0.139, *p* = 0.042), indicating increased selection with increasing HFP at low to moderate levels. However, significant negative quadratic trends in these habitats (TreeCover: $\beta_2$ = -0.183, *p* < 0.0001; Open: $\beta_2$ = -0.181, *p* < 0.0001) suggested that selection peaked at intermediate HFP and declined at higher human footprint levels.
 
 Selection for Cropland and BuiltUp was weak and non-significant (*p* > 0.05). Water showed a significant negative linear trend ($\beta_1$ = -0.550, *p* = 0.036), indicating declining selection with increasing HFP.
 
@@ -241,7 +241,7 @@ Selection for Cropland and BuiltUp was weak and non-significant (*p* > 0.05). Wa
 | BuiltUp      | -0.062                     | 0.309| -0.667 – 0.544   | -0.20 | 0.842 |
 | Water        | -0.550                     | 0.263| -1.065 – -0.035  | -2.09 | 0.036 |
 
-: Estimated marginal linear trends. {#tbl-emtrends-linear}
+: Estimated marginal linear trends {#tbl-emtrends-linear}
 
 |Land cover    |Quadratic trend ($\beta_2$) |SE    |     95% CI       |*z*    |    *p*|
 |:-------------|:--------------------------:|:----:|:----------------:|:-----:|:-----:|
@@ -251,10 +251,9 @@ Selection for Cropland and BuiltUp was weak and non-significant (*p* > 0.05). Wa
 | BuiltUp      | -0.161                     | 0.077| -0.312 – -0.011  | -2.11 | 0.0351|
 | Water        | -0.013                     | 0.081| -0.172 – 0.146   | -0.16 | 0.870 |
 
-: Estimated marginal quadratic trends. {#tbl-emtrends-quadratic}
+: Estimated marginal quadratic trends {#tbl-emtrends-quadratic}
 
-Estimated marginal trends of human footprint on coyote habitat selection by land cover type.
-Includes linear (a) and quadratic (b) trends, with standard errors, 95% confidence intervals, *z*-ratios, and *p*-values.
+Estimated marginal trends of human footprint on coyote habitat selection by land cover type. Includes linear (a) and quadratic (b) trends, with standard errors, 95% confidence intervals, *z*-ratios, and *p*-values.
 :::
 
 
@@ -285,9 +284,11 @@ For the habitat selection, model validity was assessed by inspecting fixed and r
 
 ## Home range size assessment
 
-The fox home range size results show enormous differences between rural and remote areas. We conclude that human presence changes fox movement behavior patterns fundamentally. The opportunity to move undisturbed, and the availability of anthropogenic food sources are likely the most relevant factors. Interestingly, home range sizes for Bylot and Herschel foxes are similar, even if the island sizes differ by a factor of 100. Note that there is one fox with an extraordinarily large home range in @fig-home-ranges-wiltshire. The additional charts in @sec-additional-charts show several instances of large fox movements within a single month. Similar patterns with a small number of foxes covering much larger areas than others were found in @kobryn2023foxes, concluding that the data is genuine and demonstrates potential for extensive movement patterns in urban foxes. 
+The fox home range size results show enormous differences between rural and remote areas, with substantially smaller home ranges observed in Wiltshire compared to Bylot. This suggests that human presence fundamentally alters fox movement behavior, likely due to a combination of reduced space availability and access to anthropogenic food resources. Interestingly, home range sizes for Bylot and Herschel foxes are similar, even if the island sizes differ by a factor of 100, implying that environmental factors other than available land area constrain movements in these remote settings.
 
-While technical aspects such as sampling intervals and home range estimator have significant influence on the calculation results, they play a secondary role in comparison to the difference in fox behavior, which enables the chosen approach of comparing data from heterogeneous sources. 
+One fox in Wiltshire exhibited an exceptionally large home range compared to its conspecifics, as highlighted in @fig-home-range-sizes. This individual may represent a disperser or exhibit exploratory behavior. Similar patterns of occasional extensive movements in urban foxes have been reported elsewhere (@kobryn2023foxes), reinforcing that such variation reflects biological rather than technical factors.
+
+Although methodological factors such as sampling interval and home range estimator can influence results, their impact appears minor relative to the overarching differences in movement behavior across landscapes. This supports the validity of comparing home range sizes across these heterogeneous datasets despite inherent differences in data collection.
 
 ## Habitat selection
 
@@ -314,7 +315,7 @@ We have performed spatial data analysis and statistical modeling on externally c
 
 ![Density plot showing predicted relative use from the SSF model for used and available steps.](img/coyote_predicted_vs_used.png){#fig-pred-vs-used width="100%" .lightbox}
 
-## Supplementary Material {#sec-sup-mat}
+## Supplementary material {#sec-sup-mat}
 
 All R code and preprocessing steps are publicly available:
 
