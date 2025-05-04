@@ -12,7 +12,7 @@ freeze: auto
 
 # Abstract
 
-We investigate how human activity affects the movement patterns of wild animals by analyzing GPS tracking data of red foxes and coyotes from rural and remote areas in England, Canada, and the U.S. We compare home range sizes and model habitat selection in relation to human footprint and land cover, using spatial analysis and step selection functions. Our results show that foxes maintain substantially smaller home ranges in human-impacted areas. Coyotes preferentially selected forested and open habitats at low to moderate human footprint, while avoiding highly developed landscapes as human disturbance increased.
+We investigate how human activity affects the movement patterns of wild animals by analyzing GPS tracking data of red foxes and coyotes from rural and remote areas in England, Canada, and the U.S. We compare home range sizes and model habitat selection in relation to human footprint and land cover, using spatial analysis and step selection functions. Our results show that foxes maintain substantially smaller home ranges in human-impacted areas. Coyotes preferentially selected forested and open habitats at low to moderate levels of human footprint—rather than in completely undisturbed areas—while avoiding highly developed landscapes as disturbance increased.
 
 # Introduction
 
@@ -74,9 +74,9 @@ Data from Bylot and Herschel (@fig-tracks) were collected year-round, at a lower
 Amount of data per year and month.
 :::
 
-### Bobcat and coyote
+### Coyote and bobcat
 
-Coyote and bobcat GPS were collected in northeastern Washington between 2014 and 2015, with collars programmed to record locations every four hours. The two species occupied two distinct geographic areas with overlapping but species-specific home ranges (@fig-esa), shown in relation to land cover data. Human footprint was generally low across the study area, except for localized settlements and roads (@fig-hfp).
+Coyote and bobcat data were collected in northeastern Washington between 2014 and 2015, with collars programmed to record locations every four hours. The two species occupied two distinct geographic areas with overlapping but species-specific home ranges (@fig-esa), shown in relation to land cover data. Human footprint was generally low across the study area, except for localized settlements and roads (@fig-hfp).
 
 ![Bobcat and coyote locations in the context of the land cover data.](img/land_cover.png){#fig-esa width="100%" .lightbox}
 
@@ -94,7 +94,7 @@ Box plots of sampling rates for bobcat and coyote data.
 
 ## Analytical methods {#sec-methodology}
 
-We applied two analytical approaches: (1) home range estimation for red foxes and (2) habitat selection modeling using step-selection functions for coyotes.
+We applied two analytical approaches: (1) home range estimation for red foxes and (2) habitat selection modeling using step-selection functions for coyotes and bobcats.
 
 ### Home range size assessment
 
@@ -112,7 +112,7 @@ These discrepancies introduce potential biases in home range estimation @laube20
 
 To model fine-scale habitat preferences, we used step-selection functions (SSFs) @fortin2005wolves. These compare environmental attributes at "used" locations to those at randomly sampled "available" locations along the animal’s movement path. This allows to quantify how animals respond to environmental covariates, such as human footprint and land cover. Selection patterns are then compared to assess how habitat preferences vary with human influence.
 
-#### Step Generation and Covariates {#sec-step-cov}
+#### Step generation and covariates {#sec-step-cov}
 
 Coyote and bobcat GPS tracks were irregularly spaced (@fig-sampling-rates) and were resampled for temporal consistency — coyotes to 4-hour intervals and bobcats to 8-hour intervals, both with a 10-minute tolerance — using the `amt::track_resample` function @signer2019animal. Steps were then generated using the `amt::steps_by_burst` and `amt::random_steps` functions. For each used step, ten random available steps were generated based on empirical step length (gamma distribution) and turning angle (Von Mises distribution). Log-transformed step lengths were calculated for modeling to account for potential bias in the availability distribution.
 
@@ -256,11 +256,11 @@ Although methodological factors such as sampling interval and home range estimat
 
 Coyote habitat selection was driven by both land cover and the degree of human modification. Animals strongly favored forest and open habitats under low-to-moderate human footprint but reduced use of these habitats once disturbance exceeded an apparent threshold, indicating a trade-off between resource gain and risk. Cropland, built-up areas, and water were rarely selected, revealing broad avoidance of highly modified landscapes.
 
-Land-cover-specific relative selection strength (RSS) curves showed that human disturbance altered preferences differently among habitats—selection for forest declined more steeply with increasing footprint than did selection for open areas—echoing earlier work that forests function as crucial refuges in human-dominated settings (e.g., @riley2003effects). Model diagnostics confirmed that the SSF was well specified, with no over-dispersion or problematic collinearity. A comparable analysis for bobcats was infeasible because of sparse, uneven data, underscoring the limitations of opportunistic tracking datasets.
+The RSS curves (@fig-rss) further illustrated these habitat-specific selection patterns, showing consistently highest selection strength for forest across the entire human footprint gradient, aligning with previous findings that forests serve as key refuges in human-modified environments (e.g., @riley2003effects). Model diagnostics confirmed that the SSF was well specified, with no evidence of overdispersion or problematic collinearity, despite the data not being originally collected for this specific analytical purpose. A comparable analysis for bobcats was not feasible due to sparse and uneven data, underscoring the limitations of opportunistic tracking datasets.
 
 # Conclusion
 
-This study demonstrates, through spatial analysis and statistical modeling, that human activity significantly influences wild animal movement. We found that (1) red foxes in remote areas have substantially larger home ranges than those in human-impacted landscapes, and (2) coyotes preferentially selected forested and open habitats at low to moderate human footprint, with selection declining as disturbance increased. These results underscore the role of human disturbance in shaping movement behavior and habitat selection.
+This study demonstrates, through spatial analysis and statistical modeling, that human activity significantly influences wild animal movement. We found that (1) red foxes in remote areas have substantially larger home ranges than those in human-impacted landscapes, and (2) coyotes preferentially selected forested and open habitats at low to moderate levels of human footprint—rather than in completely undisturbed wilderness—with selection declining as disturbance increased. These results underscore the role of human disturbance in shaping movement behavior and habitat selection.
 
 # Appendix
 
