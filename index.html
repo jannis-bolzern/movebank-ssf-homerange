@@ -870,11 +870,11 @@ Figure&nbsp;15: Density plot showing predicted relative use from the SSF model f
 <h2 class="anchored" data-anchor-id="sec-sup-mat">Supplementary material</h2>
 <p>All R code and preprocessing steps are publicly available:</p>
 <ul>
-<li><a href="https://elkeelke.github.io/MovebankProject/preprocessing_uk_wader_nesting_season_home_range.html">Red fox: UK wader nesting season home ranges</a></li>
-<li><a href="https://elkeelke.github.io/MovebankProject/preprocessing_monthly_home_ranges.html">Red fox: monthly home ranges</a></li>
-<li><a href="https://elkeelke.github.io/MovebankProject/preprocessing_SSF_complete.html">Bobcat/coyote: data preparation and statistical modelling</a></li>
-<li><a href="https://elkeelke.github.io/MovebankProject/preprocessing_HFP_subsetting.html">Human Footprint Index data preparation</a></li>
-<li><a href="https://elkeelke.github.io/MovebankProject/preprocessing_ESA_world_cover.html">ESA WorldCover data preparation</a></li>
+<li><a href="https://jannis-bolzern.github.io/movebank-ssf-homerange/preprocessing_uk_wader_nesting_season_home_range.html">Red fox: UK wader nesting season home ranges</a></li>
+<li><a href="https://jannis-bolzern.github.io/movebank-ssf-homerange/preprocessing_monthly_home_ranges.html">Red fox: monthly home ranges</a></li>
+<li><a href="https://jannis-bolzern.github.io/movebank-ssf-homerange/preprocessing_SSF_complete.html">Bobcat/coyote: data preparation and statistical modelling</a></li>
+<li><a href="https://jannis-bolzern.github.io/movebank-ssf-homerange/preprocessing_HFP_subsetting.html">Human Footprint Index data preparation</a></li>
+<li><a href="https://jannis-bolzern.github.io/movebank-ssf-homerange/preprocessing_ESA_world_cover.html">ESA WorldCover data preparation</a></li>
 </ul>
 </section>
 <section id="use-of-generative-ai" class="level2">
@@ -1034,7 +1034,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp('/' + window.location.host + '/');
+      var filterRegex = new RegExp("https:\/\/jannis-bolzern\.github\.io\/movebank-ssf-homerange\/");
     var isInternal = (href) => {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }
@@ -1363,7 +1363,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
-<script>var lightboxQuarto = GLightbox({"openEffect":"zoom","closeEffect":"zoom","selector":".lightbox","loop":false,"descPosition":"bottom"});
+<script>var lightboxQuarto = GLightbox({"openEffect":"zoom","descPosition":"bottom","selector":".lightbox","closeEffect":"zoom","loop":false});
 (function() {
   let previousOnload = window.onload;
   window.onload = () => {
