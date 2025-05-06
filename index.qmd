@@ -274,11 +274,11 @@ This study demonstrates, through spatial analysis and statistical modeling, that
 
 All R code and preprocessing steps are publicly available:
 
-- [Red fox: UK wader nesting season home ranges](https://elkeelke.github.io/MovebankProject/preprocessing_uk_wader_nesting_season_home_range.html)
-- [Red fox: monthly home ranges](https://elkeelke.github.io/MovebankProject/preprocessing_monthly_home_ranges.html)
-- [Bobcat/coyote: data preparation and statistical modelling](https://elkeelke.github.io/MovebankProject/preprocessing_SSF_complete.html)
-- [Human Footprint Index data preparation](https://elkeelke.github.io/MovebankProject/preprocessing_HFP_subsetting.html)
-- [ESA WorldCover data preparation](https://elkeelke.github.io/MovebankProject/preprocessing_ESA_world_cover.html)
+- [Red fox: UK wader nesting season home ranges](https://jannis-bolzern.github.io/movebank-ssf-homerange/preprocessing_uk_wader_nesting_season_home_range.html)
+- [Red fox: monthly home ranges](https://jannis-bolzern.github.io/movebank-ssf-homerange/preprocessing_monthly_home_ranges.html)
+- [Bobcat/coyote: data preparation and statistical modelling](https://jannis-bolzern.github.io/movebank-ssf-homerange/preprocessing_SSF_complete.html)
+- [Human Footprint Index data preparation](https://jannis-bolzern.github.io/movebank-ssf-homerange/preprocessing_HFP_subsetting.html)
+- [ESA WorldCover data preparation](https://jannis-bolzern.github.io/movebank-ssf-homerange/preprocessing_ESA_world_cover.html)
 
 ## Use of generative AI
 
